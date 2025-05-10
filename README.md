@@ -65,7 +65,7 @@ EcoMaxTienda/
 
 ## 🧾 Documentación Técnica
 
-Consulta la documentación detallada del diseño físico, modelo lógico, clases UML, casos de uso, etc., en [`docs/README.md`](docs/README.md)
+Consulta la documentación detallada del diseño físico, modelo lógico, clases UML, casos de uso, etc., en mi informes/avances del proyecto.
 
 ---
 
