@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head('Historial de Pedidos | EcoMaxTienda Admin')">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Historial de Pedidos | EcoMaxTienda Admin</title>
+</head>
+<body class="bg-light">
+    <!-- Admin Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="/admin/portal_administrador">
+                <i class="bi bi-leaf-fill text-success me-2"></i>
+                EcoMaxTienda Admin
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarAdmin" aria-label="Abrir menú de navegación">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarAdmin">
+                <ul class="navbar-nav me-auto">                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/portal">
+                            <i class="bi bi-speedometer2 me-1"></i>Panel de Control
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/clientes">
+                            <i class="bi bi-people me-1"></i>Clientes
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/productos">
+                            <i class="bi bi-box-seam me-1"></i>Productos
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/admin/pedidos">
+                            <i class="bi bi-cart-check me-1"></i>Pedidos
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-gear me-1"></i>Gestión
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/admin/registro-admin">
+                                <i class="bi bi-person-plus me-2"></i>Nuevo Admin
+                            </a></li>
+                            <li><a class="dropdown-item" href="/admin/reportes">
+                                <i class="bi bi-graph-up me-2"></i>Reportes
+                            </a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle me-1"></i>Admin
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="/admin/perfil">Mi Perfil</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/logout">Cerrar Sesión</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container-fluid py-4">
+        <!-- Header -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h1 class="h3 mb-0 text-dark fw-bold">
+                            <i class="bi bi-cart-check text-success me-2"></i>
+                            Historial de Pedidos
+                        </h1>
+                        <p class="text-muted mb-0">Gestiona y monitorea todos los pedidos de EcoMaxTienda</p>
+                    </div>
+                    <div>
+                        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exportModal">
+                            <i class="bi bi-download me-2"></i>Exportar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>        <!-- Stats Cards -->
+        <div class="row g-4 mb-4">
+            <div class="col-xl-3 col-md-6">
+                <div class="card border-0 shadow-sm bg-primary text-white">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-shrink-0">
+                                <i class="bi bi-cart-plus-fill display-6 text-white"></i>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <div class="small fw-bold text-white">Total Pedidos</div>
+                                <div class="h4 mb-0 text-white">2,847</div>
+                                <div class="small text-light">Desde el inicio</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="card border-0 shadow-sm bg-warning text-dark">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-shrink-0">
+                                <i class="bi bi-clock-fill display-6 text-dark"></i>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <div class="small fw-bold text-dark">Pendientes</div>
+                                <div class="h4 mb-0 text-dark">89</div>
+                                <div class="small text-muted">Requieren atención</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="card border-0 shadow-sm bg-success text-white">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-shrink-0">
+                                <i class="bi bi-check-circle-fill display-6 text-white"></i>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <div class="small fw-bold text-white">Completados</div>
+                                <div class="h4 mb-0 text-white">2,712</div>
+                                <div class="small text-light">95.2% exitosos</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="card border-0 shadow-sm bg-info text-white">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-shrink-0">
+                                <i class="bi bi-currency-dollar display-6 text-white"></i>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <div class="small fw-bold text-white">Ingresos Total</div>
+                                <div class="h4 mb-0 text-white">$124,580</div>
+                                <div class="small text-light">Este año</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <div class="row g-3 align-items-end">
+                            <div class="col-md-3">
+                                <label class="form-label fw-bold">Estado del Pedido</label>
+                                <select class="form-select" id="statusFilter" title="Estado del Pedido">
+                                    <option value="">Todos los estados</option>
+                                    <option value="pendiente">Pendiente</option>
+                                    <option value="procesando">Procesando</option>
+                                    <option value="enviado">Enviado</option>
+                                    <option value="entregado">Entregado</option>
+                                    <option value="cancelado">Cancelado</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label fw-bold">Fecha Desde</label>
+                                <input type="date" class="form-control" id="dateFrom" title="Fecha Desde" placeholder="Selecciona la fecha de inicio">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label fw-bold">Fecha Hasta</label>
+                                <input type="date" class="form-control" id="dateTo" title="Fecha Hasta" placeholder="Selecciona la fecha de fin">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label fw-bold">Buscar</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="ID, cliente, email..." id="searchOrders">
+                                    <button class="btn btn-outline-secondary" type="button" title="Buscar">
+                                        <i class="bi bi-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Orders Table -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card border-0 shadow-sm">                    <div class="card-header bg-white border-bottom">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h5 class="card-title mb-0 text-dark fw-bold">Lista de Pedidos</h5>
+                            </div>
+                            <div class="col-auto">
+                                <div class="btn-group" role="group">
+                                    <input type="radio" class="btn-check" name="viewMode" id="tableView" checked title="Vista de tabla">
+                                    <label class="btn btn-outline-secondary" for="tableView" title="Vista de tabla">
+                                        <i class="bi bi-table"></i>
+                                    </label>
+                                    <input type="radio" class="btn-check" name="viewMode" id="cardView" title="Vista de tarjetas">
+                                    <label class="btn btn-outline-secondary" for="cardView">
+                                        <i class="bi bi-grid-3x3-gap"></i>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0" id="ordersTable">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>ID Pedido</th>
+                                        <th>Cliente</th>
+                                        <th>Fecha</th>
+                                        <th>Productos</th>
+                                        <th>Total</th>
+                                        <th>Estado</th>
+                                        <th>Método Pago</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <span class="fw-bold text-primary">#ECO-2024-1025</span>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <img src="/img/avatar-placeholder.png" alt="Avatar" class="rounded-circle me-2" width="32" height="32">
+                                                <div>
+                                                    <div class="fw-bold">María González</div>
+                                                    <small class="text-muted">maria.gonzalez@email.com</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div>15/05/2024</div>
+                                            <small class="text-muted">14:30</small>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <span class="badge bg-info me-2">3 items</span>
+                                                <small>Eco Kit Hogar, Shampoo...</small>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="fw-bold text-success">$89.99</span>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-warning">Procesando</span>
+                                        </td>
+                                        <td>
+                                            <i class="bi bi-credit-card text-primary me-1"></i>
+                                            Tarjeta
+                                        </td>
+                                        <td>
+                                            <div class="btn-group btn-group-sm">
+                                                <button class="btn btn-outline-primary" title="Ver detalles" onclick="viewOrder('ECO-2024-1025')">
+                                                    <i class="bi bi-eye"></i>
+                                                </button>
+                                                <button class="btn btn-outline-warning" title="Editar estado" onclick="editOrderStatus('ECO-2024-1025')">
+                                                    <i class="bi bi-pencil"></i>
+                                                </button>
+                                                <button class="btn btn-outline-info" title="Imprimir" onclick="printOrder('ECO-2024-1025')">
+                                                    <i class="bi bi-printer"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span class="fw-bold text-primary">#ECO-2024-1024</span>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <img src="/img/avatar-placeholder.png" alt="Avatar" class="rounded-circle me-2" width="32" height="32">
+                                                <div>
+                                                    <div class="fw-bold">Carlos Ruiz</div>
+                                                    <small class="text-muted">carlos.ruiz@email.com</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div>14/05/2024</div>
+                                            <small class="text-muted">16:45</small>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <span class="badge bg-info me-2">5 items</span>
+                                                <small>Detergente Orgánico, Bolsas...</small>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="fw-bold text-success">$156.75</span>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-success">Entregado</span>
+                                        </td>
+                                        <td>
+                                            <i class="bi bi-paypal text-primary me-1"></i>
+                                            PayPal
+                                        </td>
+                                        <td>
+                                            <div class="btn-group btn-group-sm">
+                                                <button class="btn btn-outline-primary" title="Ver detalles" onclick="viewOrder('ECO-2024-1024')">
+                                                    <i class="bi bi-eye"></i>
+                                                </button>
+                                                <button class="btn btn-outline-success" title="Reordenar" onclick="reorderItems('ECO-2024-1024')">
+                                                    <i class="bi bi-arrow-repeat"></i>
+                                                </button>
+                                                <button class="btn btn-outline-info" title="Imprimir" onclick="printOrder('ECO-2024-1024')">
+                                                    <i class="bi bi-printer"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span class="fw-bold text-primary">#ECO-2024-1023</span>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <img src="/img/avatar-placeholder.png" alt="Avatar" class="rounded-circle me-2" width="32" height="32">
+                                                <div>
+                                                    <div class="fw-bold">Ana Martínez</div>
+                                                    <small class="text-muted">ana.martinez@email.com</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div>13/05/2024</div>
+                                            <small class="text-muted">09:15</small>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <span class="badge bg-info me-2">2 items</span>
+                                                <small>Cepillo de Bambú, Copa...</small>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="fw-bold text-success">$45.50</span>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-info">Enviado</span>
+                                        </td>
+                                        <td>
+                                            <i class="bi bi-credit-card text-primary me-1"></i>
+                                            Tarjeta
+                                        </td>
+                                        <td>
+                                            <div class="btn-group btn-group-sm">
+                                                <button class="btn btn-outline-primary" title="Ver detalles" onclick="viewOrder('ECO-2024-1023')">
+                                                    <i class="bi bi-eye"></i>
+                                                </button>
+                                                <button class="btn btn-outline-warning" title="Rastrear envío" onclick="trackOrder('ECO-2024-1023')">
+                                                    <i class="bi bi-truck"></i>
+                                                </button>
+                                                <button class="btn btn-outline-info" title="Imprimir" onclick="printOrder('ECO-2024-1023')">
+                                                    <i class="bi bi-printer"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-white">
+                        <nav>
+                            <ul class="pagination justify-content-center mb-0">
+                                <li class="page-item disabled">
+                                    <span class="page-link">Anterior</span>
+                                </li>
+                                <li class="page-item active">
+                                    <span class="page-link">1</span>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">2</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">3</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">Siguiente</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Order Details Modal -->
+    <div class="modal fade" id="orderDetailsModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="bi bi-cart-check me-2"></i>Detalles del Pedido <span id="orderIdModal"></span>
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <h6 class="fw-bold text-success">Información del Cliente</h6>
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <p class="mb-1"><strong>Nombre:</strong> <span id="customerName"></span></p>
+                                    <p class="mb-1"><strong>Email:</strong> <span id="customerEmail"></span></p>
+                                    <p class="mb-1"><strong>Teléfono:</strong> <span id="customerPhone"></span></p>
+                                    <p class="mb-0"><strong>Dirección:</strong> <span id="customerAddress"></span></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="fw-bold text-success">Información del Pedido</h6>
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <p class="mb-1"><strong>Fecha:</strong> <span id="orderDate"></span></p>
+                                    <p class="mb-1"><strong>Estado:</strong> <span id="orderStatus"></span></p>
+                                    <p class="mb-1"><strong>Método de Pago:</strong> <span id="paymentMethod"></span></p>
+                                    <p class="mb-0"><strong>Total:</strong> <span id="orderTotal"></span></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <h6 class="fw-bold text-success">Productos</h6>
+                            <div class="table-responsive">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Producto</th>
+                                            <th>Cantidad</th>
+                                            <th>Precio Unit.</th>
+                                            <th>Subtotal</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="orderProductsList">
+                                        <!-- Products will be loaded here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary">
+                        <i class="bi bi-printer me-2"></i>Imprimir
+                    </button>
+                    <button type="button" class="btn btn-success">
+                        <i class="bi bi-pencil me-2"></i>Editar Estado
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export Modal -->
+    <div class="modal fade" id="exportModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="bi bi-download me-2"></i>Exportar Pedidos
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label class="form-label" for="exportFormatSelect">Formato de Exportación</label>
+                            <select class="form-select" id="exportFormatSelect" title="Formato de Exportación">
+                                <option value="excel">Excel (.xlsx)</option>
+                                <option value="csv">CSV (.csv)</option>
+                                <option value="pdf">PDF (.pdf)</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Rango de Fechas</label>
+                            <div class="row g-2">
+                                <div class="col">
+                                    <input type="date" class="form-control" placeholder="Desde">
+                                </div>
+                                <div class="col">
+                                    <input type="date" class="form-control" placeholder="Hasta">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Estados a Incluir</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" checked title="Seleccionar todos los estados">
+                                <label class="form-check-label">Todos los estados</label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-success">
+                        <i class="bi bi-download me-2"></i>Exportar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="fragments/footer :: footer"></div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <style>
+        .bg-gradient-info {
+            background: linear-gradient(135deg, #29b6f6 0%, #1976d2 100%);
+        }
+        .bg-gradient-warning {
+            background: linear-gradient(135deg, #ffa726 0%, #f57c00 100%);
+        }
+        .bg-gradient-success {
+            background: linear-gradient(135deg, #43a047 0%, #388e3c 100%);
+        }
+        .bg-gradient-primary {
+            background: linear-gradient(135deg, #5c6bc0 0%, #3f51b5 100%);
+        }
+        
+        .table th {
+            border-top: none;
+            font-weight: 600;
+            color: #495057;
+            background-color: #f8f9fa;
+        }
+        
+        .table-hover tbody tr:hover {
+            background-color: rgba(40, 167, 69, 0.05);
+        }
+        
+        .btn-group-sm .btn {
+            padding: 0.25rem 0.5rem;
+        }
+        
+        .badge {
+            font-size: 0.75rem;
+        }
+        
+        .card {
+            border-radius: 1rem;
+        }
+        
+        .navbar-dark .navbar-nav .nav-link:hover {
+            background: rgba(255,255,255,0.1);
+            border-radius: 0.5rem;
+        }
+        
+        .btn-check:checked + .btn {
+            background-color: #28a745;
+            border-color: #28a745;
+            color: white;
+        }
+    </style>
+
+    <script>
+        // Search functionality
+        document.getElementById('searchOrders').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const tableRows = document.querySelectorAll('#ordersTable tbody tr');
+            
+            tableRows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchTerm) ? '' : 'none';
+            });
+        });
+
+        // Filter functionality
+        document.getElementById('statusFilter').addEventListener('change', function(e) {
+            const status = e.target.value.toLowerCase();
+            const tableRows = document.querySelectorAll('#ordersTable tbody tr');
+            
+            tableRows.forEach(row => {
+                if (status === '') {
+                    row.style.display = '';
+                } else {
+                    const statusBadge = row.querySelector('.badge').textContent.toLowerCase();
+                    row.style.display = statusBadge.includes(status) ? '' : 'none';
+                }
+            });
+        });
+
+        // Order action functions
+        function viewOrder(orderId) {
+            // Simulate loading order details
+            document.getElementById('orderIdModal').textContent = orderId;
+            document.getElementById('customerName').textContent = 'María González';
+            document.getElementById('customerEmail').textContent = 'maria.gonzalez@email.com';
+            document.getElementById('customerPhone').textContent = '+1 234 567 8900';
+            document.getElementById('customerAddress').textContent = 'Calle 123, Ciudad Eco, País Verde';
+            document.getElementById('orderDate').textContent = '15/05/2024 14:30';
+            document.getElementById('orderStatus').innerHTML = '<span class="badge bg-warning">Procesando</span>';
+            document.getElementById('paymentMethod').textContent = 'Tarjeta de Crédito';
+            document.getElementById('orderTotal').textContent = '$89.99';
+            
+            // Load products
+            const productsList = document.getElementById('orderProductsList');
+            productsList.innerHTML = `
+                <tr>
+                    <td>Eco Kit Hogar</td>
+                    <td>1</td>
+                    <td>$45.99</td>
+                    <td>$45.99</td>
+                </tr>
+                <tr>
+                    <td>Shampoo Natural</td>
+                    <td>2</td>
+                    <td>$12.00</td>
+                    <td>$24.00</td>
+                </tr>
+                <tr>
+                    <td>Detergente Orgánico</td>
+                    <td>1</td>
+                    <td>$20.00</td>
+                    <td>$20.00</td>
+                </tr>
+            `;
+            
+            new bootstrap.Modal(document.getElementById('orderDetailsModal')).show();
+        }
+
+        function editOrderStatus(orderId) {
+            // Implement edit status functionality
+            console.log('Editing status for order:', orderId);
+        }
+
+        function printOrder(orderId) {
+            // Implement print functionality
+            console.log('Printing order:', orderId);
+        }
+
+        function trackOrder(orderId) {
+            // Implement tracking functionality
+            console.log('Tracking order:', orderId);
+        }
+
+        function reorderItems(orderId) {
+            // Implement reorder functionality
+            console.log('Reordering items from:', orderId);
+        }
+
+        // Set current date as default for date filters
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date().toISOString().split('T')[0];
+            const lastMonth = new Date();
+            lastMonth.setMonth(lastMonth.getMonth() - 1);
+            const lastMonthStr = lastMonth.toISOString().split('T')[0];
+            
+            document.getElementById('dateFrom').value = lastMonthStr;
+            document.getElementById('dateTo').value = today;
+        });
+    </script>
+</body>
+</html>

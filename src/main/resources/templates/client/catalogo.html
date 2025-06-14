@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head('Catálogo | EcoMaxTienda')">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Catálogo | EcoMaxTienda</title>
+</head>
+<body class="bg-light eco-bg">
+    <div th:replace="fragments/navbar :: navbar"></div>
+    <main class="container my-5">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex align-items-center mb-4">
+                    <i class="bi bi-grid-fill text-success me-3 fs-2"></i>
+                    <h1 class="fw-bold text-success mb-0">Catálogo de Productos</h1>
+                </div>
+                <p class="lead mb-4">Descubre nuestros productos eco-amigables y únete al movimiento sostenible.</p>
+            </div>
+        </div>
+
+        <!-- Filtros -->
+        <div class="row mb-4">
+            <div class="col-lg-3">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-success text-white">
+                        <h6 class="mb-0"><i class="bi bi-funnel me-2"></i>Filtros</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Categoría</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="hogar">
+                                <label class="form-check-label" for="hogar">Hogar</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="personal">
+                                <label class="form-check-label" for="personal">Cuidado Personal</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="cocina">
+                                <label class="form-check-label" for="cocina">Cocina</label>
+                            </div>
+                        </div>                        <div class="mb-3">
+                            <label for="priceRange" class="form-label fw-bold">Precio</label>
+                            <input type="range" class="form-range" min="0" max="100" id="priceRange" 
+                                   aria-label="Filtro de precio" title="Seleccionar rango de precio">
+                            <div class="d-flex justify-content-between">
+                                <small>$0</small>
+                                <small>$100+</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lista de productos -->
+            <div class="col-lg-9">
+                <div class="row g-4">
+                    <!-- Producto 1 -->
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card border-0 shadow-sm h-100 product-card">
+                            <div class="position-relative text-center pt-4">
+                                <i class="bi bi-box-seam display-1 text-success"></i>
+                                <span class="badge bg-success position-absolute top-0 end-0 m-2">Eco-Friendly</span>
+                            </div>
+                            <div class="card-body">
+                                <h6 class="card-title fw-bold">Eco Kit Hogar</h6>
+                                <p class="card-text text-muted small">Kit completo de productos ecológicos para el hogar.</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="fw-bold text-success fs-5">$17.50</span>
+                                    <div class="btn-group" role="group">
+                                        <button class="btn btn-success btn-sm" onclick="addToCart('Eco Kit Hogar', 17.50, this)">
+                                            <i class="bi bi-cart-plus me-1"></i>Agregar
+                                        </button>
+                                        <button class="btn btn-outline-danger btn-sm" onclick="toggleFavorite(this, 'Eco Kit Hogar')" 
+                                                data-bs-toggle="tooltip" title="Agregar a favoritos">
+                                            <i class="bi bi-heart"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Producto 2 -->
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card border-0 shadow-sm h-100 product-card">
+                            <div class="position-relative text-center pt-4">
+                                <i class="bi bi-droplet-half display-1 text-primary"></i>
+                                <span class="badge bg-success position-absolute top-0 end-0 m-2">Eco-Friendly</span>
+                            </div>
+                            <div class="card-body">
+                                <h6 class="card-title fw-bold">Shampoo Natural</h6>
+                                <p class="card-text text-muted small">Shampoo 100% natural sin químicos dañinos.</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="fw-bold text-success fs-5">$12.00</span>
+                                    <div class="btn-group" role="group">
+                                        <button class="btn btn-success btn-sm" onclick="addToCart('Shampoo Natural', 12.00, this)">
+                                            <i class="bi bi-cart-plus me-1"></i>Agregar
+                                        </button>
+                                        <button class="btn btn-outline-danger btn-sm" onclick="toggleFavorite(this, 'Shampoo Natural')" 
+                                                data-bs-toggle="tooltip" title="Agregar a favoritos">
+                                            <i class="bi bi-heart"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Producto 3 -->
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card border-0 shadow-sm h-100 product-card">
+                            <div class="position-relative text-center pt-4">
+                                <i class="bi bi-bucket display-1 text-info"></i>
+                                <span class="badge bg-success position-absolute top-0 end-0 m-2">Eco-Friendly</span>
+                            </div>
+                            <div class="card-body">
+                                <h6 class="card-title fw-bold">Detergente Orgánico</h6>
+                                <p class="card-text text-muted small">Detergente biodegradable para ropa.</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="fw-bold text-success fs-5">$15.00</span>
+                                    <div class="btn-group" role="group">
+                                        <button class="btn btn-success btn-sm" onclick="addToCart('Detergente Orgánico', 15.00, this)">
+                                            <i class="bi bi-cart-plus me-1"></i>Agregar
+                                        </button>
+                                        <button class="btn btn-outline-danger btn-sm" onclick="toggleFavorite(this, 'Detergente Orgánico')" 
+                                                data-bs-toggle="tooltip" title="Agregar a favoritos">
+                                            <i class="bi bi-heart"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Producto 4 -->
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card border-0 shadow-sm h-100 product-card">
+                            <div class="position-relative text-center pt-4">
+                                <i class="bi bi-bag-check display-1 text-warning"></i>
+                                <span class="badge bg-success position-absolute top-0 end-0 m-2">Eco-Friendly</span>
+                            </div>
+                            <div class="card-body">
+                                <h6 class="card-title fw-bold">Bolsas Reutilizables</h6>
+                                <p class="card-text text-muted small">Set de 5 bolsas reutilizables de algodón orgánico.</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="fw-bold text-success fs-5">$8.50</span>
+                                    <div class="btn-group" role="group">
+                                        <button class="btn btn-success btn-sm" onclick="addToCart('Bolsas Reutilizables', 8.50, this)">
+                                            <i class="bi bi-cart-plus me-1"></i>Agregar
+                                        </button>
+                                        <button class="btn btn-outline-danger btn-sm" onclick="toggleFavorite(this, 'Bolsas Reutilizables')" 
+                                                data-bs-toggle="tooltip" title="Agregar a favoritos">
+                                            <i class="bi bi-heart"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Producto 5 -->
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card border-0 shadow-sm h-100 product-card">
+                            <div class="position-relative text-center pt-4">
+                                <i class="bi bi-brush display-1 text-secondary"></i>
+                                <span class="badge bg-success position-absolute top-0 end-0 m-2">Eco-Friendly</span>
+                            </div>
+                            <div class="card-body">
+                                <h6 class="card-title fw-bold">Cepillo de Bambú</h6>
+                                <p class="card-text text-muted small">Cepillo dental biodegradable de bambú.</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="fw-bold text-success fs-5">$4.00</span>
+                                    <div class="btn-group" role="group">
+                                        <button class="btn btn-success btn-sm" onclick="addToCart('Cepillo de Bambú', 4.00, this)">
+                                            <i class="bi bi-cart-plus me-1"></i>Agregar
+                                        </button>
+                                        <button class="btn btn-outline-danger btn-sm" onclick="toggleFavorite(this, 'Cepillo de Bambú')" 
+                                                data-bs-toggle="tooltip" title="Agregar a favoritos">
+                                            <i class="bi bi-heart"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Producto 6 -->
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card border-0 shadow-sm h-100 product-card">
+                            <div class="position-relative text-center pt-4">
+                                <i class="bi bi-droplet-fill display-1 text-danger"></i>
+                                <span class="badge bg-success position-absolute top-0 end-0 m-2">Eco-Friendly</span>
+                            </div>
+                            <div class="card-body">
+                                <h6 class="card-title fw-bold">Copa Menstrual</h6>
+                                <p class="card-text text-muted small">Copa menstrual de silicona médica reutilizable.</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="fw-bold text-success fs-5">$25.00</span>
+                                    <div class="btn-group" role="group">
+                                        <button class="btn btn-success btn-sm" onclick="addToCart('Copa Menstrual', 25.00, this)">
+                                            <i class="bi bi-cart-plus me-1"></i>Agregar
+                                        </button>
+                                        <button class="btn btn-outline-danger btn-sm" onclick="toggleFavorite(this, 'Copa Menstrual')" 
+                                                data-bs-toggle="tooltip" title="Agregar a favoritos">
+                                            <i class="bi bi-heart"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Paginación -->
+                <nav aria-label="Navegación de productos" class="mt-5">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1">Anterior</a>
+                        </li>
+                        <li class="page-item active">
+                            <a class="page-link" href="#">1</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">2</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">3</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">Siguiente</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>    </main>
+    
+    <!-- Toast para notificaciones de productos agregados -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="productAddedToast" class="toast align-items-center text-white bg-success border-0" role="alert">
+            <div class="d-flex">
+                <div class="toast-body">
+                    <i class="bi bi-check-circle me-2"></i>
+                    <span id="toastProductMessage">¡Producto agregado al carrito exitosamente!</span>
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" 
+                        data-bs-dismiss="toast" aria-label="Cerrar notificación" title="Cerrar"></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de producto agregado con animación -->
+    <div class="modal fade" id="productSuccessModal" tabindex="-1">
+        <div class="modal-dialog modal-sm modal-dialog-centered">
+            <div class="modal-content border-0 bg-success text-white">
+                <div class="modal-body text-center p-4">
+                    <div class="success-animation mb-3">
+                        <i class="bi bi-check-circle-fill success-icon-small"></i>
+                    </div>
+                    <h6 class="fw-bold mb-2">¡Producto Agregado!</h6>
+                    <p class="mb-3" id="productSuccessName">Eco Kit Hogar</p>
+                    <div class="d-grid gap-2">
+                        <a href="/client/carrito" class="btn btn-light text-success fw-bold">
+                            <i class="bi bi-cart me-2"></i>Ver Carrito
+                        </a>
+                        <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">
+                            Seguir Comprando
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="fragments/footer :: footer"></div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Contador del carrito
+        let cartCount = 0;
+
+        // Función para agregar producto al carrito con animación
+        function addToCart(productName, price, button) {
+            // Deshabilitar el botón temporalmente
+            const originalText = button.innerHTML;
+            button.disabled = true;
+            button.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Agregando...';
+
+            // Simular tiempo de procesamiento
+            setTimeout(() => {
+                // Incrementar contador del carrito
+                cartCount++;
+                updateCartCounter();
+
+                // Mostrar toast de éxito
+                showProductAddedToast(productName);
+
+                // Mostrar modal de confirmación con animación
+                showProductSuccessModal(productName);
+
+                // Restaurar botón
+                button.disabled = false;
+                button.innerHTML = originalText;
+
+                // Animación del botón
+                button.classList.add('btn-outline-success');
+                button.classList.remove('btn-success');
+                
+                setTimeout(() => {
+                    button.classList.remove('btn-outline-success');
+                    button.classList.add('btn-success');
+                }, 1000);
+            }, 800);
+        }
+
+        // Función para mostrar toast de producto agregado
+        function showProductAddedToast(productName) {
+            document.getElementById('toastProductMessage').innerHTML = 
+                `<i class="bi bi-check-circle me-2"></i>¡${productName} agregado al carrito!`;
+            
+            const toast = new bootstrap.Toast(document.getElementById('productAddedToast'), {
+                delay: 3000
+            });
+            toast.show();
+        }
+
+        // Función para mostrar modal de éxito
+        function showProductSuccessModal(productName) {
+            document.getElementById('productSuccessName').textContent = productName;
+            
+            const modal = new bootstrap.Modal(document.getElementById('productSuccessModal'));
+            modal.show();
+
+            // Auto-cerrar el modal después de 3 segundos
+            setTimeout(() => {
+                modal.hide();
+            }, 3000);
+        }
+
+        // Función para actualizar contador del carrito en el navbar
+        function updateCartCounter() {
+            const cartBadge = document.querySelector('.cart-counter');
+            if (cartBadge) {
+                cartBadge.textContent = cartCount;
+                cartBadge.style.animation = 'pulse 0.5s ease-in-out';
+                
+                setTimeout(() => {
+                    cartBadge.style.animation = '';
+                }, 500);
+            }
+        }
+
+        // Función para mostrar vista rápida del producto
+        function quickView(productName) {
+            alert(`Vista rápida de: ${productName}\n\nEn un entorno real, esto abriría un modal con más detalles del producto.`);
+        }
+
+        // Función para alternar favoritos
+        function toggleFavorite(element, productName) {
+            const icon = element.querySelector('i');
+            
+            if (icon.classList.contains('bi-heart')) {
+                icon.classList.remove('bi-heart');
+                icon.classList.add('bi-heart-fill');
+                element.classList.add('text-danger');
+                
+                // Mostrar mensaje de favorito agregado
+                showFavoriteToast(productName, true);
+            } else {
+                icon.classList.remove('bi-heart-fill');
+                icon.classList.add('bi-heart');
+                element.classList.remove('text-danger');
+                
+                // Mostrar mensaje de favorito removido
+                showFavoriteToast(productName, false);
+            }
+        }
+
+        // Función para mostrar toast de favoritos
+        function showFavoriteToast(productName, added) {
+            const toastElement = document.getElementById('productAddedToast');
+            const messageElement = document.getElementById('toastProductMessage');
+            
+            if (added) {
+                messageElement.innerHTML = `<i class="bi bi-heart-fill me-2"></i>¡${productName} agregado a favoritos!`;
+                toastElement.classList.remove('bg-success');
+                toastElement.classList.add('bg-danger');
+            } else {
+                messageElement.innerHTML = `<i class="bi bi-heart me-2"></i>${productName} removido de favoritos`;
+                toastElement.classList.remove('bg-danger');
+                toastElement.classList.add('bg-secondary');
+            }
+            
+            const toast = new bootstrap.Toast(toastElement, { delay: 2000 });
+            toast.show();
+            
+            // Restaurar color original después del toast
+            setTimeout(() => {
+                toastElement.classList.remove('bg-danger', 'bg-secondary');
+                toastElement.classList.add('bg-success');
+            }, 2500);
+        }
+
+        // Agregar estilos CSS para animaciones
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes bounce {
+                0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+                40% { transform: translateY(-10px); }
+                60% { transform: translateY(-5px); }
+            }
+            
+            @keyframes pulse {
+                0% { transform: scale(1); }
+                50% { transform: scale(1.2); }
+                100% { transform: scale(1); }
+            }
+            
+            .product-card {
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+            }
+            
+            .product-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+            }
+            
+            .success-animation {
+                animation: bounce 0.6s ease-in-out;
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Inicializar tooltips para los botones de acción rápida
+        document.addEventListener('DOMContentLoaded', function() {
+            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head('Panel de Control Admin | EcoMaxTienda')">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Panel de Control Admin | EcoMaxTienda</title>
+</head>
+<body class="bg-light eco-admin-bg">
+    <!-- Admin Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="/admin/portal_administrador">
+                <i class="bi bi-leaf-fill text-success me-2"></i>
+                EcoMaxTienda Admin
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarAdmin" aria-label="Abrir menú de navegación">
+                <span class="navbar-toggler-icon"></span>
+                <span class="visually-hidden">Abrir menú de navegación</span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarAdmin">
+                <ul class="navbar-nav me-auto">                    <li class="nav-item">
+                        <a class="nav-link active" href="/admin/portal">
+                            <i class="bi bi-speedometer2 me-1"></i>Panel de Control
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/clientes">
+                            <i class="bi bi-people me-1"></i>Clientes
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/productos">
+                            <i class="bi bi-box-seam me-1"></i>Productos
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/pedidos">
+                            <i class="bi bi-cart-check me-1"></i>Pedidos
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-gear me-1"></i>Gestión
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/admin/registro-admin">
+                                <i class="bi bi-person-plus me-2"></i>Nuevo Admin
+                            </a></li>
+                            <li><a class="dropdown-item" href="/admin/reportes">
+                                <i class="bi bi-graph-up me-2"></i>Reportes
+                            </a></li>
+                            <li><a class="dropdown-item" href="/admin/configuracion">
+                                <i class="bi bi-sliders me-2"></i>Configuración
+                            </a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle me-1"></i>Admin
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="/admin/perfil">Mi Perfil</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/logout">Cerrar Sesión</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container-fluid py-4">
+        <!-- Welcome Header -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>                        <h1 class="h3 mb-0 text-dark fw-bold">
+                            <i class="bi bi-speedometer2 text-success me-2"></i>
+                            Panel de Control EcoMaxTienda
+                        </h1>
+                        <p class="text-muted mb-0">Bienvenido al panel de administración</p>
+                    </div>
+                    <div class="text-end">
+                        <small class="text-muted d-block">Último acceso:</small>
+                        <span class="fw-bold text-success" id="currentDateTime"></span>
+                    </div>
+                </div>
+            </div>
+        </div>        <!-- Metrics Cards -->
+        <div class="row g-4 mb-4">
+            <div class="col-xl-3 col-md-6">
+                <div class="card border-0 shadow-sm h-100 metric-card bg-success">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-shrink-0">
+                                <i class="bi bi-people-fill text-white display-6"></i>
+                            </div>                            <div class="flex-grow-1 ms-3 text-white">
+                                <div class="small fw-bold text-white">Total Clientes</div>
+                                <div class="h4 mb-0 text-white" id="total-clientes">--</div>
+                                <div class="small text-light">
+                                    <i class="bi bi-arrow-up me-1"></i>Crecimiento activo
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="card border-0 shadow-sm h-100 metric-card bg-primary">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-shrink-0">
+                                <i class="bi bi-cart-check-fill text-white display-6"></i>
+                            </div>                            <div class="flex-grow-1 ms-3 text-white">
+                                <div class="small fw-bold text-white">Pedidos Pendientes</div>
+                                <div class="h4 mb-0 text-white" id="pedidos-pendientes">--</div>
+                                <div class="small text-light">
+                                    <i class="bi bi-clock me-1"></i>Requieren atención
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="card border-0 shadow-sm h-100 metric-card bg-warning">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-shrink-0">
+                                <i class="bi bi-currency-dollar text-dark display-6"></i>
+                            </div>                            <div class="flex-grow-1 ms-3 text-dark">
+                                <div class="small fw-bold text-dark">Ventas del Mes</div>
+                                <div class="h4 mb-0 text-dark" id="ventas-mes">--</div>
+                                <div class="small text-muted">
+                                    <i class="bi bi-arrow-up me-1"></i>Mes actual
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="card border-0 shadow-sm h-100 metric-card bg-info">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-shrink-0">
+                                <i class="bi bi-box-seam-fill text-white display-6"></i>
+                            </div>
+                            <div class="flex-grow-1 ms-3 text-white">
+                                <div class="small fw-bold text-white">Productos Activos</div>
+                                <div class="h4 mb-0 text-white">156</div>
+                                <div class="small text-light">
+                                    <i class="bi bi-check-circle me-1"></i>Todos disponibles
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4 mb-4">
+            <!-- Quick Actions -->
+            <div class="col-lg-8">                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-header bg-white border-bottom">
+                        <h5 class="card-title mb-0 text-dark fw-bold">
+                            <i class="bi bi-lightning-fill text-warning me-2"></i>
+                            Acciones Rápidas
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <a href="/admin/clientes" class="btn btn-outline-success w-100 py-3 action-card">
+                                    <i class="bi bi-people display-6 d-block mb-2"></i>
+                                    <div class="fw-bold">Gestionar Clientes</div>
+                                    <small class="text-muted">Ver y administrar usuarios</small>
+                                </a>
+                            </div>
+                            <div class="col-md-4">
+                                <a href="/admin/registro-admin" class="btn btn-outline-primary w-100 py-3 action-card">
+                                    <i class="bi bi-person-plus display-6 d-block mb-2"></i>
+                                    <div class="fw-bold">Nuevo Admin</div>
+                                    <small class="text-muted">Registrar administrador</small>
+                                </a>
+                            </div>
+                            <div class="col-md-4">
+                                <a href="/admin/pedidos" class="btn btn-outline-info w-100 py-3 action-card">
+                                    <i class="bi bi-list-check display-6 d-block mb-2"></i>
+                                    <div class="fw-bold">Historial Pedidos</div>
+                                    <small class="text-muted">Ver todos los pedidos</small>
+                                </a>
+                            </div>
+                            <div class="col-md-4">
+                                <a href="/admin/productos" class="btn btn-outline-warning w-100 py-3 action-card">
+                                    <i class="bi bi-box-seam display-6 d-block mb-2"></i>
+                                    <div class="fw-bold">Productos</div>
+                                    <small class="text-muted">Gestionar catálogo</small>
+                                </a>
+                            </div>
+                            <div class="col-md-4">
+                                <a href="/admin/reportes" class="btn btn-outline-secondary w-100 py-3 action-card">
+                                    <i class="bi bi-graph-up display-6 d-block mb-2"></i>
+                                    <div class="fw-bold">Reportes</div>
+                                    <small class="text-muted">Análisis y estadísticas</small>
+                                </a>
+                            </div>
+                            <div class="col-md-4">
+                                <a href="/admin/configuracion" class="btn btn-outline-dark w-100 py-3 action-card">
+                                    <i class="bi bi-gear display-6 d-block mb-2"></i>
+                                    <div class="fw-bold">Configuración</div>
+                                    <small class="text-muted">Ajustes del sistema</small>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="col-lg-4">                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-header bg-white border-bottom">
+                        <h5 class="card-title mb-0 text-dark fw-bold">
+                            <i class="bi bi-clock-history text-info me-2"></i>
+                            Actividad Reciente
+                        </h5>
+                    </div><div class="card-body">
+                        <div class="timeline" id="activity-timeline">
+                            <!-- La actividad se cargará dinámicamente desde la API -->
+                            <div class="timeline-item">
+                                <div class="timeline-marker bg-info"></div>
+                                <div class="timeline-content">
+                                    <h6 class="mb-1">Cargando actividad...</h6>
+                                    <p class="mb-1 text-muted small">Por favor espere</p>
+                                    <small class="text-muted">Sistema iniciándose</small>
+                                </div>
+                            </div>
+                                <div class="timeline-content">
+                                    <h6 class="mb-1">Producto actualizado</h6>
+                                    <p class="mb-1 text-muted small">Eco Kit Hogar - Stock: 25</p>
+                                    <small class="text-muted">Hace 1 hora</small>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-marker bg-info"></div>
+                                <div class="timeline-content">
+                                    <h6 class="mb-1">Correo de bienvenida</h6>
+                                    <p class="mb-1 text-muted small">Enviado a nuevo usuario</p>
+                                    <small class="text-muted">Hace 2 horas</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Impact & Environment Stats -->
+        <div class="row g-4">
+            <div class="col-12">                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="card-title mb-0 text-white fw-bold">
+                            <i class="bi bi-globe-americas me-2"></i>
+                            Impacto Ambiental EcoMaxTienda
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row text-center">
+                            <div class="col-md-3">
+                                <div class="border-end">
+                                    <i class="bi bi-tree-fill text-success display-4 mb-2"></i>
+                                    <h4 class="fw-bold text-success">1,247</h4>
+                                    <p class="text-muted mb-0">Árboles salvados</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="border-end">
+                                    <i class="bi bi-droplet-fill text-primary display-4 mb-2"></i>
+                                    <h4 class="fw-bold text-primary">15,680L</h4>
+                                    <p class="text-muted mb-0">Agua ahorrada</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="border-end">
+                                    <i class="bi bi-recycle text-warning display-4 mb-2"></i>
+                                    <h4 class="fw-bold text-warning">892kg</h4>
+                                    <p class="text-muted mb-0">Residuos reducidos</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <i class="bi bi-heart-fill text-danger display-4 mb-2"></i>
+                                <h4 class="fw-bold text-danger">2,456</h4>
+                                <p class="text-muted mb-0">Familias beneficiadas</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div th:replace="fragments/footer :: footer"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        .eco-admin-bg {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+
+        .metric-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-radius: 1rem;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15) !important;
+        }
+
+        .bg-gradient-success {
+            background: linear-gradient(135deg, #43a047 0%, #388e3c 100%);
+        }
+
+        .bg-gradient-info {
+            background: linear-gradient(135deg, #29b6f6 0%, #1976d2 100%);
+        }
+
+        .bg-gradient-warning {
+            background: linear-gradient(135deg, #ffa726 0%, #f57c00 100%);
+        }
+
+        .bg-gradient-primary {
+            background: linear-gradient(135deg, #5c6bc0 0%, #3f51b5 100%);
+        }
+
+        .action-card {
+            transition: all 0.3s ease;
+            border-radius: 1rem;
+            text-decoration: none;
+        }
+
+        .action-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 1rem;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #e9ecef;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .timeline-marker {
+            position: absolute;
+            left: -2rem;
+            top: 0.25rem;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+
+        .timeline-content {
+            background: #f8f9fa;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            border-left: 3px solid #28a745;
+        }
+
+        .navbar-dark .navbar-nav .nav-link:hover {
+            background: rgba(255,255,255,0.1);
+            border-radius: 0.5rem;
+        }
+
+        .card {
+            border-radius: 1rem;
+        }
+
+        .card-header {
+            border-radius: 1rem 1rem 0 0 !important;
+        }
+    </style>
+
+    <script>
+        // Update current date and time
+        function updateDateTime() {
+            const now = new Date();
+            const options = { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            };
+            document.getElementById('currentDateTime').textContent = now.toLocaleDateString('es-ES', options);
+        }
+
+        updateDateTime();
+        setInterval(updateDateTime, 60000); // Update every minute
+
+        // Add smooth scrolling and animations
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate metric cards on load
+            const metricCards = document.querySelectorAll('.metric-card');
+            metricCards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    card.style.transition = 'all 0.6s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+
+            // Add click effects to action cards
+            const actionCards = document.querySelectorAll('.action-card');
+            actionCards.forEach(card => {
+                card.addEventListener('click', function(e) {
+                    // Add ripple effect
+                    const ripple = document.createElement('span');
+                    ripple.style.position = 'absolute';
+                    ripple.style.borderRadius = '50%';
+                    ripple.style.background = 'rgba(255,255,255,0.3)';
+                    ripple.style.transform = 'scale(0)';
+                    ripple.style.animation = 'ripple 0.6s linear';
+                    ripple.style.left = e.offsetX + 'px';
+                    ripple.style.top = e.offsetY + 'px';
+                    ripple.style.width = ripple.style.height = '40px';
+                    ripple.style.marginLeft = ripple.style.marginTop = '-20px';
+                    
+                    this.appendChild(ripple);
+                    setTimeout(() => ripple.remove(), 600);
+                });            });
+        });
+    </script>
+
+    <!-- API Scripts -->
+    <script src="/js/admin-api.js"></script>
+    
+    <!-- Panel de Control específico -->
+    <script>
+        // Agregar ID al contenedor principal para que el script API lo detecte
+        document.addEventListener('DOMContentLoaded', function() {
+            const mainContainer = document.querySelector('.container-fluid');
+            if (mainContainer) {
+                mainContainer.id = 'panel-control-container';
+            }
+        });
+    </script>
+
+    <style>
+        @keyframes ripple {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+    </style>
+</body>
+</html>
