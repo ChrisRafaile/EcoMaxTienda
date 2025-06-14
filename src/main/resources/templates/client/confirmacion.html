@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head('Compra Confirmada | EcoMaxTienda')">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Compra Confirmada | EcoMaxTienda</title>
+</head>
+<body class="bg-light eco-bg">
+    <div th:replace="fragments/navbar :: navbar"></div>
+    <main class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <!-- Mensaje de confirmación principal -->
+                <div class="card shadow-sm border-0 mb-4 text-center">
+                    <div class="card-body p-5">
+                        <div class="mb-4">
+                            <i class="bi bi-check-circle-fill text-success payment-success-icon"></i>
+                        </div>
+                        <h1 class="fw-bold text-success mb-3">¡Compra Confirmada!</h1>
+                        <p class="lead mb-4">Tu pedido ha sido procesado exitosamente. Gracias por elegir productos eco-amigables.</p>
+                        
+                        <div class="alert alert-success border-0" role="alert">
+                            <h5 class="alert-heading mb-3">
+                                <i class="bi bi-receipt me-2"></i>Número de Pedido: <strong>ECO-2024-001234</strong>
+                            </h5>
+                            <p class="mb-0">Guarda este número para hacer seguimiento a tu pedido.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Detalles del pedido -->
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="card shadow-sm border-0 mb-4">
+                            <div class="card-header bg-success text-white">
+                                <h5 class="mb-0"><i class="bi bi-box-seam me-2"></i>Detalles del Pedido</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row g-3">
+                                    <!-- Producto 1 -->
+                                    <div class="col-12">
+                                        <div class="d-flex align-items-center p-3 border rounded">                                            <img src="https://via.placeholder.com/60x60/28a745/ffffff?text=Kit" 
+                                                 class="rounded me-3 small-product-image" alt="Eco Kit Hogar">
+                                            <div class="flex-grow-1">
+                                                <h6 class="fw-bold mb-1">Eco Kit Hogar</h6>
+                                                <p class="text-muted small mb-1">Kit completo de productos ecológicos para el hogar</p>
+                                                <span class="badge bg-success">Eco-Friendly</span>
+                                            </div>
+                                            <div class="text-end">
+                                                <div class="fw-bold">Cantidad: 2</div>
+                                                <div class="text-success fw-bold">$35.00</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Producto 2 -->
+                                    <div class="col-12">
+                                        <div class="d-flex align-items-center p-3 border rounded">                                            <img src="https://via.placeholder.com/60x60/28a745/ffffff?text=Shampoo" 
+                                                 class="rounded me-3 small-product-image" alt="Shampoo Natural">
+                                            <div class="flex-grow-1">
+                                                <h6 class="fw-bold mb-1">Shampoo Natural</h6>
+                                                <p class="text-muted small mb-1">Shampoo orgánico libre de químicos dañinos</p>
+                                                <span class="badge bg-success">Orgánico</span>
+                                            </div>
+                                            <div class="text-end">
+                                                <div class="fw-bold">Cantidad: 1</div>
+                                                <div class="text-success fw-bold">$12.00</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Producto 3 -->
+                                    <div class="col-12">
+                                        <div class="d-flex align-items-center p-3 border rounded">                                            <img src="https://via.placeholder.com/60x60/28a745/ffffff?text=Botella" 
+                                                 class="rounded me-3 small-product-image" alt="Botella Reutilizable">
+                                            <div class="flex-grow-1">
+                                                <h6 class="fw-bold mb-1">Botella Reutilizable</h6>
+                                                <p class="text-muted small mb-1">Botella de acero inoxidable libre de BPA</p>
+                                                <span class="badge bg-success">Reutilizable</span>
+                                            </div>
+                                            <div class="text-end">
+                                                <div class="fw-bold">Cantidad: 1</div>
+                                                <div class="text-success fw-bold">$15.00</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Información de envío y facturación -->
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="card shadow-sm border-0 h-100">
+                                    <div class="card-header bg-light border-0">
+                                        <h6 class="mb-0 fw-bold"><i class="bi bi-truck me-2"></i>Información de Envío</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="mb-2"><strong>Nombre:</strong> Juan Pérez</p>
+                                        <p class="mb-2"><strong>Teléfono:</strong> +51 999 123 456</p>
+                                        <p class="mb-2"><strong>Dirección:</strong> Av. Principal 123</p>
+                                        <p class="mb-2"><strong>Ciudad:</strong> Lima, Lima</p>
+                                        <p class="mb-0"><strong>Código Postal:</strong> 15001</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card shadow-sm border-0 h-100">
+                                    <div class="card-header bg-light border-0">
+                                        <h6 class="mb-0 fw-bold"><i class="bi bi-credit-card me-2"></i>Método de Pago</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="mb-2"><strong>Método:</strong> Tarjeta de Crédito</p>
+                                        <p class="mb-2"><strong>Tarjeta:</strong> •••• •••• •••• 3456</p>
+                                        <p class="mb-2"><strong>Estado:</strong> <span class="text-success fw-bold">Pagado</span></p>
+                                        <p class="mb-0"><strong>Fecha:</strong> <span id="paymentDate"></span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Resumen financiero y acciones -->
+                    <div class="col-lg-4">
+                        <div class="card shadow-sm border-0 mb-4">
+                            <div class="card-header bg-light border-0">
+                                <h6 class="mb-0 fw-bold"><i class="bi bi-calculator me-2"></i>Resumen de Pago</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Subtotal (4 productos):</span>
+                                    <span>$62.00</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Envío:</span>
+                                    <span class="text-success fw-bold">GRATIS</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Descuento Eco-Friendly:</span>
+                                    <span class="text-success">-$3.10</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-3">
+                                    <span>IGV (18%):</span>
+                                    <span>$10.60</span>
+                                </div>
+                                <hr>
+                                <div class="d-flex justify-content-between mb-4">
+                                    <h6 class="fw-bold">Total Pagado:</h6>
+                                    <h6 class="fw-bold text-success">$69.50</h6>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Información de seguimiento -->
+                        <div class="card shadow-sm border-0 mb-4">
+                            <div class="card-header bg-light border-0">
+                                <h6 class="mb-0 fw-bold"><i class="bi bi-geo-alt me-2"></i>Seguimiento del Envío</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="timeline">
+                                    <div class="timeline-item completed">
+                                        <div class="timeline-marker bg-success"></div>
+                                        <div class="timeline-content">
+                                            <h6 class="mb-1">Pedido Confirmado</h6>
+                                            <p class="text-muted small mb-0">Hoy, <span id="orderTime"></span></p>
+                                        </div>
+                                    </div>
+                                    <div class="timeline-item">
+                                        <div class="timeline-marker bg-secondary"></div>
+                                        <div class="timeline-content">
+                                            <h6 class="mb-1">Preparando Envío</h6>
+                                            <p class="text-muted small mb-0">Estimado: Mañana</p>
+                                        </div>
+                                    </div>
+                                    <div class="timeline-item">
+                                        <div class="timeline-marker bg-secondary"></div>
+                                        <div class="timeline-content">
+                                            <h6 class="mb-1">En Camino</h6>
+                                            <p class="text-muted small mb-0">Estimado: 2-3 días</p>
+                                        </div>
+                                    </div>
+                                    <div class="timeline-item">
+                                        <div class="timeline-marker bg-secondary"></div>
+                                        <div class="timeline-content">
+                                            <h6 class="mb-1">Entregado</h6>
+                                            <p class="text-muted small mb-0">Estimado: 3-5 días</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>                        <!-- Acciones -->
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-success" onclick="downloadInvoice()">
+                                <i class="bi bi-download me-2"></i>Descargar Factura
+                            </button>
+                            <button class="btn btn-outline-success" onclick="trackOrder()">
+                                <i class="bi bi-geo-alt me-2"></i>Rastrear Pedido
+                            </button>
+                            <a href="/client/home" class="btn btn-outline-primary">
+                                <i class="bi bi-house me-2"></i>Ir al Área de Cliente
+                            </a>
+                            <a href="/client/catalogo" class="btn btn-outline-secondary">
+                                <i class="bi bi-shop me-2"></i>Seguir Comprando
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Información adicional -->
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="card shadow-sm border-0">
+                            <div class="card-body">
+                                <h5 class="fw-bold text-success mb-4">
+                                    <i class="bi bi-leaf me-2"></i>¡Gracias por Elegir EcoMaxTienda!
+                                </h5>
+                                <div class="row g-4">
+                                    <div class="col-md-4">
+                                        <div class="text-center">
+                                            <i class="bi bi-envelope text-success fs-2 mb-3"></i>
+                                            <h6 class="fw-bold">Confirmación por Email</h6>
+                                            <p class="text-muted small">Recibirás un email con todos los detalles de tu pedido en los próximos minutos.</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="text-center">
+                                            <i class="bi bi-truck text-success fs-2 mb-3"></i>
+                                            <h6 class="fw-bold">Envío Rápido</h6>
+                                            <p class="text-muted small">Tu pedido será procesado y enviado en un plazo de 24-48 horas hábiles.</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="text-center">
+                                            <i class="bi bi-headset text-success fs-2 mb-3"></i>
+                                            <h6 class="fw-bold">Soporte 24/7</h6>
+                                            <p class="text-muted small">Si tienes alguna pregunta, nuestro equipo está aquí para ayudarte.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Productos recomendados -->
+                <div class="row mt-5">
+                    <div class="col-12">
+                        <h4 class="fw-bold text-success mb-4">
+                            <i class="bi bi-star me-2"></i>Productos que Podrían Interesarte
+                        </h4>
+                        <div class="row g-3">
+                            <div class="col-md-3">
+                                <div class="card border-0 shadow-sm h-100">                                    <img src="https://via.placeholder.com/200x150/28a745/ffffff?text=Eco+Bag" 
+                                         class="card-img-top recommended-product-image" alt="Bolsa Ecológica">
+                                    <div class="card-body text-center">
+                                        <h6 class="card-title">Bolsa Ecológica</h6>
+                                        <p class="text-success fw-bold">$8.50</p>
+                                        <a href="/client/catalogo" class="btn btn-outline-success btn-sm">Ver Producto</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card border-0 shadow-sm h-100">                                    <img src="https://via.placeholder.com/200x150/28a745/ffffff?text=Bamboo" 
+                                         class="card-img-top recommended-product-image" alt="Cepillo de Bambú">
+                                    <div class="card-body text-center">
+                                        <h6 class="card-title">Cepillo de Bambú</h6>
+                                        <p class="text-success fw-bold">$4.00</p>
+                                        <a href="/client/catalogo" class="btn btn-outline-success btn-sm">Ver Producto</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card border-0 shadow-sm h-100">                                    <img src="https://via.placeholder.com/200x150/28a745/ffffff?text=Copa" 
+                                         class="card-img-top recommended-product-image" alt="Copa Menstrual">
+                                    <div class="card-body text-center">
+                                        <h6 class="card-title">Copa Menstrual</h6>
+                                        <p class="text-success fw-bold">$25.00</p>
+                                        <a href="/client/catalogo" class="btn btn-outline-success btn-sm">Ver Producto</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card border-0 shadow-sm h-100">                                    <img src="https://via.placeholder.com/200x150/28a745/ffffff?text=Kit+Premium" 
+                                         class="card-img-top recommended-product-image" alt="Kit Premium">
+                                    <div class="card-body text-center">
+                                        <h6 class="card-title">Kit Premium</h6>
+                                        <p class="text-success fw-bold">$45.00</p>
+                                        <a href="/client/catalogo" class="btn btn-outline-success btn-sm">Ver Producto</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <div th:replace="fragments/footer :: footer"></div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Establecer fecha y hora actual
+        document.addEventListener('DOMContentLoaded', function() {
+            const now = new Date();
+            const dateOptions = { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            };
+            const timeOptions = { 
+                hour: '2-digit', 
+                minute: '2-digit',
+                hour12: false
+            };
+
+            document.getElementById('paymentDate').textContent = now.toLocaleDateString('es-ES', dateOptions);
+            document.getElementById('orderTime').textContent = now.toLocaleTimeString('es-ES', timeOptions);
+        });
+
+        // Función para descargar factura
+        function downloadInvoice() {
+            // Simular descarga de factura
+            const link = document.createElement('a');
+            link.href = '#'; // Aquí iría la URL real del PDF
+            link.download = 'Factura_ECO-2024-001234.pdf';
+            
+            // Mostrar mensaje mientras se "genera" la factura
+            const originalText = event.target.innerHTML;
+            event.target.disabled = true;
+            event.target.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Generando...';
+            
+            setTimeout(function() {
+                event.target.disabled = false;
+                event.target.innerHTML = originalText;
+                alert('Tu factura ha sido generada. En un entorno real, se descargaría automáticamente.');
+            }, 2000);
+        }
+
+        // Función para rastrear pedido
+        function trackOrder() {
+            // Simular redirección a página de seguimiento
+            alert('Serás redirigido a la página de seguimiento del pedido ECO-2024-001234.');
+            // En un entorno real: window.location.href = '/tracking/ECO-2024-001234';
+        }
+
+        // Efecto de confetti (celebración)
+        function createConfetti() {
+            const colors = ['#28a745', '#20c997', '#6f42c1', '#fd7e14'];
+            const confettiCount = 50;
+            
+            for (let i = 0; i < confettiCount; i++) {
+                const confetti = document.createElement('div');
+                confetti.style.position = 'fixed';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.top = '-10px';
+                confetti.style.width = '10px';
+                confetti.style.height = '10px';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.zIndex = '9999';
+                confetti.style.borderRadius = '50%';
+                confetti.style.animation = `fall ${Math.random() * 3 + 2}s linear infinite`;
+                
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => {
+                    confetti.remove();
+                }, 5000);
+            }
+        }
+
+        // Agregar animación CSS para el confetti
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fall {
+                to {
+                    transform: translateY(100vh) rotate(360deg);
+                }
+            }
+            
+            .timeline {
+                position: relative;
+                padding: 0;
+            }
+            
+            .timeline-item {
+                position: relative;
+                padding-left: 30px;
+                margin-bottom: 20px;
+            }
+            
+            .timeline-item:last-child {
+                margin-bottom: 0;
+            }
+            
+            .timeline-marker {
+                position: absolute;
+                left: 0;
+                top: 5px;
+                width: 12px;
+                height: 12px;
+                border-radius: 50%;
+                border: 2px solid #fff;
+                z-index: 1;
+            }
+            
+            .timeline-item:not(:last-child)::before {
+                content: '';
+                position: absolute;
+                left: 5px;
+                top: 17px;
+                width: 2px;
+                height: calc(100% + 20px);
+                background-color: #dee2e6;
+            }
+            
+            .timeline-item.completed .timeline-marker {
+                background-color: #28a745;
+            }
+            
+            .timeline-content h6 {
+                margin-bottom: 5px;
+                font-size: 0.9rem;
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Ejecutar confetti al cargar la página
+        setTimeout(createConfetti, 500);
+    </script>
+</body>
+</html>
