@@ -116,9 +116,18 @@ public class Producto {
             return this.inventario.getStock();
         }
         return 0;
+    }    public boolean esEcoAmigable() {
+        return this.puntuacionEco != null && this.puntuacionEco.compareTo(BigDecimal.valueOf(7.0)) >= 0;
     }
 
-    public boolean esEcoAmigable() {
-        return this.puntuacionEco != null && this.puntuacionEco.compareTo(BigDecimal.valueOf(7.0)) >= 0;
+    // Constructor personalizado para casos de uso específicos
+    public Producto(String nombre, String descripcion, BigDecimal precio, String categoria, String marca) {
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.precio = precio;
+        this.categoria = categoria;
+        this.marca = marca;
+        this.estado = true;
+        this.fechaCreacion = LocalDateTime.now();
     }
 }

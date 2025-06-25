@@ -10,13 +10,17 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ecomaxtienda.entity.Rol;
 import com.ecomaxtienda.repository.RolRepository;
 
-import lombok.RequiredArgsConstructor;
+
 
 @Service
-@RequiredArgsConstructor
 @Transactional
 public class RolService {
     private final RolRepository rolRepository;
+
+    // Constructor manual
+    public RolService(RolRepository rolRepository) {
+        this.rolRepository = rolRepository;
+    }
 
     // Métodos CRUD básicos
     public List<Rol> findAll() {

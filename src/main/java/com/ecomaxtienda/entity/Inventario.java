@@ -109,5 +109,12 @@ public class Inventario {
         } else {
             return "NORMAL";
         }
-    }
+    }    // Constructor personalizado para casos de uso específicos
+    public Inventario(Producto producto, Integer stock, Integer stockMinimo, Integer stockMaximo) {
+        this.producto = producto;
+        this.stock = stock;
+        this.stockMinimo = stockMinimo;
+        this.stockMaximo = stockMaximo;
+        this.estado = true;
+        this.fechaActualizacion = LocalDateTime.now();    }
 }

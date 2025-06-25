@@ -91,8 +91,17 @@ public class PedidoDetalle {
     }    public BigDecimal getPorcentajeDescuento() {
         if (this.precioUnitario == null || this.precioUnitario.compareTo(BigDecimal.ZERO) == 0) {
             return BigDecimal.ZERO;
-        }
-        return this.descuentoUnitario.divide(this.precioUnitario, 4, java.math.RoundingMode.HALF_UP)
+        }        return this.descuentoUnitario.divide(this.precioUnitario, 4, java.math.RoundingMode.HALF_UP)
                .multiply(BigDecimal.valueOf(100));
+    }
+
+    // Constructor personalizado para casos de uso específicos
+    public PedidoDetalle(Pedido pedido, Producto producto, Integer cantidad, BigDecimal precioUnitario) {
+        this.pedido = pedido;
+        this.producto = producto;
+        this.cantidad = cantidad;
+        this.precioUnitario = precioUnitario;
+        this.descuentoUnitario = BigDecimal.ZERO;
+        this.subtotal = precioUnitario.multiply(BigDecimal.valueOf(cantidad));
     }
 }

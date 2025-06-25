@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Panel de Control Admin | EcoMaxTienda</title>
 </head>
-<body class="bg-light eco-admin-bg">
+<body class="eco-admin-bg" style="background: linear-gradient(135deg, #e8f5e8 0%, #f0f9f0 50%, #e3f2fd 100%);">
     <!-- Admin Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+    <nav class="navbar navbar-expand-lg shadow-lg" style="background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);">
         <div class="container-fluid">
-            <a class="navbar-brand fw-bold" href="/admin/portal_administrador">
+            <a class="navbar-brand fw-bold text-white" href="/admin/portal_administrador">
                 <i class="bi bi-leaf-fill text-success me-2"></i>
                 EcoMaxTienda Admin
             </a>
@@ -18,39 +18,40 @@
                 <span class="visually-hidden">Abrir menú de navegación</span>
             </button>
             <div class="collapse navbar-collapse" id="navbarAdmin">
-                <ul class="navbar-nav me-auto">                    <li class="nav-item">
-                        <a class="nav-link active" href="/admin/portal">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link text-white fw-bold" href="/admin/portal" style="background: linear-gradient(45deg, #28a745, #20c997); border-radius: 20px; margin: 0 5px; padding: 8px 15px;">
                             <i class="bi bi-speedometer2 me-1"></i>Panel de Control
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/admin/clientes">
+                        <a class="nav-link text-white" href="/admin/clientes" style="border-radius: 20px; margin: 0 5px; padding: 8px 15px; transition: all 0.3s;" onmouseover="this.style.background='rgba(52, 152, 219, 0.2)'" onmouseout="this.style.background='transparent'">
                             <i class="bi bi-people me-1"></i>Clientes
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/admin/productos">
+                        <a class="nav-link text-white" href="/admin/productos" style="border-radius: 20px; margin: 0 5px; padding: 8px 15px; transition: all 0.3s;" onmouseover="this.style.background='rgba(52, 152, 219, 0.2)'" onmouseout="this.style.background='transparent'">
                             <i class="bi bi-box-seam me-1"></i>Productos
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/admin/pedidos">
+                        <a class="nav-link text-white" href="/admin/pedidos" style="border-radius: 20px; margin: 0 5px; padding: 8px 15px; transition: all 0.3s;" onmouseover="this.style.background='rgba(52, 152, 219, 0.2)'" onmouseout="this.style.background='transparent'">
                             <i class="bi bi-cart-check me-1"></i>Pedidos
                         </a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                        <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" style="border-radius: 20px; margin: 0 5px; padding: 8px 15px;">
                             <i class="bi bi-gear me-1"></i>Gestión
                         </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="/admin/registro-admin">
-                                <i class="bi bi-person-plus me-2"></i>Nuevo Admin
+                        <ul class="dropdown-menu shadow-lg border-0" style="background: linear-gradient(135deg, #ffffff, #f8f9fa); border-radius: 15px;">
+                            <li><a class="dropdown-item" href="/admin/registro-admin" style="border-radius: 10px; margin: 5px;">
+                                <i class="bi bi-person-plus me-2 text-success"></i>Nuevo Admin
                             </a></li>
-                            <li><a class="dropdown-item" href="/admin/reportes">
-                                <i class="bi bi-graph-up me-2"></i>Reportes
+                            <li><a class="dropdown-item" href="/admin/reportes" style="border-radius: 10px; margin: 5px;">
+                                <i class="bi bi-graph-up me-2 text-info"></i>Reportes
                             </a></li>
-                            <li><a class="dropdown-item" href="/admin/configuracion">
-                                <i class="bi bi-sliders me-2"></i>Configuración
+                            <li><a class="dropdown-item" href="/admin/configuracion" style="border-radius: 10px; margin: 5px;">
+                                <i class="bi bi-sliders me-2 text-warning"></i>Configuración
                             </a></li>
                         </ul>
                     </li>

@@ -15,14 +15,17 @@ import com.ecomaxtienda.entity.Producto;
 import com.ecomaxtienda.repository.InventarioRepository;
 import com.ecomaxtienda.repository.ProductoRepository;
 
-import lombok.RequiredArgsConstructor;
-
 @Service
-@RequiredArgsConstructor
 @Transactional
 public class ProductoService {
     private final ProductoRepository productoRepository;
     private final InventarioRepository inventarioRepository;
+
+    // Constructor manual
+    public ProductoService(ProductoRepository productoRepository, InventarioRepository inventarioRepository) {
+        this.productoRepository = productoRepository;
+        this.inventarioRepository = inventarioRepository;
+    }
 
     // Métodos CRUD básicos
     public List<Producto> findAll() {

@@ -32,11 +32,8 @@ import com.ecomaxtienda.service.ProductoService;
 import com.ecomaxtienda.service.RolService;
 import com.ecomaxtienda.service.UsuarioService;
 
-import lombok.RequiredArgsConstructor;
-
 @RestController
 @RequestMapping("/api")
-@RequiredArgsConstructor
 @CrossOrigin(origins = "*")
 public class ApiController {
     
@@ -45,6 +42,17 @@ public class ApiController {
     private final PedidoService pedidoService;
     private final InventarioService inventarioService;
     private final RolService rolService;
+
+    // Constructor manual
+    public ApiController(UsuarioService usuarioService, ProductoService productoService,
+                        PedidoService pedidoService, InventarioService inventarioService,
+                        RolService rolService) {
+        this.usuarioService = usuarioService;
+        this.productoService = productoService;
+        this.pedidoService = pedidoService;
+        this.inventarioService = inventarioService;
+        this.rolService = rolService;
+    }
 
     // ========== DASHBOARD STATS ==========
     @GetMapping("/admin/dashboard/stats")

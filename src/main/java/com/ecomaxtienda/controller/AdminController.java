@@ -16,12 +16,14 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ecomaxtienda.entity.Usuario;
 import com.ecomaxtienda.service.UsuarioService;
 
-import lombok.RequiredArgsConstructor;
-
 @Controller
-@RequiredArgsConstructor
 public class AdminController {
-    private final UsuarioService usuarioService;    // ========== RUTAS PRINCIPALES ==========
+    private final UsuarioService usuarioService;
+
+    // Constructor manual
+    public AdminController(UsuarioService usuarioService) {
+        this.usuarioService = usuarioService;
+    }// ========== RUTAS PRINCIPALES ==========
     
     // 🎯 RUTA PRINCIPAL PARA PRODUCTOS (FUNCIONAL SIN BUCLES)
     @GetMapping("/admin/productos")

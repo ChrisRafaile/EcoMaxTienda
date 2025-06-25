@@ -18,14 +18,15 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ecomaxtienda.entity.Usuario;
 import com.ecomaxtienda.service.UsuarioService;
 
-import lombok.RequiredArgsConstructor;
-
 @Controller
 @RequestMapping("/client")
-@RequiredArgsConstructor
 public class ClientController {
 
     private final UsuarioService usuarioService;
+
+    public ClientController(UsuarioService usuarioService) {
+        this.usuarioService = usuarioService;
+    }
 
     @GetMapping("/home")
     public String home(Model model, Principal principal) {
