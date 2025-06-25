@@ -13,15 +13,21 @@ import com.ecomaxtienda.repository.RolRepository;
 import com.ecomaxtienda.repository.UsuarioRepository;
 import com.ecomaxtienda.service.EmailService;
 
-import lombok.RequiredArgsConstructor;
-
 @Controller
-@RequiredArgsConstructor
 public class UsuarioController {
     private final UsuarioRepository usuarioRepository;
     private final RolRepository rolRepository;
     private final PasswordEncoder passwordEncoder;
-    private final EmailService emailService;@GetMapping("/auth/registro")
+    private final EmailService emailService;
+
+    // Constructor manual
+    public UsuarioController(UsuarioRepository usuarioRepository, RolRepository rolRepository,
+                           PasswordEncoder passwordEncoder, EmailService emailService) {
+        this.usuarioRepository = usuarioRepository;
+        this.rolRepository = rolRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.emailService = emailService;
+    }@GetMapping("/auth/registro")
     public String mostrarFormularioRegistro(Model model) {
         System.out.println("✅ GET /auth/registro - Mostrando formulario de registro");
         model.addAttribute("usuario", new Usuario());

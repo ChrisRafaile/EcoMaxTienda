@@ -19,10 +19,7 @@ import com.ecomaxtienda.repository.ProductoRepository;
 import com.ecomaxtienda.repository.RolRepository;
 import com.ecomaxtienda.repository.UsuarioRepository;
 
-import lombok.RequiredArgsConstructor;
-
 @Service
-@RequiredArgsConstructor
 @Transactional
 public class InitializationService implements CommandLineRunner {
     
@@ -33,6 +30,17 @@ public class InitializationService implements CommandLineRunner {
     private final ProductoRepository productoRepository;
     private final InventarioRepository inventarioRepository;
     private final PasswordEncoder passwordEncoder;
+
+    // Constructor manual
+    public InitializationService(RolRepository rolRepository, UsuarioRepository usuarioRepository,
+                               ProductoRepository productoRepository, InventarioRepository inventarioRepository,
+                               PasswordEncoder passwordEncoder) {
+        this.rolRepository = rolRepository;
+        this.usuarioRepository = usuarioRepository;
+        this.productoRepository = productoRepository;
+        this.inventarioRepository = inventarioRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     public void run(String... args) throws Exception {

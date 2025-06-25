@@ -13,11 +13,14 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ecomaxtienda.entity.Usuario;
 import com.ecomaxtienda.repository.UsuarioRepository;
 
-import lombok.RequiredArgsConstructor;
-
 @Service
-@RequiredArgsConstructor
-public class CustomUserDetailsService implements UserDetailsService {    private final UsuarioRepository usuarioRepository;
+public class CustomUserDetailsService implements UserDetailsService {
+    private final UsuarioRepository usuarioRepository;
+
+    // Constructor manual
+    public CustomUserDetailsService(UsuarioRepository usuarioRepository) {
+        this.usuarioRepository = usuarioRepository;
+    }
     
     @Override
     @Transactional(readOnly = true)

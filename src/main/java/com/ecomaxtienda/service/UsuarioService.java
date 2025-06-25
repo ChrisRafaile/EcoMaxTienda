@@ -15,16 +15,24 @@ import com.ecomaxtienda.entity.Usuario;
 import com.ecomaxtienda.repository.RolRepository;
 import com.ecomaxtienda.repository.UsuarioRepository;
 
-import lombok.RequiredArgsConstructor;
+
 
 @Service
-@RequiredArgsConstructor
 @Transactional
 public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final RolRepository rolRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
+
+    // Constructor manual
+    public UsuarioService(UsuarioRepository usuarioRepository, RolRepository rolRepository,
+                         PasswordEncoder passwordEncoder, EmailService emailService) {
+        this.usuarioRepository = usuarioRepository;
+        this.rolRepository = rolRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.emailService = emailService;
+    }
 
     // Métodos CRUD básicos
     public List<Usuario> findAll() {

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Compra Confirmada | EcoMaxTienda</title>
 </head>
-<body class="bg-light eco-bg">
+<body class="eco-bg">
     <div th:replace="fragments/navbar :: navbar"></div>
     <main class="container my-5">
         <div class="row justify-content-center">
@@ -43,7 +43,7 @@
                                                  class="rounded me-3 small-product-image" alt="Eco Kit Hogar">
                                             <div class="flex-grow-1">
                                                 <h6 class="fw-bold mb-1">Eco Kit Hogar</h6>
-                                                <p class="text-muted small mb-1">Kit completo de productos ecológicos para el hogar</p>
+                                                <p class="small mb-1" style="color: #038554; font-weight: 600;">Kit completo de productos ecológicos para el hogar</p>
                                                 <span class="badge bg-success">Eco-Friendly</span>
                                             </div>
                                             <div class="text-end">
@@ -59,7 +59,7 @@
                                                  class="rounded me-3 small-product-image" alt="Shampoo Natural">
                                             <div class="flex-grow-1">
                                                 <h6 class="fw-bold mb-1">Shampoo Natural</h6>
-                                                <p class="text-muted small mb-1">Shampoo orgánico libre de químicos dañinos</p>
+                                                <p class="small mb-1" style="color: #038554; font-weight: 600;">Shampoo orgánico libre de químicos dañinos</p>
                                                 <span class="badge bg-success">Orgánico</span>
                                             </div>
                                             <div class="text-end">
@@ -75,7 +75,7 @@
                                                  class="rounded me-3 small-product-image" alt="Botella Reutilizable">
                                             <div class="flex-grow-1">
                                                 <h6 class="fw-bold mb-1">Botella Reutilizable</h6>
-                                                <p class="text-muted small mb-1">Botella de acero inoxidable libre de BPA</p>
+                                                <p class="small mb-1" style="color: #038554; font-weight: 600;">Botella de acero inoxidable libre de BPA</p>
                                                 <span class="badge bg-success">Reutilizable</span>
                                             </div>
                                             <div class="text-end">
@@ -105,10 +105,9 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="card shadow-sm border-0 h-100">
-                                    <div class="card-header bg-light border-0">
-                                        <h6 class="mb-0 fw-bold"><i class="bi bi-credit-card me-2"></i>Método de Pago</h6>
-                                    </div>
+                                <div class="card shadow-sm border-0 h-100">                            <div class="card-header border-0" style="background: linear-gradient(45deg, #038554, #03bb85); color: white;">
+                                <h6 class="mb-0 fw-bold"><i class="bi bi-credit-card me-2"></i>Método de Pago</h6>
+                            </div>
                                     <div class="card-body">
                                         <p class="mb-2"><strong>Método:</strong> Tarjeta de Crédito</p>
                                         <p class="mb-2"><strong>Tarjeta:</strong> •••• •••• •••• 3456</p>
@@ -122,8 +121,7 @@
 
                     <!-- Resumen financiero y acciones -->
                     <div class="col-lg-4">
-                        <div class="card shadow-sm border-0 mb-4">
-                            <div class="card-header bg-light border-0">
+                        <div class="card shadow-sm border-0 mb-4">                            <div class="card-header border-0" style="background: linear-gradient(45deg, #038554, #03bb85); color: white;">
                                 <h6 class="mb-0 fw-bold"><i class="bi bi-calculator me-2"></i>Resumen de Pago</h6>
                             </div>
                             <div class="card-body">
@@ -152,38 +150,43 @@
                         </div>
 
                         <!-- Información de seguimiento -->
-                        <div class="card shadow-sm border-0 mb-4">
-                            <div class="card-header bg-light border-0">
+                        <div class="card shadow-sm border-0 mb-4">                            <div class="card-header border-0" style="background: linear-gradient(45deg, #038554, #03bb85); color: white;">
                                 <h6 class="mb-0 fw-bold"><i class="bi bi-geo-alt me-2"></i>Seguimiento del Envío</h6>
-                            </div>
-                            <div class="card-body">
+                            </div>                            <div class="card-body">
                                 <div class="timeline">
+                                    <!-- Pedido Confirmado -->
                                     <div class="timeline-item completed">
-                                        <div class="timeline-marker bg-success"></div>
+                                        <div class="timeline-marker"></div>
                                         <div class="timeline-content">
-                                            <h6 class="mb-1">Pedido Confirmado</h6>
-                                            <p class="text-muted small mb-0">Hoy, <span id="orderTime"></span></p>
+                                            <h6 class="mb-1"><i class="bi bi-check-circle-fill me-2 text-success"></i>Pedido Confirmado</h6>
+                                            <p class="small mb-0">Hoy, <span id="orderTime"></span></p>
                                         </div>
                                     </div>
+                                    
+                                    <!-- Preparando Envío -->
                                     <div class="timeline-item">
-                                        <div class="timeline-marker bg-secondary"></div>
+                                        <div class="timeline-marker"></div>
                                         <div class="timeline-content">
-                                            <h6 class="mb-1">Preparando Envío</h6>
-                                            <p class="text-muted small mb-0">Estimado: Mañana</p>
+                                            <h6 class="mb-1"><i class="bi bi-box-seam me-2"></i>Preparando Envío</h6>
+                                            <p class="small mb-0">Estimado: Mañana</p>
                                         </div>
                                     </div>
+                                    
+                                    <!-- En Camino -->
                                     <div class="timeline-item">
-                                        <div class="timeline-marker bg-secondary"></div>
+                                        <div class="timeline-marker"></div>
                                         <div class="timeline-content">
-                                            <h6 class="mb-1">En Camino</h6>
-                                            <p class="text-muted small mb-0">Estimado: 2-3 días</p>
+                                            <h6 class="mb-1"><i class="bi bi-truck me-2"></i>En Camino</h6>
+                                            <p class="small mb-0">Estimado: 2-3 días</p>
                                         </div>
                                     </div>
+                                    
+                                    <!-- Entregado -->
                                     <div class="timeline-item">
-                                        <div class="timeline-marker bg-secondary"></div>
+                                        <div class="timeline-marker"></div>
                                         <div class="timeline-content">
-                                            <h6 class="mb-1">Entregado</h6>
-                                            <p class="text-muted small mb-0">Estimado: 3-5 días</p>
+                                            <h6 class="mb-1"><i class="bi bi-house-check me-2"></i>Entregado</h6>
+                                            <p class="small mb-0">Estimado: 3-5 días</p>
                                         </div>
                                     </div>
                                 </div>
@@ -198,8 +201,7 @@
                             </button>
                             <a href="/client/home" class="btn btn-outline-primary">
                                 <i class="bi bi-house me-2"></i>Ir al Área de Cliente
-                            </a>
-                            <a href="/client/catalogo" class="btn btn-outline-secondary">
+                            </a>                            <a href="/client/catalogo" class="btn btn-outline-success">
                                 <i class="bi bi-shop me-2"></i>Seguir Comprando
                             </a>
                         </div>
@@ -218,22 +220,21 @@
                                     <div class="col-md-4">
                                         <div class="text-center">
                                             <i class="bi bi-envelope text-success fs-2 mb-3"></i>
-                                            <h6 class="fw-bold">Confirmación por Email</h6>
-                                            <p class="text-muted small">Recibirás un email con todos los detalles de tu pedido en los próximos minutos.</p>
+                                            <h6 class="fw-bold">Confirmación por Email</h6>                                            <p class="small" style="color: #038554; font-weight: 600;">Recibirás un email con todos los detalles de tu pedido en los próximos minutos.</p>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="text-center">
                                             <i class="bi bi-truck text-success fs-2 mb-3"></i>
                                             <h6 class="fw-bold">Envío Rápido</h6>
-                                            <p class="text-muted small">Tu pedido será procesado y enviado en un plazo de 24-48 horas hábiles.</p>
+                                            <p class="small" style="color: #038554; font-weight: 600;">Tu pedido será procesado y enviado en un plazo de 24-48 horas hábiles.</p>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="text-center">
                                             <i class="bi bi-headset text-success fs-2 mb-3"></i>
                                             <h6 class="fw-bold">Soporte 24/7</h6>
-                                            <p class="text-muted small">Si tienes alguna pregunta, nuestro equipo está aquí para ayudarte.</p>
+                                            <p class="small" style="color: #038554; font-weight: 600;">Si tienes alguna pregunta, nuestro equipo está aquí para ayudarte.</p>
                                         </div>
                                     </div>
                                 </div>
@@ -390,15 +391,15 @@
             .timeline-item:last-child {
                 margin-bottom: 0;
             }
-            
-            .timeline-marker {
+              .timeline-marker {
                 position: absolute;
                 left: 0;
                 top: 5px;
                 width: 12px;
                 height: 12px;
                 border-radius: 50%;
-                border: 2px solid #fff;
+                border: 2px solid #ffffff;
+                background: linear-gradient(45deg, #038554, #03bb85) !important;
                 z-index: 1;
             }
             
@@ -409,11 +410,11 @@
                 top: 17px;
                 width: 2px;
                 height: calc(100% + 20px);
-                background-color: #dee2e6;
+                background: linear-gradient(180deg, #038554, #03bb85) !important;
             }
             
             .timeline-item.completed .timeline-marker {
-                background-color: #28a745;
+                background: linear-gradient(45deg, #038554, #03bb85) !important;
             }
             
             .timeline-content h6 {

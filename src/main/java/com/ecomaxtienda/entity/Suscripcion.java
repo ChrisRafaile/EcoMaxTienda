@@ -112,9 +112,7 @@ public class Suscripcion {
         } else {
             this.fechaFin = this.fechaFin.plusMonths(meses);
         }
-    }
-
-    public String getEstadoSuscripcion() {
+    }    public String getEstadoSuscripcion() {
         if (!this.estado) {
             return "CANCELADA";
         } else if (this.vencida()) {
@@ -124,5 +122,14 @@ public class Suscripcion {
         } else {
             return "ACTIVA";
         }
+    }    // Constructor personalizado para casos de uso específicos
+    public Suscripcion(Usuario usuario, String tipoSuscripcion, BigDecimal precioMensual) {
+        this.usuario = usuario;
+        this.tipoSuscripcion = tipoSuscripcion;
+        this.precioMensual = precioMensual;
+        this.estado = true;
+        this.autoRenovacion = true;
+        this.fechaInicio = LocalDateTime.now();
+        this.fechaCreacion = LocalDateTime.now();
     }
 }

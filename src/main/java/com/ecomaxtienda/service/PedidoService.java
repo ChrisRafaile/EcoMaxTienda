@@ -1,19 +1,25 @@
 package com.ecomaxtienda.service;
 
-import com.ecomaxtienda.entity.*;
-import com.ecomaxtienda.repository.*;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.ecomaxtienda.entity.Pedido;
+import com.ecomaxtienda.entity.PedidoDetalle;
+import com.ecomaxtienda.entity.Producto;
+import com.ecomaxtienda.entity.Usuario;
+import com.ecomaxtienda.repository.PedidoDetalleRepository;
+import com.ecomaxtienda.repository.PedidoRepository;
+import com.ecomaxtienda.repository.ProductoRepository;
+import com.ecomaxtienda.repository.UsuarioRepository;
+
 @Service
-@RequiredArgsConstructor
 @Transactional
 public class PedidoService {
     private final PedidoRepository pedidoRepository;
@@ -22,6 +28,18 @@ public class PedidoService {
     private final UsuarioRepository usuarioRepository;
     private final InventarioService inventarioService;
     private final EmailService emailService;
+
+    // Constructor manual
+    public PedidoService(PedidoRepository pedidoRepository, PedidoDetalleRepository pedidoDetalleRepository,
+                        ProductoRepository productoRepository, UsuarioRepository usuarioRepository,
+                        InventarioService inventarioService, EmailService emailService) {
+        this.pedidoRepository = pedidoRepository;
+        this.pedidoDetalleRepository = pedidoDetalleRepository;
+        this.productoRepository = productoRepository;
+        this.usuarioRepository = usuarioRepository;
+        this.inventarioService = inventarioService;
+        this.emailService = emailService;
+    }
 
     // Métodos CRUD básicos
     public List<Pedido> findAll() {

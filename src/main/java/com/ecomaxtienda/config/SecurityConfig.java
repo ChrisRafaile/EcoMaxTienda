@@ -14,13 +14,18 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 
 import com.ecomaxtienda.service.CustomUserDetailsService;
 
-import lombok.RequiredArgsConstructor;
-
 @Configuration
 @EnableMethodSecurity
-@RequiredArgsConstructor
 public class SecurityConfig {
-    private final CustomUserDetailsService userDetailsService;    @Bean
+    
+    private final CustomUserDetailsService userDetailsService;
+    
+    // Constructor manual en lugar de @RequiredArgsConstructor
+    public SecurityConfig(CustomUserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
+    
+    @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }    @Bean
@@ -35,7 +40,7 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
-    }    @Bean
+    }@Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {        http
             .authenticationProvider(this.authenticationProvider())            .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/auth/**", "/css/**", "/js/**", "/img/**", "/fonts/**", "/").permitAll()

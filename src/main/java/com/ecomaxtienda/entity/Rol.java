@@ -38,9 +38,7 @@ public class Rol {
     private Boolean estado = true;
 
     @Column(name = "fecha_creacion", nullable = false)
-    private LocalDateTime fechaCreacion = LocalDateTime.now();
-
-    @OneToMany(mappedBy = "rol", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private LocalDateTime fechaCreacion = LocalDateTime.now();    @OneToMany(mappedBy = "rol", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Usuario> usuarios;
 
     @PrePersist
@@ -51,5 +49,13 @@ public class Rol {
         if (this.estado == null) {
             this.estado = true;
         }
+    }
+
+    // Constructor personalizado para casos de uso específicos
+    public Rol(String nombre, String descripcion) {
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.estado = true;
+        this.fechaCreacion = LocalDateTime.now();
     }
 }

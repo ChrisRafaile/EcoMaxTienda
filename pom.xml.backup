@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.5.0</version>
+		<version>3.2.10</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.ecomaxtienda</groupId>
@@ -13,45 +13,64 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>ecomaxtienda</name>
 	<description>Plataforma e-commerce sostenible - EcoMaxTienda</description>
-	<url>https://github.com/ecomaxtienda/ecomaxtienda</url>
+	<url/>
 	<licenses>
-		<license>
-			<name>MIT License</name>
-			<url>https://opensource.org/licenses/MIT</url>
-		</license>
+		<license/>
 	</licenses>
 	<developers>
-		<developer>
-			<name>EcoMaxTienda Team</name>
-			<email>dev@ecomaxtienda.com</email>
-		</developer>
+		<developer/>
 	</developers>
 	<scm>
-		<connection>scm:git:git://github.com/ecomaxtienda/ecomaxtienda.git</connection>
-		<developerConnection>scm:git:ssh://github.com:ecomaxtienda/ecomaxtienda.git</developerConnection>
-		<tag>HEAD</tag>
-		<url>https://github.com/ecomaxtienda/ecomaxtienda</url>
+		<connection/>
+		<developerConnection/>
+		<tag/>
+		<url/>
 	</scm>
 	<properties>
 		<java.version>17</java.version>
-		<spring-boot.version>3.5.0</spring-boot.version>
-		<maven.compiler.release>17</maven.compiler.release>
-		<maven.compiler.showWarnings>false</maven.compiler.showWarnings>
-		<maven.compiler.showDeprecation>false</maven.compiler.showDeprecation>
-		
-		<!-- Suprimir completamente las validaciones de versión de Spring Boot -->
-		<spring-boot.version.validation.skip>true</spring-boot.version.validation.skip>
-		<spring-boot.version.check.skip>true</spring-boot.version.check.skip>
-		<versions.skip>true</versions.skip>
-		<maven.version.update.skip>true</maven.version.update.skip>
-		<maven.enforcer.skip>true</maven.enforcer.skip>
-		
-		<!-- Propiedades específicas para eliminar BOOT_VERSION_VALIDATION_CODE -->
-		<spring-boot.version.validation.enabled>false</spring-boot.version.validation.enabled>
-		<spring-boot.build-info.skip>true</spring-boot.build-info.skip>
-		<spring-boot.repackage.skip>false</spring-boot.repackage.skip>
+		<maven.compiler.source>17</maven.compiler.source>
+		<maven.compiler.target>17</maven.compiler.target>
+		<lombok.version>1.18.30</lombok.version>
+		<!-- Suprimir advertencias de versiones -->
+		<maven.version.check.skip>true</maven.version.check.skip>
+		<!-- Configuración para IDEs -->
+		<m2e.apt.activation>jdt_apt</m2e.apt.activation>
+	</properties>?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>3.2.10</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>com.ecomaxtienda</groupId>
+	<artifactId>ecomaxtienda</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>ecomaxtienda</name>
+	<description>Plataforma e-commerce sostenible - EcoMaxTienda</description>
+	<url/>
+	<licenses>
+		<license/>
+	</licenses>
+	<developers>
+		<developer/>
+	</developers>
+	<scm>
+		<connection/>
+		<developerConnection/>
+		<tag/>
+		<url/>
+	</scm>
+	<properties>
+		<java.version>17</java.version>
+		<maven.compiler.source>17</maven.compiler.source>
+		<maven.compiler.target>17</maven.compiler.target>
+		<lombok.version>1.18.30</lombok.version>
+		<!-- Suprimir advertencias de versiones -->
+		<maven.version.check.skip>true</maven.version.check.skip>
 	</properties>
-	
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -85,6 +104,7 @@
 			<groupId>org.thymeleaf.extras</groupId>
 			<artifactId>thymeleaf-extras-springsecurity6</artifactId>
 		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
@@ -120,41 +140,13 @@
 
 	<build>
 		<plugins>
-			<!-- Plugin versions-maven-plugin deshabilitado completamente -->
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>versions-maven-plugin</artifactId>
-				<configuration>
-					<skip>true</skip>
-				</configuration>
-				<executions>
-					<execution>
-						<id>default</id>
-						<phase>none</phase>
-					</execution>
-				</executions>
-			</plugin>
-			
-			<!-- Plugin enforcer deshabilitado -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-enforcer-plugin</artifactId>
-				<configuration>
-					<skip>true</skip>
-				</configuration>
-				<executions>
-					<execution>
-						<id>default</id>
-						<phase>none</phase>
-					</execution>
-				</executions>
-			</plugin>
-			
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.11.0</version>
 				<configuration>
+					<source>17</source>
+					<target>17</target>
 					<release>17</release>
 					<compilerArgs>
 						<arg>-parameters</arg>
@@ -166,9 +158,11 @@
 							<version>${lombok.version}</version>
 						</path>
 					</annotationProcessorPaths>
+					<annotationProcessors>
+						<annotationProcessor>lombok.launch.AnnotationProcessorHider$AnnotationProcessor</annotationProcessor>
+					</annotationProcessors>
 				</configuration>
 			</plugin>
-			
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>

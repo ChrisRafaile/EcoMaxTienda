@@ -32,7 +32,9 @@ public class Usuario {
     private Integer idUsuario;
 
     @Column(name = "nombre", nullable = false, length = 100)
-    private String nombre;    @Column(name = "apellido", nullable = false, length = 100)
+    private String nombre;
+
+    @Column(name = "apellido", nullable = false, length = 100)
     private String apellido = "";
 
     @Column(name = "email", nullable = false, unique = true, length = 150)
@@ -85,10 +87,25 @@ public class Usuario {
         }
     }
 
+    // Constructor personalizado para casos de uso específicos
+    public Usuario(String nombre, String apellido, String email, String password, String telefono, String direccion, Rol rol) {
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.email = email;
+        this.password = password;
+        this.telefono = telefono;
+        this.direccion = direccion;
+        this.rol = rol;
+        this.estado = true;
+        this.fechaRegistro = LocalDateTime.now();
+    }
+
     // Métodos de utilidad
     public String getNombreCompleto() {
         return this.nombre + " " + this.apellido;
-    }    public boolean isAdmin() {
+    }
+
+    public boolean isAdmin() {
         return this.rol != null && ("ROLE_ADMIN".equals(this.rol.getNombre()) || "ROLE_SUPER_ADMIN".equals(this.rol.getNombre()));
     }
 

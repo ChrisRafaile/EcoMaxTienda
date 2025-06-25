@@ -159,5 +159,11 @@ public class Pago {
 
     public boolean esEfectivo() {
         return "EFECTIVO".equals(this.metodoPago);
+    }    // Constructor personalizado para casos de uso específicos
+    public Pago(Pedido pedido, String metodoPago, BigDecimal monto, String estado) {
+        this.pedido = pedido;
+        this.metodoPago = metodoPago;
+        this.monto = monto;
+        this.estado = estado;        this.fechaPago = LocalDateTime.now();
     }
 }

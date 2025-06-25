@@ -173,11 +173,19 @@ public class Pedido {
         if (this.puedeSerCancelado()) {
             this.estado = "CANCELADO";
         }
-    }
-
-    public Integer getCantidadItems() {
+    }    public Integer getCantidadItems() {
         return this.detalles != null ? this.detalles.stream()
             .mapToInt(PedidoDetalle::getCantidad)
             .sum() : 0;
+    }    // Constructor personalizado para casos de uso específicos
+    public Pedido(Usuario usuario, String numeroPedido, String estado) {
+        this.usuario = usuario;
+        this.numeroPedido = numeroPedido;
+        this.estado = estado;
+        this.fechaPedido = LocalDateTime.now();
+        this.subtotal = BigDecimal.ZERO;
+        this.descuento = BigDecimal.ZERO;
+        this.impuestos = BigDecimal.ZERO;
+        this.costoEnvio = BigDecimal.ZERO;        this.total = BigDecimal.ZERO;
     }
 }
