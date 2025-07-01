@@ -12,21 +12,21 @@
         <div class="row">
             <!-- Sidebar de navegación -->
             <div class="col-md-3">
-                <div class="card shadow-sm border-0">
-                    <div class="card-header bg-success text-white">
+                <div class="client-sidebar">
+                    <div class="client-sidebar-header">
                         <h5 class="mb-0"><i class="bi bi-person-circle me-2"></i>Mi Cuenta</h5>
                     </div>
                     <div class="list-group list-group-flush">
-                        <a href="/client/perfil" class="list-group-item list-group-item-action">
+                        <a href="/client/perfil" class="client-nav-item">
                             <i class="bi bi-person me-2"></i>Mi Perfil
                         </a>
-                        <a href="/client/pedidos" class="list-group-item list-group-item-action">
+                        <a href="/client/pedidos" class="client-nav-item">
                             <i class="bi bi-bag-check me-2"></i>Mis Pedidos
                         </a>
-                        <a href="/client/configuracion" class="list-group-item list-group-item-action active">
+                        <a href="/client/configuracion" class="client-nav-item active">
                             <i class="bi bi-gear me-2"></i>Configuración
                         </a>
-                        <a href="/client/suscripcion" class="list-group-item list-group-item-action">
+                        <a href="/client/suscripcion" class="client-nav-item">
                             <i class="bi bi-star me-2"></i>Suscripción
                         </a>
                     </div>
@@ -35,13 +35,13 @@
 
             <!-- Contenido principal -->
             <div class="col-md-9">                <!-- Editar información personal -->
-                <div class="card shadow-lg border-0 mb-4 rounded-4">
-                    <div class="card-header border-0" style="background: linear-gradient(135deg, #28a745, #20c997); color: white;">
+                <div class="client-modern-card">
+                    <div class="client-card-header">
                         <h4 class="mb-0 fw-bold">
                             <i class="bi bi-pencil-square me-2"></i>Editar Información Personal
                         </h4>
                     </div>
-                    <div class="card-body p-4" style="background: linear-gradient(135deg, #f8fffe, #e8f5e8);">
+                    <div class="client-card-body">
                         <form id="profileForm" th:action="@{/client/configuracion}" method="post" enctype="multipart/form-data" th:object="${usuario}">
                             <!-- Foto de perfil -->
                             <div class="row mb-4">
@@ -65,36 +65,36 @@
                                 <div class="col-md-8">
                                     <div class="row g-3">
                                         <div class="col-md-6">
-                                            <label for="nombre" class="form-label fw-bold text-success">
+                                            <label for="nombre" class="client-form-label">
                                                 <i class="bi bi-person me-1"></i>Nombre
                                             </label>
-                                            <input type="text" class="form-control border-success" id="nombre" name="nombre"
+                                            <input type="text" class="client-form-control" id="nombre" name="nombre"
                                                    th:field="*{nombre}"
                                                    th:value="${usuario != null ? usuario.nombre : 'Juan'}" 
-                                                   value="Juan" required style="background-color: #f8fff8;">
+                                                   value="Juan" required>
                                         </div>
                                         <div class="col-md-6">
-                                            <label for="apellido" class="form-label fw-bold text-success">
+                                            <label for="apellido" class="client-form-label">
                                                 <i class="bi bi-person-badge me-1"></i>Apellido
                                             </label>
-                                            <input type="text" class="form-control border-success" id="apellido" name="apellido"
+                                            <input type="text" class="client-form-control" id="apellido" name="apellido"
                                                    th:field="*{apellido}"
                                                    th:value="${usuario != null ? usuario.apellido : 'Pérez'}" 
-                                                   value="Pérez" required style="background-color: #f8fff8;">
+                                                   value="Pérez" required>
                                         </div>
                                         <div class="col-md-6">
-                                            <label for="email" class="form-label fw-bold text-success">
+                                            <label for="email" class="client-form-label">
                                                 <i class="bi bi-envelope me-1"></i>Email
                                             </label>
-                                            <input type="email" class="form-control border-success" id="email" name="email"
+                                            <input type="email" class="client-form-control" id="email" name="email"
                                                    th:field="*{email}"
                                                    th:value="${usuario != null ? usuario.email : 'juan.perez@email.com'}" 
                                                    value="juan.perez@email.com" required readonly style="background-color: #f0f8f0;">
                                             <div class="form-text">El email no se puede cambiar</div>
                                         </div>
                                         <div class="col-md-6">
-                                            <label for="telefono" class="form-label fw-bold">Teléfono</label>
-                                            <input type="tel" class="form-control" id="telefono" 
+                                            <label for="telefono" class="client-form-label">Teléfono</label>
+                                            <input type="tel" class="client-form-control" id="telefono" 
                                                    th:value="${usuario != null ? usuario.telefono : '+51 999 123 456'}" 
                                                    value="+51 999 123 456" required>
                                         </div>
@@ -105,25 +105,25 @@
                             <!-- Información adicional -->
                             <div class="row g-3 mb-4">
                                 <div class="col-md-6">
-                                    <label for="dni" class="form-label fw-bold">DNI</label>
-                                    <input type="text" class="form-control" id="dni" 
+                                    <label for="dni" class="client-form-label">DNI</label>
+                                    <input type="text" class="client-form-control" id="dni" 
                                            th:value="${usuario != null ? usuario.dni : '12345678'}" 
                                            value="12345678" required>
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="fechaNacimiento" class="form-label fw-bold">Fecha de Nacimiento</label>
-                                    <input type="date" class="form-control" id="fechaNacimiento" name="fechaNacimiento"
+                                    <label for="fechaNacimiento" class="client-form-label">Fecha de Nacimiento</label>
+                                    <input type="date" class="client-form-control" id="fechaNacimiento" name="fechaNacimiento"
                                            th:field="*{fechaNacimiento}" th:value="${usuario != null && usuario.fechaNacimiento != null ? #temporals.format(usuario.fechaNacimiento, 'yyyy-MM-dd') : ''}">
                                 </div>
                                 <div class="col-md-12">
-                                    <label for="direccion" class="form-label fw-bold">Dirección</label>
-                                    <input type="text" class="form-control" id="direccion" 
+                                    <label for="direccion" class="client-form-label">Dirección</label>
+                                    <input type="text" class="client-form-control" id="direccion" 
                                            th:value="${usuario != null ? usuario.direccion : 'Av. Principal 123, San Isidro'}" 
                                            value="Av. Principal 123, San Isidro" required>
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="ciudad" class="form-label fw-bold">Ciudad</label>
-                                    <select class="form-select" id="ciudad">
+                                    <label for="ciudad" class="client-form-label">Ciudad</label>
+                                    <select class="client-form-control" id="ciudad">
                                         <option value="Lima" selected>Lima</option>
                                         <option value="Arequipa">Arequipa</option>
                                         <option value="Trujillo">Trujillo</option>
@@ -131,16 +131,16 @@
                                     </select>
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="codigoPostal" class="form-label fw-bold">Código Postal</label>
-                                    <input type="text" class="form-control" id="codigoPostal" value="15001" required>
+                                    <label for="codigoPostal" class="client-form-label">Código Postal</label>
+                                    <input type="text" class="client-form-control" id="codigoPostal" value="15001" required>
                                 </div>
                             </div>
 
                             <div class="d-flex gap-3">
-                                <button type="submit" class="btn btn-success">
+                                <button type="submit" class="client-btn-primary">
                                     <i class="bi bi-check-circle me-2"></i>Guardar Cambios
                                 </button>
-                                <a href="/client/perfil" class="btn btn-outline-secondary">
+                                <a href="/client/perfil" class="client-btn-secondary">
                                     <i class="bi bi-x-circle me-2"></i>Cancelar
                                 </a>
                             </div>
@@ -149,31 +149,31 @@
                 </div>
 
                 <!-- Cambiar contraseña -->
-                <div class="card shadow-sm border-0 mb-4">
-                    <div class="card-header bg-light border-0">
-                        <h5 class="mb-0 text-success fw-bold">
+                <div class="client-modern-card">
+                    <div class="client-card-header">
+                        <h5 class="mb-0 fw-bold">
                             <i class="bi bi-shield-lock me-2"></i>Cambiar Contraseña
                         </h5>
                     </div>
-                    <div class="card-body p-4">
+                    <div class="client-card-body">
                         <form id="passwordForm">
                             <div class="row g-3">
                                 <div class="col-md-12">
-                                    <label for="currentPassword" class="form-label fw-bold">Contraseña Actual</label>
-                                    <input type="password" class="form-control" id="currentPassword" required>
+                                    <label for="currentPassword" class="client-form-label">Contraseña Actual</label>
+                                    <input type="password" class="client-form-control" id="currentPassword" required>
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="newPassword" class="form-label fw-bold">Nueva Contraseña</label>
-                                    <input type="password" class="form-control" id="newPassword" required>
+                                    <label for="newPassword" class="client-form-label">Nueva Contraseña</label>
+                                    <input type="password" class="client-form-control" id="newPassword" required>
                                     <div class="form-text">Mínimo 8 caracteres</div>
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="confirmPassword" class="form-label fw-bold">Confirmar Nueva Contraseña</label>
-                                    <input type="password" class="form-control" id="confirmPassword" required>
+                                    <label for="confirmPassword" class="client-form-label">Confirmar Nueva Contraseña</label>
+                                    <input type="password" class="client-form-control" id="confirmPassword" required>
                                 </div>
                             </div>
                             <div class="mt-3">
-                                <button type="submit" class="btn btn-warning">
+                                <button type="submit" class="client-btn-warning">
                                     <i class="bi bi-key me-2"></i>Cambiar Contraseña
                                 </button>
                             </div>
@@ -182,19 +182,19 @@
                 </div>
 
                 <!-- Configuración de suscripción -->
-                <div class="card shadow-sm border-0 mb-4">
-                    <div class="card-header bg-light border-0">
-                        <h5 class="mb-0 text-success fw-bold">
+                <div class="client-modern-card">
+                    <div class="client-card-header">
+                        <h5 class="mb-0 fw-bold">
                             <i class="bi bi-star me-2"></i>Configuración de Suscripción
                         </h5>
                     </div>
-                    <div class="card-body p-4">
+                    <div class="client-card-body">
                         <div class="row">
                             <div class="col-md-8">
                                 <h6 class="fw-bold text-success">Plan EcoAmigo Premium</h6>
                                 <p class="text-muted">Disfruta de descuentos exclusivos y envío gratis en todos tus pedidos.</p>
                                 <div class="d-flex align-items-center mb-3">
-                                    <span class="badge bg-success me-2">Activo</span>
+                                    <span class="client-badge-success me-2">Activo</span>
                                     <span class="text-muted">Próxima facturación: 15 de julio, 2024</span>
                                 </div>
                             </div>

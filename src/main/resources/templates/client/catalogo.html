@@ -32,54 +32,53 @@
         <!-- Filtros -->
         <div class="row mb-4">
             <div class="col-lg-3">
-                <div class="card border-0 shadow-lg rounded-4">
-                    <div class="card-header border-0" style="background: linear-gradient(135deg, #17a2b8, #20c997); color: white;">
+                <div class="card client-filter-card">
+                    <div class="card-header client-filter-header">
                         <h6 class="mb-0 fw-bold"><i class="bi bi-funnel me-2"></i>Filtros Inteligentes</h6>
                     </div>
-                    <div class="card-body" style="background: linear-gradient(135deg, #e8f8f5, #f0fffe);">
+                    <div class="card-body client-filter-body">
                         <div class="mb-3">
-                            <label class="form-label fw-bold text-success">
+                            <label class="form-label fw-bold client-text-primary">
                                 <i class="bi bi-tags me-1"></i>Categoría
                             </label>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="hogar" style="color: #28a745;">
+                                <input class="form-check-input client-form-check-input" type="checkbox" id="hogar">
                                 <label class="form-check-label" for="hogar">🏠 Hogar Sostenible</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="personal">
+                                <input class="form-check-input client-form-check-input" type="checkbox" id="personal">
                                 <label class="form-check-label" for="personal">🧴 Cuidado Personal</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="cocina">
+                                <input class="form-check-input client-form-check-input" type="checkbox" id="cocina">
                                 <label class="form-check-label" for="cocina">🍳 Cocina Verde</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="ropa">
+                                <input class="form-check-input client-form-check-input" type="checkbox" id="ropa">
                                 <label class="form-check-label" for="ropa">👕 Textiles Eco</label>
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label for="priceRange" class="form-label fw-bold text-success">
+                            <label for="priceRange" class="form-label fw-bold client-text-primary">
                                 <i class="bi bi-currency-dollar me-1"></i>Rango de Precio
                             </label>
-                            <input type="range" class="form-range" min="0" max="100" id="priceRange" 
-                                   aria-label="Filtro de precio" title="Seleccionar rango de precio"
-                                   style="accent-color: #28a745;">
+                            <input type="range" class="form-range client-form-range" min="0" max="100" id="priceRange" 
+                                   aria-label="Filtro de precio" title="Seleccionar rango de precio">
                             <div class="d-flex justify-content-between">
-                                <small class="text-success fw-bold">$0</small>
-                                <small class="text-success fw-bold">$100+</small>
+                                <small class="client-text-primary fw-bold">$0</small>
+                                <small class="client-text-primary fw-bold">$100+</small>
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label fw-bold text-success">
+                            <label class="form-label fw-bold client-text-primary">
                                 <i class="bi bi-leaf me-1"></i>Impacto Ecológico
                             </label>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="carbono_neutro">
+                                <input class="form-check-input client-form-check-input" type="checkbox" id="carbono_neutro">
                                 <label class="form-check-label" for="carbono_neutro">🌍 Carbono Neutro</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="biodegradable">
+                                <input class="form-check-input client-form-check-input" type="checkbox" id="biodegradable">
                                 <label class="form-check-label" for="biodegradable">♻️ Biodegradable</label>
                             </div>
                         </div>
@@ -88,11 +87,11 @@
             </div>            <!-- Lista de productos -->
             <div class="col-lg-9">
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h3 class="text-success fw-bold">
+                    <h3 class="client-text-primary fw-bold">
                         <i class="bi bi-stars me-2"></i>Productos Destacados
                     </h3>
                     <div class="dropdown">
-                        <button class="btn btn-outline-success dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <button class="btn client-btn-outline dropdown-toggle" type="button" data-bs-toggle="dropdown">
                             <i class="bi bi-sort-down me-1"></i>Ordenar por
                         </button>
                         <ul class="dropdown-menu">
@@ -104,22 +103,23 @@
                     </div>
                 </div>
                 
-                <div class="row g-4">                    <!-- Producto 1 -->
+                <div class="row g-4">
+                    <!-- Producto 1 -->
                     <div class="col-md-6 col-lg-4">
-                        <div class="card border-0 shadow-lg h-100 product-card rounded-4" style="background: white; border: 2px solid #28a745;">
+                        <div class="card client-product-card">
                             <div class="position-relative text-center pt-4">
-                                <div class="bg-success bg-gradient rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
-                                    <i class="bi bi-house-heart text-white display-6"></i>
+                                <div class="client-product-icon">
+                                    <i class="bi bi-house-heart text-white fs-2"></i>
                                 </div>
-                                <span class="badge position-absolute top-0 end-0 m-3" style="background: linear-gradient(45deg, #28a745, #20c997); color: white;">
+                                <span class="badge client-product-badge position-absolute top-0 end-0 m-3">
                                     <i class="bi bi-leaf me-1"></i>Eco-Friendly
                                 </span>
                             </div>
                             <div class="card-body">
-                                <h6 class="card-title fw-bold text-success">Eco Kit Hogar Premium</h6>
+                                <h6 class="card-title fw-bold client-text-primary">Eco Kit Hogar Premium</h6>
                                 <p class="card-text text-dark small">Kit completo con productos biodegradables para mantener tu hogar limpio y sostenible.</p>
                                 <div class="mb-2">
-                                    <small class="text-success">
+                                    <small class="client-text-primary">
                                         <i class="bi bi-star-fill text-warning"></i>
                                         <i class="bi bi-star-fill text-warning"></i>
                                         <i class="bi bi-star-fill text-warning"></i>
@@ -130,14 +130,14 @@
                                 </div>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div>
-                                        <span class="fw-bold text-success fs-4">$17.50</span>
+                                        <span class="fw-bold client-text-primary fs-4">$17.50</span>
                                         <small class="text-decoration-line-through text-muted ms-1">$25.00</small>
                                     </div>
                                     <div class="btn-group" role="group">
-                                        <button class="btn btn-success btn-sm rounded-pill" onclick="addToCart('Eco Kit Hogar', 17.50, this)">
+                                        <button class="btn client-btn-add" onclick="addToCart('Eco Kit Hogar', 17.50, this)">
                                             <i class="bi bi-cart-plus me-1"></i>Agregar
                                         </button>
-                                        <button class="btn btn-outline-danger btn-sm rounded-circle" onclick="toggleFavorite(this, 'Eco Kit Hogar')" 
+                                        <button class="btn client-btn-favorite" onclick="toggleFavorite(this, 'Eco Kit Hogar')" 
                                                 data-bs-toggle="tooltip" title="Agregar a favoritos">
                                             <i class="bi bi-heart"></i>
                                         </button>
@@ -147,25 +147,25 @@
                         </div>
                     </div>                    <!-- Producto 2 - Shampoo Natural -->
                     <div class="col-md-6 col-lg-4">
-                        <div class="card border-0 shadow-lg h-100 product-card rounded-4" style="background: white; border: 2px solid #17a2b8;">
+                        <div class="card client-product-card">
                             <div class="position-relative text-center pt-4">
-                                <div class="bg-primary bg-gradient rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
-                                    <i class="bi bi-droplet-half text-white display-6"></i>
+                                <div class="client-product-icon">
+                                    <i class="bi bi-droplet-half text-white fs-2"></i>
                                 </div>
-                                <span class="badge position-absolute top-0 end-0 m-3" style="background: linear-gradient(45deg, #28a745, #20c997); color: white;">
+                                <span class="badge client-product-badge position-absolute top-0 end-0 m-3">
                                     <i class="bi bi-leaf me-1"></i>Eco-Friendly
                                 </span>
                             </div>
                             <div class="card-body">
-                                <h6 class="card-title fw-bold text-primary">Shampoo Natural</h6>
+                                <h6 class="card-title fw-bold client-text-primary">Shampoo Natural</h6>
                                 <p class="card-text text-dark small">Shampoo 100% natural sin químicos dañinos.</p>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <span class="fw-bold text-success fs-4">$12.00</span>
+                                    <span class="fw-bold client-text-primary fs-4">$12.00</span>
                                     <div class="btn-group" role="group">
-                                        <button class="btn btn-success btn-sm rounded-pill" onclick="addToCart('Shampoo Natural', 12.00, this)">
+                                        <button class="btn client-btn-add" onclick="addToCart('Shampoo Natural', 12.00, this)">
                                             <i class="bi bi-cart-plus me-1"></i>Agregar
                                         </button>
-                                        <button class="btn btn-outline-danger btn-sm rounded-circle" onclick="toggleFavorite(this, 'Shampoo Natural')" 
+                                        <button class="btn client-btn-favorite" onclick="toggleFavorite(this, 'Shampoo Natural')" 
                                                 data-bs-toggle="tooltip" title="Agregar a favoritos">
                                             <i class="bi bi-heart"></i>
                                         </button>
@@ -176,25 +176,25 @@
                     </div>
                     <!-- Producto 3 - Detergente Orgánico -->
                     <div class="col-md-6 col-lg-4">
-                        <div class="card border-0 shadow-lg h-100 product-card rounded-4" style="background: white; border: 2px solid #20c997;">
+                        <div class="card client-product-card">
                             <div class="position-relative text-center pt-4">
-                                <div class="bg-info bg-gradient rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
-                                    <i class="bi bi-bucket text-white display-6"></i>
+                                <div class="client-product-icon">
+                                    <i class="bi bi-bucket text-white fs-2"></i>
                                 </div>
-                                <span class="badge position-absolute top-0 end-0 m-3" style="background: linear-gradient(45deg, #28a745, #20c997); color: white;">
+                                <span class="badge client-product-badge position-absolute top-0 end-0 m-3">
                                     <i class="bi bi-leaf me-1"></i>Eco-Friendly
                                 </span>
                             </div>
                             <div class="card-body">
-                                <h6 class="card-title fw-bold">Detergente Orgánico</h6>
-                                <p class="card-text text-muted small">Detergente biodegradable para ropa.</p>
+                                <h6 class="card-title fw-bold client-text-primary">Detergente Orgánico</h6>
+                                <p class="card-text text-dark small">Detergente biodegradable para ropa.</p>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <span class="fw-bold text-success fs-5">$15.00</span>
+                                    <span class="fw-bold client-text-primary fs-4">$15.00</span>
                                     <div class="btn-group" role="group">
-                                        <button class="btn btn-success btn-sm" onclick="addToCart('Detergente Orgánico', 15.00, this)">
+                                        <button class="btn client-btn-add" onclick="addToCart('Detergente Orgánico', 15.00, this)">
                                             <i class="bi bi-cart-plus me-1"></i>Agregar
                                         </button>
-                                        <button class="btn btn-outline-danger btn-sm" onclick="toggleFavorite(this, 'Detergente Orgánico')" 
+                                        <button class="btn client-btn-favorite" onclick="toggleFavorite(this, 'Detergente Orgánico')" 
                                                 data-bs-toggle="tooltip" title="Agregar a favoritos">
                                             <i class="bi bi-heart"></i>
                                         </button>
@@ -205,21 +205,25 @@
                     </div>
                     <!-- Producto 4 -->
                     <div class="col-md-6 col-lg-4">
-                        <div class="card border-0 shadow-sm h-100 product-card">
+                        <div class="card client-product-card">
                             <div class="position-relative text-center pt-4">
-                                <i class="bi bi-bag-check display-1 text-warning"></i>
-                                <span class="badge bg-success position-absolute top-0 end-0 m-2">Eco-Friendly</span>
+                                <div class="client-product-icon">
+                                    <i class="bi bi-bag-check text-white fs-2"></i>
+                                </div>
+                                <span class="badge client-product-badge position-absolute top-0 end-0 m-3">
+                                    <i class="bi bi-leaf me-1"></i>Eco-Friendly
+                                </span>
                             </div>
                             <div class="card-body">
-                                <h6 class="card-title fw-bold">Bolsas Reutilizables</h6>
-                                <p class="card-text text-muted small">Set de 5 bolsas reutilizables de algodón orgánico.</p>
+                                <h6 class="card-title fw-bold client-text-primary">Bolsas Reutilizables</h6>
+                                <p class="card-text text-dark small">Set de 5 bolsas reutilizables de algodón orgánico.</p>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <span class="fw-bold text-success fs-5">$8.50</span>
+                                    <span class="fw-bold client-text-primary fs-4">$8.50</span>
                                     <div class="btn-group" role="group">
-                                        <button class="btn btn-success btn-sm" onclick="addToCart('Bolsas Reutilizables', 8.50, this)">
+                                        <button class="btn client-btn-add" onclick="addToCart('Bolsas Reutilizables', 8.50, this)">
                                             <i class="bi bi-cart-plus me-1"></i>Agregar
                                         </button>
-                                        <button class="btn btn-outline-danger btn-sm" onclick="toggleFavorite(this, 'Bolsas Reutilizables')" 
+                                        <button class="btn client-btn-favorite" onclick="toggleFavorite(this, 'Bolsas Reutilizables')" 
                                                 data-bs-toggle="tooltip" title="Agregar a favoritos">
                                             <i class="bi bi-heart"></i>
                                         </button>
@@ -230,21 +234,25 @@
                     </div>
                     <!-- Producto 5 -->
                     <div class="col-md-6 col-lg-4">
-                        <div class="card border-0 shadow-sm h-100 product-card">
+                        <div class="card client-product-card">
                             <div class="position-relative text-center pt-4">
-                                <i class="bi bi-brush display-1 text-secondary"></i>
-                                <span class="badge bg-success position-absolute top-0 end-0 m-2">Eco-Friendly</span>
+                                <div class="client-product-icon">
+                                    <i class="bi bi-brush text-white fs-2"></i>
+                                </div>
+                                <span class="badge client-product-badge position-absolute top-0 end-0 m-3">
+                                    <i class="bi bi-leaf me-1"></i>Eco-Friendly
+                                </span>
                             </div>
                             <div class="card-body">
-                                <h6 class="card-title fw-bold">Cepillo de Bambú</h6>
-                                <p class="card-text text-muted small">Cepillo dental biodegradable de bambú.</p>
+                                <h6 class="card-title fw-bold client-text-primary">Cepillo de Bambú</h6>
+                                <p class="card-text text-dark small">Cepillo dental biodegradable de bambú.</p>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <span class="fw-bold text-success fs-5">$4.00</span>
+                                    <span class="fw-bold client-text-primary fs-4">$4.00</span>
                                     <div class="btn-group" role="group">
-                                        <button class="btn btn-success btn-sm" onclick="addToCart('Cepillo de Bambú', 4.00, this)">
+                                        <button class="btn client-btn-add" onclick="addToCart('Cepillo de Bambú', 4.00, this)">
                                             <i class="bi bi-cart-plus me-1"></i>Agregar
                                         </button>
-                                        <button class="btn btn-outline-danger btn-sm" onclick="toggleFavorite(this, 'Cepillo de Bambú')" 
+                                        <button class="btn client-btn-favorite" onclick="toggleFavorite(this, 'Cepillo de Bambú')" 
                                                 data-bs-toggle="tooltip" title="Agregar a favoritos">
                                             <i class="bi bi-heart"></i>
                                         </button>
