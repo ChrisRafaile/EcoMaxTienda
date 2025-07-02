@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/head :: head('Carrito de Compras | EcoMaxTienda')">
+    <!-- Fallback content si Thymeleaf no está disponible -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito de Compras | EcoMaxTienda</title>
 </head>
 <body class="eco-bg">
     <div th:replace="fragments/navbar :: navbar"></div>
