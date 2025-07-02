@@ -92,14 +92,14 @@
     border-color: #43a047;
 }
 
-/* Asegura que el body y html ocupen toda la altura y el footer quede abajo */
+/* Asegura que el body y html permitan scroll completo */
 html, body {
-    height: 100%;
+    height: auto;
+    min-height: 100vh;
 }
 body {
     min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+    display: block; /* Cambiar de flex a block para permitir scroll */
 }
 .eco-footer {
     margin-top: auto;
