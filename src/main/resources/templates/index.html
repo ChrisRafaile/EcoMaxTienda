@@ -1,15 +1,70 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/head :: head('EcoMaxTienda | Inicio')">
+<head>
+    <!-- Meta tags básicos -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>EcoMaxTienda | Inicio</title>
+    
+    <!-- Favicons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/img/apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="/img/apple-touch-icon.png">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png">
+    <link rel="icon" sizes="192x192" href="/img/android-chrome-192x192.png">
+    <link rel="icon" sizes="512x512" href="/img/android-chrome-512x512.png">
+    <link rel="manifest" href="/img/site.webmanifest">
+    
+    <!-- CSS externos -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/client-styles.css">
     <link rel="stylesheet" href="/css/green-theme.css">
+    <link rel="stylesheet" href="/css/client-improvements.css">
     <style>
+        /* FIX DEFINITIVO: Permitir scroll vertical completo */
+        html {
+            overflow-x: hidden !important;
+            overflow-y: auto !important;
+            height: auto !important; /* SOBRESCRIBIR height: 100% del styles.css */
+            min-height: 100vh !important;
+            max-height: none !important;
+            scroll-behavior: smooth !important;
+        }
+        
+        body {
+            overflow-x: hidden !important;
+            overflow-y: visible !important;
+            height: auto !important; /* SOBRESCRIBIR height: 100% del styles.css */
+            min-height: 100vh !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            position: relative !important;
+            display: block !important; /* Cambiar de flex a block para permitir scroll normal */
+        }
+        
+        /* Asegurar que el main y containers permitan contenido completo */
+        main {
+            height: auto !important;
+            min-height: 100vh !important;
+            max-height: none !important;
+            overflow: visible !important;
+            width: 100% !important;
+            flex: 1 !important; /* Para que el main ocupe el espacio disponible */
+        }
+        
+        .container, .container-fluid {
+            height: auto !important;
+            min-height: 0 !important;
+            max-height: none !important;
+            overflow: visible !important;
+        }
+        
         :root {
             --primary-green: #038554;
             --secondary-green: #03bb85;
@@ -20,9 +75,10 @@
         /* Hero Section con Animaciones */
         .hero-container {
             background: linear-gradient(135deg, var(--primary-green) 0%, var(--secondary-green) 50%, #17a2b8 100%);
-            min-height: 100vh;
+            min-height: 100vh; /* Altura mínima, no máxima */
+            height: auto; /* Permitir altura automática */
             position: relative;
-            overflow: hidden;
+            overflow: visible !important; /* PERMITIR que el contenido se muestre */
             display: flex;
             align-items: center;
         }
@@ -51,17 +107,19 @@
         .hero-title {
             font-size: 4rem;
             font-weight: 900;
-            background: linear-gradient(45deg, #ffffff, #f0fff0);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            color: #ffffff !important; /* Texto blanco sólido */
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.7) !important; /* Sombra más fuerte */
+            background: none !important; /* Quitar gradiente transparente */
+            -webkit-background-clip: unset !important;
+            -webkit-text-fill-color: unset !important;
+            background-clip: unset !important;
         }
 
         .hero-subtitle {
             font-size: 1.5rem;
-            color: rgba(255, 255, 255, 0.9);
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            color: #ffffff !important;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+            font-weight: 600;
         }
 
         /* Botones Avanzados */
@@ -182,15 +240,60 @@
             position: relative;
         }
 
+        /* MEJORAS DE CONTRASTE PARA MEJOR LEGIBILIDAD */
         .stats-number {
             font-size: 3rem;
             font-weight: 900;
             display: block;
+            color: #ffffff !important; /* Texto blanco para mejor contraste */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Sombra para mejor legibilidad */
         }
 
         .stats-label {
             font-size: 1.2rem;
-            opacity: 0.9;
+            opacity: 1;
+            color: #ffffff !important; /* Texto blanco para mejor contraste */
+            font-weight: 600;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4); /* Sombra para mejor legibilidad */
+        }
+
+        /* MEJORAS DE CONTRASTE PARA BOTONES */
+        .btn-fill-bottom, .btn-fill-left {
+            background: #ffffff !important;
+            color: var(--primary-green) !important;
+            border: 3px solid #ffffff !important;
+            font-weight: 900 !important;
+            text-shadow: none !important;
+            font-size: 1.1rem !important;
+            padding: 15px 30px !important;
+            border-radius: 50px !important;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3) !important;
+        }
+        
+        .btn-fill-bottom:hover, .btn-fill-left:hover {
+            background: var(--primary-green) !important;
+            color: #ffffff !important;
+            border-color: #ffffff !important;
+            transform: translateY(-3px) !important;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4) !important;
+        }
+
+        /* MEJORAS PARA TEXTO DEL HERO */
+        .text-glow {
+            color: #ffffff !important;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8) !important;
+            font-weight: 700 !important;
+        }
+
+        /* MEJORAS PARA TEXTO ANIMADO */
+        .text-brand, .text-future, .text-eco, .text-sustainable {
+            color: #ffffff !important;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.8) !important;
+            font-weight: 900 !important;
+            background: none !important;
+            -webkit-background-clip: unset !important;
+            -webkit-text-fill-color: unset !important;
+            background-clip: unset !important;
         }
 
         /* Parallax Wave Effect */
@@ -460,7 +563,7 @@
                         <div class="text-center">
                             <i class="bi bi-truck display-4 mb-3" style="color: var(--secondary-green);"></i>
                             <h5 style="color: var(--primary-green);">Envío Gratis</h5>
-                            <p style="color: var(--accent-green);">En compras superiores a $50</p>
+                            <p style="color: var(--accent-green);">En compras superiores a S/ 200</p>
                         </div>
                     </div>
                     <div class="col-md-4" data-aos="fade-up" data-aos-delay="700">
@@ -500,13 +603,100 @@
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // FIX INMEDIATO PARA SCROLL - EJECUTAR ANTES QUE CUALQUIER OTRA COSA
+        (function forceScrollFix() {
+            console.log('🔧 Aplicando fix de scroll...');
+            
+            // Remover cualquier CSS que limite la altura
+            const style = document.createElement('style');
+            style.textContent = `
+                html, body {
+                    height: auto !important;
+                    max-height: none !important;
+                    overflow-y: auto !important;
+                    overflow-x: hidden !important;
+                }
+                .hero-container {
+                    overflow: visible !important;
+                    max-height: none !important;
+                }
+            `;
+            document.head.appendChild(style);
+            
+            // Forzar recalculo del layout
+            setTimeout(() => {
+                document.body.style.height = 'auto';
+                document.documentElement.style.height = 'auto';
+                console.log('✅ Fix de scroll aplicado correctamente');
+            }, 100);
+        })();
+    </script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>    <script>
         // Inicializar AOS
         AOS.init({
             duration: 1000,
             once: true,
             offset: 100
-        });        // Scroll to Top Button Animation con color forzado y inicialización mejorada
+        });
+
+        // ===== FIX CRÍTICO: FORZAR SCROLL VERTICAL =====
+        (function() {
+            'use strict';
+            
+            console.log('🚨 APLICANDO FIX CRÍTICO DE SCROLL...');
+            
+            // Elementos críticos
+            const html = document.documentElement;
+            const body = document.body;
+            
+            // Forzar estilos que permitan scroll
+            function forceScrollStyles() {
+                [html, body].forEach(el => {
+                    el.style.setProperty('overflow-x', 'hidden', 'important');
+                    el.style.setProperty('overflow-y', 'auto', 'important');
+                    el.style.setProperty('height', 'auto', 'important');
+                    el.style.setProperty('min-height', '100vh', 'important');
+                    el.style.setProperty('max-height', 'none', 'important');
+                    el.style.setProperty('position', 'relative', 'important');
+                });
+            }
+            
+            // Aplicar inmediatamente
+            forceScrollStyles();
+            
+            // Verificar después del DOM
+            setTimeout(() => {
+                // Containers problemáticos
+                const containers = document.querySelectorAll('main, .container, .container-fluid, .hero-container');
+                containers.forEach(el => {
+                    if (el) {
+                        el.style.setProperty('overflow', 'visible', 'important');
+                        el.style.setProperty('height', 'auto', 'important');
+                        el.style.setProperty('max-height', 'none', 'important');
+                    }
+                });
+                
+                // Verificar altura del documento
+                const docHeight = html.scrollHeight;
+                const winHeight = window.innerHeight;
+                
+                console.log('📏 Altura documento:', docHeight, 'Altura ventana:', winHeight);
+                
+                if (docHeight > winHeight) {
+                    console.log('✅ Scroll debería funcionar');
+                    
+                    // Test de scroll
+                    html.scrollTop = 100;
+                    setTimeout(() => html.scrollTop = 0, 200);
+                } else {
+                    console.warn('⚠️ Documento muy corto para scroll');
+                }
+            }, 300);
+            
+            // Re-aplicar en resize
+            window.addEventListener('resize', forceScrollStyles);
+        })();        // Scroll to Top Button Animation con color forzado y inicialización mejorada
         const scrollToTopBtn = document.getElementById('scrollToTop');
         
         // Asegurar el color correcto del botón
@@ -924,18 +1114,24 @@
 
         // Prevenir scroll horizontal y asegurar layout correcto
         function preventHorizontalScroll() {
-            // Asegurar que no haya scroll horizontal
+            // Asegurar que no haya scroll horizontal, pero SÍ permitir scroll vertical
             document.body.style.overflowX = 'hidden';
+            document.body.style.overflowY = 'auto'; // IMPORTANTE: Permitir scroll vertical
             document.documentElement.style.overflowX = 'hidden';
+            document.documentElement.style.overflowY = 'auto'; // IMPORTANTE: Permitir scroll vertical
             
-            // Verificar elementos que se puedan salir del viewport
+            // Asegurar altura mínima del body para permitir scroll
+            document.body.style.minHeight = '100vh';
+            document.documentElement.style.minHeight = '100vh';
+            
+            // Verificar elementos que se puedan salir del viewport (solo horizontal)
             const allElements = document.querySelectorAll('*');
             allElements.forEach(element => {
                 const rect = element.getBoundingClientRect();
                 if (rect.right > window.innerWidth) {
                     console.warn('Elemento se sale del viewport:', element);
                     element.style.maxWidth = '100%';
-                    element.style.overflow = 'hidden';
+                    // No aplicar overflow hidden a todos los elementos
                 }
             });
         }
@@ -944,6 +1140,41 @@
         document.addEventListener('DOMContentLoaded', () => {
             preventHorizontalScroll();
             ensureButtonColor();
+            
+            // DEBUG: Forzar que el scroll funcione
+            console.log('🔧 Iniciando debug del scroll...');
+            
+            // Forzar altura mínima del body
+            document.body.style.minHeight = 'calc(100vh + 1000px)';
+            document.documentElement.style.minHeight = 'calc(100vh + 1000px)';
+            
+            // Verificar estilos que puedan estar bloqueando el scroll
+            const computedBodyStyles = window.getComputedStyle(document.body);
+            const computedHtmlStyles = window.getComputedStyle(document.documentElement);
+            
+            console.log('📊 Body overflow-y:', computedBodyStyles.overflowY);
+            console.log('📊 HTML overflow-y:', computedHtmlStyles.overflowY);
+            console.log('📊 Body height:', computedBodyStyles.height);
+            console.log('📊 Document height:', document.documentElement.scrollHeight);
+            console.log('📊 Window height:', window.innerHeight);
+            
+            // Forzar scroll vertical si está bloqueado
+            if (computedBodyStyles.overflowY === 'hidden' || computedHtmlStyles.overflowY === 'hidden') {
+                console.warn('⚠️ Scroll vertical bloqueado, corrigiendo...');
+                document.body.style.overflowY = 'auto !important';
+                document.documentElement.style.overflowY = 'auto !important';
+            }
+            
+            // Test de scroll manual
+            setTimeout(() => {
+                console.log('🧪 Probando scroll automático...');
+                window.scrollTo({ top: 100, behavior: 'smooth' });
+                
+                setTimeout(() => {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    console.log('✅ Test de scroll completado');
+                }, 1000);
+            }, 2000);
         });
 
         // Verificar en resize

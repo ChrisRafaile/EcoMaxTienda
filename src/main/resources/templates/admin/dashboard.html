@@ -163,7 +163,7 @@
                                 </div>
                             </div>
                             <div class="flex-grow-1 ms-3">
-                                <h3 class="card-title mb-1 text-dark fw-bold" id="ventas-mes">$2,450,000</h3>
+                                <h3 class="card-title mb-1 text-dark fw-bold" id="ventas-mes">S/ 8,175,000</h3>
                                 <p class="card-text text-secondary mb-1 fw-medium">Ventas este mes</p>
                                 <small class="text-success fw-bold">
                                     <i class="bi bi-trending-up"></i> +15.3% vs mes anterior
@@ -419,7 +419,7 @@
         ];
 
         const actividadReciente = [
-            { tipo: 'pedido', mensaje: 'Nuevo pedido #1234 por $459,000', tiempo: '5 min', icono: 'box-seam', color: 'success' },
+            { tipo: 'pedido', mensaje: 'Nuevo pedido #1234 por S/ 1,533,000', tiempo: '5 min', icono: 'box-seam', color: 'success' },
             { tipo: 'usuario', mensaje: 'Usuario registrado: maria.garcia@email.com', tiempo: '12 min', icono: 'person-plus', color: 'info' },
             { tipo: 'inventario', mensaje: 'Stock bajo: Termo Biodegradable (15 unidades)', tiempo: '23 min', icono: 'exclamation-triangle', color: 'warning' },
             { tipo: 'pago', mensaje: 'Pago confirmado pedido #1230', tiempo: '35 min', icono: 'check-circle', color: 'success' },
@@ -441,7 +441,7 @@
                 data: {
                     labels: ['Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab', 'Dom'],
                     datasets: [{
-                        label: 'Ventas ($)',
+                        label: 'Ventas (S/)',
                         data: datosVentas['7d'],
                         borderColor: '#198754',
                         backgroundColor: 'rgba(25, 135, 84, 0.1)',
@@ -462,7 +462,7 @@
                             beginAtZero: true,
                             ticks: {
                                 callback: function(value) {
-                                    return '$' + (value/1000) + 'k';
+                                    return 'S/ ' + (value/1000) + 'k';
                                 }
                             }
                         }
@@ -490,7 +490,7 @@
                             </div>
                         </td>
                         <td><span class="badge bg-primary">${producto.ventas}</span></td>
-                        <td class="fw-medium">$${(producto.ingresos/1000000).toFixed(1)}M</td>
+                        <td class="fw-medium">S/${(producto.ingresos/1000000).toFixed(1)}M</td>
                         <td>
                             <div class="d-flex align-items-center">
                                 <div class="progress me-2" style="width: 60px; height: 6px;">

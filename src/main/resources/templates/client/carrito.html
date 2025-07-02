@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/head :: head('Carrito de Compras | EcoMaxTienda')">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Carrito de Compras | EcoMaxTienda</title>
 </head>
 <body class="eco-bg">
     <div th:replace="fragments/navbar :: navbar"></div>
@@ -41,7 +38,7 @@
                                 </div>
                                 <div class="col-md-2">
                                     <label class="fw-bold small text-muted">Precio</label>
-                                    <div class="fw-bold client-text-primary">$17.50</div>
+                                    <div class="fw-bold client-text-primary">S/ 58.50</div>
                                 </div>
                                 <div class="col-md-2">
                                     <label for="quantity1" class="fw-bold small text-muted">Cantidad</label>
@@ -53,7 +50,7 @@
                                 </div>
                                 <div class="col-md-1">
                                     <label class="fw-bold small text-muted">Subtotal</label>
-                                    <div class="fw-bold client-text-primary" id="subtotal1">$35.00</div>
+                                    <div class="fw-bold client-text-primary" id="subtotal1">S/ 117.00</div>
                                 </div>
                                 <div class="col-md-1">
                                     <button class="btn client-btn-remove" onclick="removeItem(1)" aria-label="Eliminar producto del carrito" title="Eliminar producto">
@@ -78,7 +75,7 @@
                                 </div>
                                 <div class="col-md-2">
                                     <label class="fw-bold small text-muted">Precio</label>
-                                    <div class="fw-bold client-text-primary">$12.00</div>
+                                    <div class="fw-bold client-text-primary">S/ 40.00</div>
                                 </div>
                                 <div class="col-md-2">
                                     <label for="quantity2" class="fw-bold small text-muted">Cantidad</label>
@@ -90,7 +87,7 @@
                                 </div>
                                 <div class="col-md-1">
                                     <label class="fw-bold small text-muted">Subtotal</label>
-                                    <div class="fw-bold client-text-primary" id="subtotal2">$12.00</div>
+                                    <div class="fw-bold client-text-primary" id="subtotal2">S/ 40.00</div>
                                 </div>
                                 <div class="col-md-1">
                                     <button class="btn client-btn-remove" onclick="removeItem(2)" aria-label="Eliminar producto del carrito" title="Eliminar producto">
@@ -115,7 +112,7 @@
                                 </div>
                                 <div class="col-md-2">
                                     <label class="fw-bold small text-muted">Precio</label>
-                                    <div class="fw-bold client-text-primary">$15.00</div>
+                                    <div class="fw-bold client-text-primary">S/ 60.00</div>
                                 </div>
                                 <div class="col-md-2">
                                     <label for="quantity3" class="fw-bold small text-muted">Cantidad</label>
@@ -127,7 +124,7 @@
                                 </div>
                                 <div class="col-md-1">
                                     <label class="fw-bold small text-muted">Subtotal</label>
-                                    <div class="fw-bold text-success" id="subtotal3">$15.00</div>
+                                    <div class="fw-bold text-success" id="subtotal3">S/ 60.00</div>
                                 </div>                                <div class="col-md-1">
                                     <button class="btn btn-outline-danger btn-sm" onclick="removeItem(3)" 
                                             aria-label="Eliminar producto del carrito" title="Eliminar producto">
@@ -156,7 +153,7 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between mb-2">
                             <span class="text-dark">Subtotal (4 productos):</span>
-                            <span id="cartSubtotal" class="text-dark">$62.00</span>
+                            <span id="cartSubtotal" class="text-dark">S/ 217.00</span>
                         </div>
                         <div class="d-flex justify-content-between mb-2">
                             <span class="text-dark">Envío:</span>
@@ -164,12 +161,12 @@
                         </div>
                         <div class="d-flex justify-content-between mb-3">
                             <span class="text-dark">Descuento Eco-Friendly:</span>
-                            <span class="text-success">-$3.10</span>
+                            <span class="text-success">-S/ 10.85</span>
                         </div>
                         <hr>
                         <div class="d-flex justify-content-between mb-4">
                             <h5 class="fw-bold text-dark">Total:</h5>
-                            <h5 class="fw-bold text-success" id="cartTotal">$58.90</h5>
+                            <h5 class="fw-bold text-success" id="cartTotal">S/ 206.15</h5>
                         </div>
 
                         <!-- Cupón de descuento -->
@@ -203,7 +200,7 @@
                             <i class="bi bi-shield-check me-2"></i>Compra Segura
                         </h6>
                         <ul class="list-unstyled small">
-                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Envío gratuito en pedidos superiores a $50</li>
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Envío gratuito en pedidos superiores a S/ 150</li>
                             <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Garantía de devolución de 30 días</li>
                             <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Pago 100% seguro</li>
                             <li class="mb-0"><i class="bi bi-check-circle text-success me-2"></i>Productos eco-amigables certificados</li>
@@ -261,9 +258,9 @@
 
         // Precios base de los productos
         const productPrices = {
-            1: 17.50, // Eco Kit Hogar
-            2: 12.00, // Shampoo Natural
-            3: 15.00  // Botella Reutilizable
+            1: 58.50, // Eco Kit Hogar
+            2: 40.00, // Shampoo Natural
+            3: 60.00  // Botella Reutilizable
         };
 
         // Función para aumentar cantidad
@@ -292,7 +289,7 @@
         function updateSubtotal(productId, quantity) {
             const price = productPrices[productId];
             const subtotal = price * quantity;
-            document.getElementById(`subtotal${productId}`).textContent = `$${subtotal.toFixed(2)}`;
+            document.getElementById(`subtotal${productId}`).textContent = `S/ ${subtotal.toFixed(2)}`;
         }
 
         // Función para actualizar totales del carrito
@@ -310,8 +307,8 @@
             const discount = subtotal * 0.05; // 5% de descuento eco-friendly
             const total = subtotal - discount;
 
-            document.getElementById('cartSubtotal').textContent = `$${subtotal.toFixed(2)}`;
-            document.getElementById('cartTotal').textContent = `$${total.toFixed(2)}`;
+            document.getElementById('cartSubtotal').textContent = `S/ ${subtotal.toFixed(2)}`;
+            document.getElementById('cartTotal').textContent = `S/ ${total.toFixed(2)}`;
             
             // Actualizar número de productos
             const summaryText = document.querySelector('.card-body .d-flex span');
@@ -396,8 +393,8 @@
             `;
             
             // Limpiar totales
-            document.getElementById('cartSubtotal').textContent = '$0.00';
-            document.getElementById('cartTotal').textContent = '$0.00';
+            document.getElementById('cartSubtotal').textContent = 'S/ 0.00';
+            document.getElementById('cartTotal').textContent = 'S/ 0.00';
         }
 
         // Función para mostrar modal de confirmación del carrito
