@@ -18,11 +18,17 @@ public interface ProductoRepository extends JpaRepository<Producto, Integer> {
     // Buscar productos activos
     List<Producto> findByEstadoTrue();
     
+    // Buscar productos activos con paginación
+    Page<Producto> findByEstadoTrue(Pageable pageable);
+    
     // Buscar por categoría
     List<Producto> findByCategoria(String categoria);
     
     // Buscar productos activos por categoría
     List<Producto> findByCategoriaAndEstadoTrue(String categoria);
+    
+    // Buscar por nombre
+    List<Producto> findByNombre(String nombre);
     
     // Buscar por marca
     List<Producto> findByMarca(String marca);
@@ -41,6 +47,14 @@ public interface ProductoRepository extends JpaRepository<Producto, Integer> {
            "LOWER(p.categoria) LIKE LOWER(CONCAT('%', :busqueda, '%')) OR " +
            "LOWER(p.marca) LIKE LOWER(CONCAT('%', :busqueda, '%'))")
     List<Producto> buscarProductos(@Param("busqueda") String busqueda);
+    
+    // Búsqueda general de productos con paginación
+    @Query("SELECT p FROM Producto p WHERE p.estado = true AND (" +
+           "LOWER(p.nombre) LIKE LOWER(CONCAT('%', :busqueda, '%')) OR " +
+           "LOWER(p.descripcion) LIKE LOWER(CONCAT('%', :busqueda, '%')) OR " +
+           "LOWER(p.categoria) LIKE LOWER(CONCAT('%', :busqueda, '%')) OR " +
+           "LOWER(p.marca) LIKE LOWER(CONCAT('%', :busqueda, '%')))")
+    Page<Producto> buscarProductosPaginado(@Param("busqueda") String busqueda, Pageable pageable);
     
     // Productos con stock disponible
     @Query("SELECT p FROM Producto p JOIN p.inventario i WHERE i.stock > 0 AND p.estado = true")

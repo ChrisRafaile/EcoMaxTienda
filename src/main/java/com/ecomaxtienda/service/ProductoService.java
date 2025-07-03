@@ -73,6 +73,10 @@ public class ProductoService {
         return this.productoRepository.buscarProductos(busqueda);
     }
     
+    public Page<Producto> buscarProductosPaginado(String busqueda, Pageable pageable) {
+        return this.productoRepository.buscarProductosPaginado(busqueda, pageable);
+    }
+    
     public List<Producto> obtenerProductosEcoAmigables() {
         return this.productoRepository.findProductosEcoAmigables(BigDecimal.valueOf(7.0));
     }
@@ -246,5 +250,43 @@ public class ProductoService {
         
         // No se puede eliminar si tiene pedidos asociados
         return producto.get().getPedidoDetalles() == null || producto.get().getPedidoDetalles().isEmpty();
+    }
+    
+    // Métodos adicionales para paginación y categorías
+    public Page<Producto> obtenerProductosPaginados(Pageable pageable) {
+        return this.productoRepository.findByEstadoTrue(pageable);
+    }
+    
+    public List<String> obtenerCategoriasDisponibles() {
+        return this.productoRepository.findCategorias();
+    }
+    
+    public boolean validarSKUUnico(String sku, Integer idProducto) {
+        // Como no tenemos campo SKU, validamos por nombre
+        List<Producto> productos = this.productoRepository.findByNombre(sku);
+        
+        if (productos.isEmpty()) {
+            return true;
+        }
+        
+        // Si existe un producto con el mismo nombre, verificar si es el mismo que estamos editando
+        if (idProducto != null) {
+            return productos.stream().allMatch(p -> p.getIdProducto().equals(idProducto));
+        }
+        
+        return false;
+    }
+    
+    public void crearInventarioInicial(Producto producto) {
+        if (producto.getInventario() == null) {
+            Inventario inventario = new Inventario();
+            inventario.setProducto(producto);
+            inventario.setStock(0);
+            inventario.setStockMinimo(5);
+            inventario.setStockMaximo(100);
+            inventario.setFechaActualizacion(LocalDateTime.now());
+            
+            this.inventarioRepository.save(inventario);
+        }
     }
 }

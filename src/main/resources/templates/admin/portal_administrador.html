@@ -5,9 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Panel de Control Admin | EcoMaxTienda</title>
 </head>
-<body class="eco-admin-bg" style="background: linear-gradient(135deg, #e8f5e8 0%, #f0f9f0 50%, #e3f2fd 100%);">
+<body class="admin-bg">
+    <!-- Incluir estilos modernos para admin -->
+    <link href="/css/admin-modern-styles.css" rel="stylesheet">
+    
     <!-- Admin Navbar -->
-    <nav class="navbar navbar-expand-lg shadow-lg" style="background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);">
+    <nav class="navbar navbar-expand-lg navbar-dark shadow-lg" style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%);">
         <div class="container-fluid">
             <a class="navbar-brand fw-bold text-white" href="/admin/portal_administrador">
                 <i class="bi bi-leaf-fill text-success me-2"></i>
@@ -130,7 +133,7 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center">
                             <div class="flex-shrink-0">
-                                <i class="bi bi-currency-dollar text-dark display-6"></i>
+                                <i class="bi bi-cash-stack text-dark display-6"></i>
                             </div>                            <div class="flex-grow-1 ms-3 text-dark">
                                 <div class="small fw-bold text-dark">Ventas del Mes</div>
                                 <div class="h4 mb-0 text-dark" id="ventas-mes">--</div>
@@ -202,14 +205,14 @@
                                 </a>
                             </div>
                             <div class="col-md-4">
-                                <a href="/admin/reportes" class="btn btn-outline-secondary w-100 py-3 action-card">
+                                <a href="/admin/reportes" class="btn btn-outline-info w-100 py-3 action-card">
                                     <i class="bi bi-graph-up display-6 d-block mb-2"></i>
                                     <div class="fw-bold">Reportes</div>
                                     <small class="text-muted">Análisis y estadísticas</small>
                                 </a>
                             </div>
                             <div class="col-md-4">
-                                <a href="/admin/configuracion" class="btn btn-outline-dark w-100 py-3 action-card">
+                                <a href="/admin/configuracion" class="btn btn-outline-purple w-100 py-3 action-card">
                                     <i class="bi bi-gear display-6 d-block mb-2"></i>
                                     <div class="fw-bold">Configuración</div>
                                     <small class="text-muted">Ajustes del sistema</small>
@@ -324,30 +327,176 @@
         }
 
         .bg-gradient-success {
-            background: linear-gradient(135deg, #43a047 0%, #388e3c 100%);
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;
         }
 
         .bg-gradient-info {
-            background: linear-gradient(135deg, #29b6f6 0%, #1976d2 100%);
+            background: linear-gradient(135deg, #17a2b8 0%, #007bff 100%) !important;
         }
 
         .bg-gradient-warning {
-            background: linear-gradient(135deg, #ffa726 0%, #f57c00 100%);
+            background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%) !important;
         }
 
         .bg-gradient-primary {
-            background: linear-gradient(135deg, #5c6bc0 0%, #3f51b5 100%);
+            background: linear-gradient(135deg, #007bff 0%, #6610f2 100%) !important;
+        }
+
+        /* Sobrescribir colores de fondo para mejor contraste */
+        .metric-card.bg-success {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;
+        }
+
+        .metric-card.bg-primary {
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%) !important;
+        }
+
+        .metric-card.bg-warning {
+            background: linear-gradient(135deg, #ffc107 0%, #e0a800 100%) !important;
+        }
+
+        .metric-card.bg-info {
+            background: linear-gradient(135deg, #17a2b8 0%, #138496 100%) !important;
         }
 
         .action-card {
             transition: all 0.3s ease;
             border-radius: 1rem;
             text-decoration: none;
+            position: relative;
+            overflow: hidden;
         }
 
         .action-card:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            text-decoration: none;
+        }
+
+        /* Mejorar contraste en action cards con colores vibrantes */
+        .action-card.btn-outline-success:hover {
+            background: linear-gradient(135deg, #28a745, #20c997) !important;
+            border-color: #28a745 !important;
+            color: white !important;
+            box-shadow: 0 8px 25px rgba(40, 167, 69, 0.4) !important;
+        }
+
+        .action-card.btn-outline-primary:hover {
+            background: linear-gradient(135deg, #007bff, #0056b3) !important;
+            border-color: #007bff !important;
+            color: white !important;
+            box-shadow: 0 8px 25px rgba(0, 123, 255, 0.4) !important;
+        }
+
+        .action-card.btn-outline-info:hover {
+            background: linear-gradient(135deg, #17a2b8, #138496) !important;
+            border-color: #17a2b8 !important;
+            color: white !important;
+            box-shadow: 0 8px 25px rgba(23, 162, 184, 0.4) !important;
+        }
+
+        .action-card.btn-outline-warning:hover {
+            background: linear-gradient(135deg, #ffc107, #e0a800) !important;
+            border-color: #ffc107 !important;
+            color: #212529 !important;
+            box-shadow: 0 8px 25px rgba(255, 193, 7, 0.4) !important;
+        }
+
+        .action-card.btn-outline-secondary:hover {
+            background: linear-gradient(135deg, #6c757d, #495057) !important;
+            border-color: #6c757d !important;
+            color: white !important;
+            box-shadow: 0 8px 25px rgba(108, 117, 125, 0.4) !important;
+        }
+
+        .action-card.btn-outline-dark:hover {
+            background: linear-gradient(135deg, #343a40, #23272b) !important;
+            border-color: #343a40 !important;
+            color: white !important;
+            box-shadow: 0 8px 25px rgba(52, 58, 64, 0.4) !important;
+        }
+
+        /* Nueva clase para configuración con color púrpura vibrante */
+        .btn-outline-purple {
+            color: #6f42c1;
+            border-color: #6f42c1;
+            background-color: transparent;
+        }
+
+        .btn-outline-purple:hover {
+            background: linear-gradient(135deg, #6f42c1, #563d7c) !important;
+            border-color: #6f42c1 !important;
+            color: white !important;
+            box-shadow: 0 8px 25px rgba(111, 66, 193, 0.4) !important;
+        }
+
+        .action-card.btn-outline-purple:hover {
+            background: linear-gradient(135deg, #6f42c1, #563d7c) !important;
+            border-color: #6f42c1 !important;
+            color: white !important;
+            box-shadow: 0 8px 25px rgba(111, 66, 193, 0.4) !important;
+        }
+
+        /* FINAL FIX: Asegurar colores vibrantes para Reportes y Configuración */
+        .action-card.btn-outline-info {
+            color: #17a2b8 !important;
+            border-color: #17a2b8 !important;
+            background-color: transparent !important;
+        }
+
+        .action-card.btn-outline-info:hover,
+        .action-card.btn-outline-info:focus,
+        .action-card.btn-outline-info:active {
+            background: linear-gradient(135deg, #17a2b8, #138496) !important;
+            border-color: #17a2b8 !important;
+            color: white !important;
+            box-shadow: 0 12px 35px rgba(23, 162, 184, 0.5) !important;
+            transform: translateY(-10px) !important;
+        }
+
+        .action-card.btn-outline-purple {
+            color: #6f42c1 !important;
+            border-color: #6f42c1 !important;
+            background-color: transparent !important;
+        }
+
+        .action-card.btn-outline-purple:hover,
+        .action-card.btn-outline-purple:focus,
+        .action-card.btn-outline-purple:active {
+            background: linear-gradient(135deg, #6f42c1, #563d7c) !important;
+            border-color: #6f42c1 !important;
+            color: white !important;
+            box-shadow: 0 12px 35px rgba(111, 66, 193, 0.5) !important;
+            transform: translateY(-10px) !important;
+        }
+
+        /* Sobrescribir cualquier estilo de Bootstrap que pueda interferir */
+        .btn-outline-secondary:not(.action-card):hover {
+            background-color: #6c757d;
+            border-color: #6c757d;
+            color: #fff;
+        }
+
+        .btn-outline-dark:not(.action-card):hover {
+            background-color: #343a40;
+            border-color: #343a40;
+            color: #fff;
+        }
+
+        /* Asegurar que los iconos y texto mantengan el color correcto */
+        .action-card:hover .bi,
+        .action-card:hover .fw-bold,
+        .action-card:hover small {
+            color: inherit !important;
+        }
+
+        /* Mejorar contraste en métricas */
+        .metric-card .text-light {
+            color: rgba(255, 255, 255, 0.9) !important;
+        }
+
+        .metric-card .text-muted {
+            color: rgba(0, 0, 0, 0.7) !important;
         }
 
         .timeline {
@@ -456,6 +605,7 @@
 
     <!-- API Scripts -->
     <script src="/js/admin-api.js"></script>
+    <script src="/js/admin-modern-interactions.js"></script>
     
     <!-- Panel de Control específico -->
     <script>
@@ -474,6 +624,46 @@
                 transform: scale(4);
                 opacity: 0;
             }
+        }
+
+        /* Mejoras adicionales de contraste y legibilidad */
+        .text-white-75 {
+            color: rgba(255, 255, 255, 0.75) !important;
+        }
+
+        .metric-card .h4 {
+            font-weight: 800 !important;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .metric-card .small {
+            font-weight: 600 !important;
+        }
+
+        /* Mejorar bordes en action cards */
+        .action-card {
+            border-width: 2px !important;
+        }
+
+        /* Texto más destacado en timeline */
+        .timeline-content h6 {
+            font-weight: 700 !important;
+            color: #2c3e50 !important;
+        }
+
+        .timeline-content .text-muted {
+            color: #6c757d !important;
+            font-weight: 500 !important;
+        }
+
+        /* Mejoras en navbar */
+        .navbar-brand {
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Asegurar que los iconos sean visibles */
+        .display-6, .display-4 {
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
         }
     </style>
 </body>

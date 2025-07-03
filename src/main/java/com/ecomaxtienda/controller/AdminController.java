@@ -25,12 +25,6 @@ public class AdminController {
         this.usuarioService = usuarioService;
     }// ========== RUTAS PRINCIPALES ==========
     
-    // 🎯 RUTA PRINCIPAL PARA PRODUCTOS (FUNCIONAL SIN BUCLES)
-    @GetMapping("/admin/productos")
-    public String productos() {
-        return "admin/productos";
-    }
-    
     // Dashboard principal
     @GetMapping("/admin/portal")
     public String portal(Model model, Principal principal) {
