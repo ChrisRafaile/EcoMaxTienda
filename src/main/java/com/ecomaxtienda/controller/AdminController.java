@@ -1,5 +1,6 @@
 package com.ecomaxtienda.controller;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 
@@ -13,19 +14,23 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ecomaxtienda.entity.ImagenPerfil.TipoUsuario;
 import com.ecomaxtienda.entity.Usuario;
+import com.ecomaxtienda.service.ImagenService;
 import com.ecomaxtienda.service.UsuarioService;
 
 @Controller
-public class AdminController {
+public class AdminController extends BaseAdminController {
     private final UsuarioService usuarioService;
+    private final ImagenService imagenService;
 
     // Constructor manual
-    public AdminController(UsuarioService usuarioService) {
+    public AdminController(UsuarioService usuarioService, ImagenService imagenService) {
         this.usuarioService = usuarioService;
+        this.imagenService = imagenService;
     }// ========== RUTAS PRINCIPALES ==========
     
-    // Dashboard principal
+    // Dashboard empresarial principal 
     @GetMapping("/admin/portal")
     public String portal(Model model, Principal principal) {
         if (principal != null) {
@@ -59,7 +64,11 @@ public class AdminController {
     }
 
     @GetMapping("/admin/portal_administrador")
-    public String portalAdministrador() {
+    public String portalAdministrador(Model model, Principal principal) {
+        if (principal != null) {
+            Usuario usuario = this.usuarioService.findByEmail(principal.getName());
+            model.addAttribute("usuario", usuario);
+        }
         return "admin/portal_administrador";
     }
 
@@ -85,9 +94,51 @@ public class AdminController {
     public String perfilAdmin(Model model, Principal principal) {
         if (principal != null) {
             Usuario usuario = this.usuarioService.findByEmail(principal.getName());
-            model.addAttribute("usuario", usuario);
+            if (usuario != null) {
+                model.addAttribute("admin", usuario);
+                
+                // Agregar URL de imagen de perfil
+                String imagenPerfilUrl = imagenService.obtenerUrlImagenPerfil(usuario.getIdUsuario().longValue(), TipoUsuario.ADMIN);
+                model.addAttribute("imagenPerfilUrl", imagenPerfilUrl);
+            } else {
+                return "redirect:/login";
+            }
+        } else {
+            return "redirect:/login";
         }
         return "admin/perfil-admin";
+    }
+    
+    // Ruta temporal para testing
+    @GetMapping("/admin/perfil-test")
+    public String perfilAdminTest(Model model, Principal principal) {
+        if (principal != null) {
+            Usuario usuario = this.usuarioService.findByEmail(principal.getName());
+            if (usuario != null) {
+                model.addAttribute("admin", usuario);
+            } else {
+                return "redirect:/login";
+            }
+        } else {
+            return "redirect:/login";
+        }
+        return "admin/perfil-admin-test";
+    }
+    
+    // Ruta simple para testing
+    @GetMapping("/admin/perfil-simple")
+    public String perfilAdminSimple(Model model, Principal principal) {
+        if (principal != null) {
+            Usuario usuario = this.usuarioService.findByEmail(principal.getName());
+            if (usuario != null) {
+                model.addAttribute("admin", usuario);
+            } else {
+                return "redirect:/login";
+            }
+        } else {
+            return "redirect:/login";
+        }
+        return "admin/perfil-admin-simple";
     }
 
     // Actualizar perfil
@@ -103,7 +154,8 @@ public class AdminController {
                 usuarioActual.setDireccion(usuarioForm.getDireccion());
                 
                 this.usuarioService.actualizarUsuario(usuarioActual);
-                model.addAttribute("success", "Perfil actualizado exitosamente");
+                model.addAttribute("mensaje", "Perfil actualizado exitosamente");
+                model.addAttribute("admin", usuarioActual);
             }
         } catch (Exception e) {
             model.addAttribute("error", "Error al actualizar perfil: " + e.getMessage());
@@ -116,12 +168,18 @@ public class AdminController {
     public String subirFotoPerfil(@RequestParam("foto") MultipartFile foto, Principal principal, Model model) {
         try {
             if (principal != null && !foto.isEmpty()) {
-                // Aquí implementarías la lógica para guardar la imagen
-                // Por ahora solo simularemos el éxito
-                model.addAttribute("success", "Foto de perfil actualizada exitosamente");
+                Usuario usuario = this.usuarioService.findByEmail(principal.getName());
+                if (usuario != null) {
+                    imagenService.guardarImagenPerfil(usuario.getIdUsuario().longValue(), TipoUsuario.ADMIN, foto);
+                    model.addAttribute("success", "Foto de perfil actualizada exitosamente");
+                }
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
             model.addAttribute("error", "Error al subir foto: " + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", "Archivo no válido: " + e.getMessage());
+        } catch (RuntimeException e) {
+            model.addAttribute("error", "Error del sistema: " + e.getMessage());
         }
         return "redirect:/admin/perfil";
     }
@@ -132,24 +190,29 @@ public class AdminController {
     public String eliminarFotoPerfil(Principal principal) {
         try {
             if (principal != null) {
-                // Aquí implementarías la lógica para eliminar la imagen
-                return "{\"success\": true, \"message\": \"Foto eliminada exitosamente\"}";
+                Usuario usuario = this.usuarioService.findByEmail(principal.getName());
+                if (usuario != null) {
+                    imagenService.eliminarImagenPerfil(usuario.getIdUsuario().longValue(), TipoUsuario.ADMIN);
+                    return "{\"success\": true, \"message\": \"Foto eliminada exitosamente\"}";
+                }
             }
             return "{\"success\": false, \"message\": \"Usuario no autenticado\"}";
-        } catch (Exception e) {
-            return "{\"success\": false, \"message\": \"Error al eliminar foto\"}";
+        } catch (IllegalArgumentException e) {
+            return "{\"success\": false, \"message\": \"Archivo no válido: " + e.getMessage() + "\"}";
+        } catch (RuntimeException e) {
+            return "{\"success\": false, \"message\": \"Error del sistema: " + e.getMessage() + "\"}";
         }
     }
 
     // Cambiar contraseña
     @PostMapping("/admin/perfil/cambiar-password")
     public String cambiarPassword(@RequestParam String passwordActual, 
-                                 @RequestParam String passwordNueva, 
+                                 @RequestParam String nuevaPassword, 
                                  Principal principal, Model model) {
         try {
             if (principal != null) {
-                this.usuarioService.cambiarPassword(principal.getName(), passwordActual, passwordNueva);
-                model.addAttribute("success", "Contraseña cambiada exitosamente");
+                this.usuarioService.cambiarPassword(principal.getName(), passwordActual, nuevaPassword);
+                model.addAttribute("mensaje", "Contraseña cambiada exitosamente");
             }
         } catch (Exception e) {
             model.addAttribute("error", "Error al cambiar contraseña: " + e.getMessage());
@@ -173,4 +236,5 @@ public class AdminController {
     public String gestionPedidos(Model model) {
         return "admin/pedidos";
     }
+
 }

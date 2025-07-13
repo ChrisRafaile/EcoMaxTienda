@@ -558,11 +558,11 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" title="Cerrar ventana"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="formCargaMasiva" th:action="@{/admin/productos/cargar-masivo}" method="post" enctype="multipart/form-data">
+                    <form id="formCargaMasiva" th:action="@{/admin/productos/bulk-upload}" method="post" enctype="multipart/form-data">
                         <div class="alert alert-info">
                             <i class="bi bi-info-circle"></i>
                             <strong>Instrucciones:</strong> Sube un archivo CSV con los productos. 
-                            <a href="/admin/productos/template-csv" class="alert-link">Descargar plantilla</a>
+                            <a th:href="@{/admin/productos/plantilla-csv}" class="alert-link">Descargar plantilla</a>
                         </div>
                         
                         <div class="mb-3">

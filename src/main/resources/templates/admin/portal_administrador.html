@@ -9,71 +9,8 @@
     <!-- Incluir estilos modernos para admin -->
     <link href="/css/admin-modern-styles.css" rel="stylesheet">
     
-    <!-- Admin Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark shadow-lg" style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%);">
-        <div class="container-fluid">
-            <a class="navbar-brand fw-bold text-white" href="/admin/portal_administrador">
-                <i class="bi bi-leaf-fill text-success me-2"></i>
-                EcoMaxTienda Admin
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarAdmin" aria-label="Abrir menú de navegación">
-                <span class="navbar-toggler-icon"></span>
-                <span class="visually-hidden">Abrir menú de navegación</span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarAdmin">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link text-white fw-bold" href="/admin/portal" style="background: linear-gradient(45deg, #28a745, #20c997); border-radius: 20px; margin: 0 5px; padding: 8px 15px;">
-                            <i class="bi bi-speedometer2 me-1"></i>Panel de Control
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="/admin/clientes" style="border-radius: 20px; margin: 0 5px; padding: 8px 15px; transition: all 0.3s;" onmouseover="this.style.background='rgba(52, 152, 219, 0.2)'" onmouseout="this.style.background='transparent'">
-                            <i class="bi bi-people me-1"></i>Clientes
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="/admin/productos" style="border-radius: 20px; margin: 0 5px; padding: 8px 15px; transition: all 0.3s;" onmouseover="this.style.background='rgba(52, 152, 219, 0.2)'" onmouseout="this.style.background='transparent'">
-                            <i class="bi bi-box-seam me-1"></i>Productos
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="/admin/pedidos" style="border-radius: 20px; margin: 0 5px; padding: 8px 15px; transition: all 0.3s;" onmouseover="this.style.background='rgba(52, 152, 219, 0.2)'" onmouseout="this.style.background='transparent'">
-                            <i class="bi bi-cart-check me-1"></i>Pedidos
-                        </a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" style="border-radius: 20px; margin: 0 5px; padding: 8px 15px;">
-                            <i class="bi bi-gear me-1"></i>Gestión
-                        </a>
-                        <ul class="dropdown-menu shadow-lg border-0" style="background: linear-gradient(135deg, #ffffff, #f8f9fa); border-radius: 15px;">
-                            <li><a class="dropdown-item" href="/admin/registro-admin" style="border-radius: 10px; margin: 5px;">
-                                <i class="bi bi-person-plus me-2 text-success"></i>Nuevo Admin
-                            </a></li>
-                            <li><a class="dropdown-item" href="/admin/reportes" style="border-radius: 10px; margin: 5px;">
-                                <i class="bi bi-graph-up me-2 text-info"></i>Reportes
-                            </a></li>
-                            <li><a class="dropdown-item" href="/admin/configuracion" style="border-radius: 10px; margin: 5px;">
-                                <i class="bi bi-sliders me-2 text-warning"></i>Configuración
-                            </a></li>
-                        </ul>
-                    </li>
-                </ul>
-                <ul class="navbar-nav">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                            <i class="bi bi-person-circle me-1"></i>Admin
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="/admin/perfil">Mi Perfil</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="/logout">Cerrar Sesión</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <!-- Admin Navbar Fragment -->
+    <div th:replace="fragments/admin-navbar :: admin-navbar"></div>
 
     <main class="container-fluid py-4">
         <!-- Welcome Header -->
@@ -234,25 +171,35 @@
                         <div class="timeline" id="activity-timeline">
                             <!-- La actividad se cargará dinámicamente desde la API -->
                             <div class="timeline-item">
-                                <div class="timeline-marker bg-info"></div>
+                                <div class="timeline-marker bg-success"></div>
                                 <div class="timeline-content">
-                                    <h6 class="mb-1">Cargando actividad...</h6>
-                                    <p class="mb-1 text-muted small">Por favor espere</p>
-                                    <small class="text-muted">Sistema iniciándose</small>
+                                    <h6 class="mb-1 timeline-title">Nuevo usuario registrado</h6>
+                                    <p class="mb-1 timeline-description">María González se registró exitosamente</p>
+                                    <small class="timeline-time">Hace 30 minutos</small>
                                 </div>
                             </div>
+                            <div class="timeline-item">
+                                <div class="timeline-marker bg-warning"></div>
                                 <div class="timeline-content">
-                                    <h6 class="mb-1">Producto actualizado</h6>
-                                    <p class="mb-1 text-muted small">Eco Kit Hogar - Stock: 25</p>
-                                    <small class="text-muted">Hace 1 hora</small>
+                                    <h6 class="mb-1 timeline-title">Producto actualizado</h6>
+                                    <p class="mb-1 timeline-description">Eco Kit Hogar - Stock: 25</p>
+                                    <small class="timeline-time">Hace 1 hora</small>
                                 </div>
                             </div>
                             <div class="timeline-item">
                                 <div class="timeline-marker bg-info"></div>
                                 <div class="timeline-content">
-                                    <h6 class="mb-1">Correo de bienvenida</h6>
-                                    <p class="mb-1 text-muted small">Enviado a nuevo usuario</p>
-                                    <small class="text-muted">Hace 2 horas</small>
+                                    <h6 class="mb-1 timeline-title">Correo de bienvenida</h6>
+                                    <p class="mb-1 timeline-description">Enviado a nuevo usuario</p>
+                                    <small class="timeline-time">Hace 2 horas</small>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-marker bg-primary"></div>
+                                <div class="timeline-content">
+                                    <h6 class="mb-1 timeline-title">Pedido procesado</h6>
+                                    <p class="mb-1 timeline-description">Pedido #12345 enviado al cliente</p>
+                                    <small class="timeline-time">Hace 3 horas</small>
                                 </div>
                             </div>
                         </div>
@@ -527,13 +474,119 @@
             height: 12px;
             border-radius: 50%;
             border: 2px solid white;
+            z-index: 1;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         .timeline-content {
-            background: #f8f9fa;
-            padding: 0.75rem;
-            border-radius: 0.5rem;
-            border-left: 3px solid #28a745;
+            background: #ffffff;
+            padding: 1.25rem;
+            border-radius: 0.75rem;
+            border-left: 4px solid #28a745;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .timeline-content:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+            transform: translateX(3px);
+        }
+
+        /* COLORES MEJORADOS Y MÁS LEGIBLES PARA EL TIMELINE */
+        .timeline-title {
+            color: #2b6cb0 !important;
+            font-weight: 800 !important;
+            font-size: 1.1rem !important;
+            margin-bottom: 0.5rem !important;
+            line-height: 1.3 !important;
+        }
+
+        .timeline-description {
+            color: #2d3748 !important;
+            font-weight: 600 !important;
+            font-size: 0.95rem !important;
+            margin-bottom: 0.75rem !important;
+            line-height: 1.4 !important;
+        }
+
+        .timeline-time {
+            color: #805ad5 !important;
+            font-weight: 700 !important;
+            font-size: 0.8rem !important;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background: #f7fafc;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            display: inline-block;
+        }
+
+        /* BORDES COLORIDOS SEGÚN TIPO DE ACTIVIDAD */
+        .timeline-item:nth-child(1) .timeline-content {
+            border-left-color: #48bb78;
+        }
+
+        .timeline-item:nth-child(2) .timeline-content {
+            border-left-color: #ed8936;
+        }
+
+        .timeline-item:nth-child(3) .timeline-content {
+            border-left-color: #4299e1;
+        }
+
+        .timeline-item:nth-child(4) .timeline-content {
+            border-left-color: #667eea;
+        }
+
+        /* HOVER EFFECTS MEJORADOS */
+        .timeline-item:hover .timeline-title {
+            color: #1a365d !important;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .timeline-item:hover .timeline-description {
+            color: #1a202c !important;
+        }
+
+        .timeline-item:hover .timeline-time {
+            color: #553c9a !important;
+            background: #edf2f7;
+        }
+
+        /* RESETEAR ESTILOS HEREDADOS Y FORZAR COLORES */
+        .timeline-content h6,
+        .timeline-content .timeline-title {
+            color: #2b6cb0 !important;
+            font-weight: 800 !important;
+        }
+
+        .timeline-content p,
+        .timeline-content .timeline-description {
+            color: #2d3748 !important;
+            font-weight: 600 !important;
+        }
+
+        .timeline-content small,
+        .timeline-content .timeline-time {
+            color: #805ad5 !important;
+            font-weight: 700 !important;
+        }
+
+        /* ELIMINAR ESTILOS ANTERIORES CONFLICTIVOS */
+        .timeline-content * {
+            color: inherit;
+        }
+        
+        .timeline-content h6 {
+            color: #2b6cb0 !important;
+        }
+        
+        .timeline-content .text-muted {
+            color: #2d3748 !important;
+        }
+        
+        .timeline-content small {
+            color: #805ad5 !important;
         }
 
         .navbar-dark .navbar-nav .nav-link:hover {

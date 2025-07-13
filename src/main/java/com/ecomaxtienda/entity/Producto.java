@@ -130,4 +130,46 @@ public class Producto {
         this.estado = true;
         this.fechaCreacion = LocalDateTime.now();
     }
+    
+    // ===== GETTERS Y SETTERS MANUALES (FIX PARA LOMBOK) =====
+    
+    public String getMarca() {
+        return marca;
+    }
+    
+    public void setMarca(String marca) {
+        this.marca = marca;
+    }
+    
+    public String getModelo() {
+        return modelo;
+    }
+    
+    public void setModelo(String modelo) {
+        this.modelo = modelo;
+    }
+    
+    public String getColor() {
+        return color;
+    }
+    
+    public void setColor(String color) {
+        this.color = color;
+    }
+    
+    public BigDecimal getPeso() {
+        return peso;
+    }
+    
+    public void setPeso(BigDecimal peso) {
+        this.peso = peso;
+    }
+    
+    public String getDimensiones() {
+        return dimensiones;
+    }
+    
+    public void setDimensiones(String dimensiones) {
+        this.dimensiones = dimensiones;
+    }
 }

@@ -9,6 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,24 +27,24 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.ecomaxtienda.dto.ProductoBulkUploadResult;
 import com.ecomaxtienda.entity.Producto;
 import com.ecomaxtienda.entity.Usuario;
+import com.ecomaxtienda.service.ExportService;
 import com.ecomaxtienda.service.ProductoBulkService;
 import com.ecomaxtienda.service.ProductoService;
-import com.ecomaxtienda.service.UsuarioService;
 
 @Controller
 @RequestMapping("/admin/productos")
-public class ProductoController {
+public class ProductoController extends BaseAdminController {
     
     private final ProductoService productoService;
     private final ProductoBulkService productoBulkService;
-    private final UsuarioService usuarioService;
+    private final ExportService exportService;
     
     public ProductoController(ProductoService productoService, 
                              ProductoBulkService productoBulkService,
-                             UsuarioService usuarioService) {
+                             ExportService exportService) {
         this.productoService = productoService;
         this.productoBulkService = productoBulkService;
-        this.usuarioService = usuarioService;
+        this.exportService = exportService;
     }
     
     /**
@@ -356,5 +358,68 @@ public class ProductoController {
         }
         
         return "redirect:/admin/productos";
+    }
+    
+    /**
+     * Procesar archivo de carga masiva (endpoint alternativo para compatibilidad)
+     */
+    @PostMapping("/cargar-masivo")
+    public String procesarCargaMasiva(@RequestParam("archivo") MultipartFile archivo,
+                                     @RequestParam(required = false) String crearCategorias,
+                                     @RequestParam(required = false) String actualizarExistentes,
+                                     RedirectAttributes redirectAttributes,
+                                     Principal principal) {
+        // Redirigir al método principal
+        return procesarBulkUpload(archivo, crearCategorias, redirectAttributes, principal);
+    }
+    
+    /**
+     * Exportar reporte de productos en formato PDF
+     */
+    @GetMapping("/exportar/pdf")
+    @SuppressWarnings("UseSpecificCatch")
+    public ResponseEntity<byte[]> exportarProductosPDF() {
+        try {
+            List<Producto> productos = productoService.findAll();
+            byte[] pdfBytes = exportService.exportarProductosPDF(productos);
+            
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            headers.setContentDispositionFormData("attachment", "reporte_productos.pdf");
+            headers.setContentLength(pdfBytes.length);
+            
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .body(pdfBytes);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+    
+    /**
+     * Exportar reporte de productos en formato Excel
+     */
+    @GetMapping("/exportar/excel")
+    @SuppressWarnings("UseSpecificCatch")
+    public ResponseEntity<byte[]> exportarProductosExcel() {
+        try {
+            List<Producto> productos = productoService.findAll();
+            byte[] excelBytes = exportService.exportarProductosExcel(productos);
+            
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
+            headers.setContentDispositionFormData("attachment", "reporte_productos.xlsx");
+            headers.setContentLength(excelBytes.length);
+            
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .body(excelBytes);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
     }
 }

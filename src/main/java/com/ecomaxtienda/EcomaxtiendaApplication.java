@@ -3,15 +3,18 @@ package com.ecomaxtienda;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.ecomaxtienda.config.AppProperties;
 import com.ecomaxtienda.entity.Rol;
 import com.ecomaxtienda.entity.Usuario;
 import com.ecomaxtienda.repository.RolRepository;
 import com.ecomaxtienda.repository.UsuarioRepository;
 
 @SpringBootApplication
+@EnableConfigurationProperties(AppProperties.class)
 public class EcomaxtiendaApplication {
 
 	public static void main(String[] args) {

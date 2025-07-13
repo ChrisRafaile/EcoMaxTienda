@@ -41,11 +41,11 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     List<Usuario> findByRolNombre(@Param("rolNombre") String rolNombre);
     
     // Buscar administradores
-    @Query("SELECT u FROM Usuario u WHERE u.rol.nombre IN ('ADMIN', 'SUPER_ADMIN')")
+    @Query("SELECT u FROM Usuario u WHERE u.rol.nombre IN ('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
     List<Usuario> findAdministradores();
     
     // Buscar clientes
-    @Query("SELECT u FROM Usuario u WHERE u.rol.nombre = 'CLIENTE'")
+    @Query("SELECT u FROM Usuario u WHERE u.rol.nombre = 'ROLE_CLIENTE'")
     List<Usuario> findClientes();
     
     // Buscar por nombre o apellido
@@ -81,4 +81,42 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     // Últimos usuarios registrados
     @Query("SELECT u FROM Usuario u ORDER BY u.fechaRegistro DESC")
     List<Usuario> findUltimosRegistrados(Pageable pageable);
+    
+    // ========== MÉTODOS PARA ADMINISTRACIÓN DE CLIENTES ==========
+    
+    // Buscar usuarios por rol con paginación
+    Page<Usuario> findByRol(Rol rol, Pageable pageable);
+    
+    // Buscar usuarios por rol y estado
+    Page<Usuario> findByRolAndEstado(Rol rol, boolean estado, Pageable pageable);
+    
+    // Buscar usuarios por rol y texto (nombre o email)
+    Page<Usuario> findByRolAndNombreContainingIgnoreCaseOrRolAndEmailContainingIgnoreCase(
+        Rol rol1, String nombre, Rol rol2, String email, Pageable pageable);
+    
+    // Búsqueda completa por rol y múltiples campos (ID, nombre, email, teléfono, DNI)
+    @Query("SELECT u FROM Usuario u WHERE u.rol = :rol AND (" +
+           "LOWER(u.nombre) LIKE LOWER(CONCAT('%', :busqueda, '%')) OR " +
+           "LOWER(u.apellido) LIKE LOWER(CONCAT('%', :busqueda, '%')) OR " +
+           "LOWER(u.email) LIKE LOWER(CONCAT('%', :busqueda, '%')) OR " +
+           "u.telefono LIKE CONCAT('%', :busqueda, '%') OR " +
+           "u.dni LIKE CONCAT('%', :busqueda, '%')" +
+           ")")
+    Page<Usuario> buscarClientesCompleto(@Param("rol") Rol rol, @Param("busqueda") String busqueda, Pageable pageable);
+    
+    // Contar usuarios por rol
+    long countByRol(Rol rol);
+    
+    // Contar usuarios por rol y estado
+    long countByRolAndEstado(Rol rol, boolean estado);
+    
+    // ===== MÉTODOS PARA REPORTES =====
+    
+    // Contar clientes activos
+    @Query("SELECT COUNT(u) FROM Usuario u WHERE u.rol.nombre = 'ROLE_CLIENTE' AND u.estado = true")
+    Long contarClientesActivos();
+    
+    // Buscar clientes por rango de fechas
+    @Query("SELECT u FROM Usuario u WHERE u.rol.nombre = 'ROLE_CLIENTE' AND u.fechaRegistro BETWEEN :fechaInicio AND :fechaFin ORDER BY u.fechaRegistro DESC")
+    List<Usuario> findClientesPorFecha(@Param("fechaInicio") LocalDateTime fechaInicio, @Param("fechaFin") LocalDateTime fechaFin);
 }

@@ -7,12 +7,12 @@
 </head>
 <body class="bg-light">
     <!-- Admin Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
-        <div class="container-fluid">
-            <a class="navbar-brand fw-bold" href="/admin/portal">
-                <i class="bi bi-leaf-fill text-success me-2"></i>
-                EcoMaxTienda Admin
-            </a>            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarAdmin" title="Alternar navegación">
+    <div th:replace="fragments/admin-navbar :: admin-navbar"></div>
+    
+    <div style="display: none"><!-- Mantener las clases y estructura para CSS -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+            <div class="container-fluid">            
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarAdmin" title="Alternar navegación">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarAdmin">
@@ -69,6 +69,7 @@
             </div>
         </div>
     </nav>
+    </div><!-- Fin de estructura oculta para CSS -->
 
     <main class="container-fluid py-4">
         <!-- Header -->
@@ -525,6 +526,17 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             `;
             document.body.appendChild(alertDiv);
+            
+            // Crear URL de descarga
+            const url = `/admin/reportes/exportar/${tipo}`;
+            
+            // Crear enlace temporal para descarga
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = true;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
             
             setTimeout(() => {
                 if (alertDiv.parentNode) {

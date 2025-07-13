@@ -7,16 +7,12 @@
 </head>
 <body class="bg-light">
     <!-- Admin Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
-        <div class="container-fluid">
-            <a class="navbar-brand fw-bold" href="/admin/portal_administrador">
-                <i class="bi bi-leaf-fill text-success me-2"></i>
-                EcoMaxTienda Admin
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarAdmin" title="Mostrar/Ocultar menú de navegación">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarAdmin">
+    <div th:replace="fragments/admin-navbar :: admin-navbar"></div>
+    
+    <div style="display: none"><!-- Mantener las clases y estructura para CSS -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+            <div class="container-fluid">
+                <div class="collapse navbar-collapse" id="navbarAdmin">
                 <ul class="navbar-nav me-auto">                    <li class="nav-item">
                         <a class="nav-link" href="/admin/portal">
                             <i class="bi bi-speedometer2 me-1"></i>Panel de Control
@@ -66,6 +62,7 @@
             </div>
         </div>
     </nav>
+    </div><!-- Fin de estructura oculta para CSS -->
 
     <main class="container-fluid py-4">
         <!-- Header -->
@@ -80,13 +77,13 @@
                         <p class="text-muted mb-0">Administra los usuarios registrados en EcoMaxTienda</p>
                     </div>
                     <div>
-                        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newClientModal">
+                        <a href="/admin/clientes/nuevo" class="btn btn-success">
                             <i class="bi bi-person-plus me-2"></i>Nuevo Cliente
-                        </button>
+                        </a>
                     </div>
                 </div>
             </div>
-        </div>        <!-- Stats Cards -->
+        </div>                        <!-- Stats Cards -->
         <div class="row g-4 mb-4">
             <div class="col-xl-3 col-md-6">
                 <div class="card border-0 shadow-sm bg-primary">
@@ -97,7 +94,7 @@
                             </div>
                             <div class="flex-grow-1 ms-3">
                                 <div class="small fw-bold text-white">Total Clientes</div>
-                                <div class="h4 mb-0 text-white">1,247</div>
+                                <div class="h4 mb-0 text-white" th:text="${totalClientes ?: 0}">0</div>
                             </div>
                         </div>
                     </div>
@@ -112,7 +109,7 @@
                             </div>
                             <div class="flex-grow-1 ms-3">
                                 <div class="small fw-bold text-white">Clientes Activos</div>
-                                <div class="h4 mb-0 text-white">1,189</div>
+                                <div class="h4 mb-0 text-white" th:text="${clientesActivos ?: 0}">0</div>
                             </div>
                         </div>
                     </div>
@@ -127,7 +124,7 @@
                             </div>
                             <div class="flex-grow-1 ms-3">
                                 <div class="small fw-bold text-white">Nuevos Este Mes</div>
-                                <div class="h4 mb-0 text-white">89</div>
+                                <div class="h4 mb-0 text-white">0</div>
                             </div>
                         </div>
                     </div>
@@ -141,8 +138,8 @@
                                 <i class="bi bi-star-fill text-dark display-6"></i>
                             </div>
                             <div class="flex-grow-1 ms-3">
-                                <div class="small fw-bold text-dark">Clientes VIP</div>
-                                <div class="h4 mb-0 text-dark">23</div>
+                                <div class="small fw-bold text-dark">Clientes Inactivos</div>
+                                <div class="h4 mb-0 text-dark" th:text="${clientesInactivos ?: 0}">0</div>
                             </div>
                         </div>
                     </div>
@@ -160,10 +157,19 @@
                             </div>
                             <div class="col-auto">
                                 <div class="input-group">
-                                    <input type="text" class="form-control" placeholder="Buscar cliente..." id="searchClient">
-                                    <button class="btn btn-outline-secondary" type="button" title="Buscar">
-                                        <i class="bi bi-search"></i>
-                                    </button>
+                                    <form th:action="@{/admin/clientes}" method="get" class="d-flex">
+                                        <input type="text" class="form-control" name="busqueda" 
+                                               th:value="${busqueda}" 
+                                               placeholder="Buscar por nombre, email, teléfono, DNI..." 
+                                               id="searchClient">
+                                        <button class="btn btn-outline-secondary" type="submit" title="Buscar">
+                                            <i class="bi bi-search"></i>
+                                        </button>
+                                        <input type="hidden" name="page" value="0">
+                                        <input type="hidden" name="size" th:value="${size ?: 10}">
+                                        <input type="hidden" name="sortBy" th:value="${sortBy ?: 'fechaRegistro'}">
+                                        <input type="hidden" name="sortDir" th:value="${sortDir ?: 'desc'}">
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -184,90 +190,62 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>#1247</td>
+                                    <tr th:each="cliente : ${clientes}" th:if="${clientes != null and !clientes.empty}">
+                                        <td th:text="'#' + ${cliente.idUsuario}">#0</td>
                                         <td>
-                                            <img src="/img/avatar-placeholder.png" alt="Avatar" class="rounded-circle" width="40" height="40">
+                                            <img th:src="${cliente.fotoPerfil != null ? cliente.fotoPerfil : '/img/default-profile.svg'}" 
+                                                 alt="Avatar" class="rounded-circle" width="40" height="40">
                                         </td>
                                         <td>
-                                            <div class="fw-bold">María González</div>
+                                            <div class="fw-bold" th:text="${cliente.nombre + ' ' + cliente.apellido}">Nombre Cliente</div>
                                             <small class="text-muted">Cliente Regular</small>
                                         </td>
-                                        <td>maria.gonzalez@email.com</td>
-                                        <td>15/05/2024</td>
-                                        <td><span class="badge bg-success">Activo</span></td>
+                                        <td th:text="${cliente.email}">email@ejemplo.com</td>
+                                        <td th:text="${#temporals.format(cliente.fechaRegistro, 'dd/MM/yyyy')}">00/00/0000</td>
                                         <td>
-                                            <span class="badge bg-primary">12 pedidos</span>
+                                            <span th:class="${cliente.estado ? 'badge bg-success' : 'badge bg-danger'}"
+                                                  th:text="${cliente.estado ? 'Activo' : 'Inactivo'}">Estado</span>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-primary">0 pedidos</span>
                                         </td>
                                         <td>
                                             <div class="btn-group btn-group-sm">
-                                                <button class="btn btn-outline-primary" title="Ver perfil">
+                                                <a th:href="@{/admin/clientes/detalle/{id}(id=${cliente.idUsuario})}" 
+                                                   class="btn btn-outline-primary" title="Ver perfil">
                                                     <i class="bi bi-eye"></i>
-                                                </button>
-                                                <button class="btn btn-outline-warning" title="Editar">
+                                                </a>
+                                                <a th:href="@{/admin/clientes/editar/{id}(id=${cliente.idUsuario})}" 
+                                                   class="btn btn-outline-warning" title="Editar">
                                                     <i class="bi bi-pencil"></i>
-                                                </button>
-                                                <button class="btn btn-outline-danger" title="Suspender">
-                                                    <i class="bi bi-person-x"></i>
-                                                </button>
+                                                </a>
+                                                <div th:if="${cliente.estado}">
+                                                    <form th:action="@{/admin/clientes/eliminar/{id}(id=${cliente.idUsuario})}" 
+                                                          method="post" style="display: inline;">
+                                                        <button type="submit" class="btn btn-outline-danger" 
+                                                                title="Desactivar" 
+                                                                onclick="return confirm('¿Está seguro de desactivar este cliente?')">
+                                                            <i class="bi bi-person-x"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                                <div th:unless="${cliente.estado}">
+                                                    <form th:action="@{/admin/clientes/activar/{id}(id=${cliente.idUsuario})}" 
+                                                          method="post" style="display: inline;">
+                                                        <button type="submit" class="btn btn-outline-success" 
+                                                                title="Activar">
+                                                            <i class="bi bi-person-check"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
                                             </div>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td>#1246</td>
-                                        <td>
-                                            <img src="/img/avatar-placeholder.png" alt="Avatar" class="rounded-circle" width="40" height="40">
-                                        </td>
-                                        <td>
-                                            <div class="fw-bold">Carlos Ruiz</div>
-                                            <small class="text-muted">Cliente VIP</small>
-                                        </td>
-                                        <td>carlos.ruiz@email.com</td>
-                                        <td>12/05/2024</td>
-                                        <td><span class="badge bg-success">Activo</span></td>
-                                        <td>
-                                            <span class="badge bg-warning">28 pedidos</span>
-                                        </td>
-                                        <td>
-                                            <div class="btn-group btn-group-sm">
-                                                <button class="btn btn-outline-primary" title="Ver perfil">
-                                                    <i class="bi bi-eye"></i>
-                                                </button>
-                                                <button class="btn btn-outline-warning" title="Editar">
-                                                    <i class="bi bi-pencil"></i>
-                                                </button>
-                                                <button class="btn btn-outline-danger" title="Suspender">
-                                                    <i class="bi bi-person-x"></i>
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>#1245</td>
-                                        <td>
-                                            <img src="/img/avatar-placeholder.png" alt="Avatar" class="rounded-circle" width="40" height="40">
-                                        </td>
-                                        <td>
-                                            <div class="fw-bold">Ana Martínez</div>
-                                            <small class="text-muted">Cliente Regular</small>
-                                        </td>
-                                        <td>ana.martinez@email.com</td>
-                                        <td>10/05/2024</td>
-                                        <td><span class="badge bg-warning">Pendiente</span></td>
-                                        <td>
-                                            <span class="badge bg-secondary">0 pedidos</span>
-                                        </td>
-                                        <td>
-                                            <div class="btn-group btn-group-sm">
-                                                <button class="btn btn-outline-primary" title="Ver perfil">
-                                                    <i class="bi bi-eye"></i>
-                                                </button>
-                                                <button class="btn btn-outline-warning" title="Editar">
-                                                    <i class="bi bi-pencil"></i>
-                                                </button>
-                                                <button class="btn btn-outline-success" title="Activar">
-                                                    <i class="bi bi-person-check"></i>
-                                                </button>
+                                    <tr th:if="${clientes == null or clientes.empty}">
+                                        <td colspan="8" class="text-center py-4">
+                                            <div class="text-muted">
+                                                <i class="bi bi-inbox fs-1"></i>
+                                                <p class="mt-2">No se encontraron clientes</p>
                                             </div>
                                         </td>
                                     </tr>
@@ -276,25 +254,51 @@
                         </div>
                     </div>
                     <div class="card-footer bg-white">
-                        <nav>
+                        <nav th:if="${clientes != null and !clientes.empty}">
                             <ul class="pagination justify-content-center mb-0">
-                                <li class="page-item disabled">
-                                    <span class="page-link">Anterior</span>
+                                <!-- Botón Anterior -->
+                                <li th:class="${currentPage == 0 ? 'page-item disabled' : 'page-item'}">
+                                    <a th:if="${currentPage > 0}" 
+                                       th:href="@{/admin/clientes(page=${currentPage - 1}, size=${size ?: 10}, sortBy=${sortBy ?: 'fechaRegistro'}, sortDir=${sortDir ?: 'desc'}, busqueda=${busqueda}, estado=${estado})}" 
+                                       class="page-link">Anterior</a>
+                                    <span th:unless="${currentPage > 0}" class="page-link">Anterior</span>
                                 </li>
-                                <li class="page-item active">
-                                    <span class="page-link">1</span>
+                                
+                                <!-- Números de página -->
+                                <li th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}" 
+                                    th:if="${totalPages > 1}"
+                                    th:class="${pageNum == currentPage ? 'page-item active' : 'page-item'}">
+                                    <a th:if="${pageNum != currentPage}" 
+                                       th:href="@{/admin/clientes(page=${pageNum}, size=${size ?: 10}, sortBy=${sortBy ?: 'fechaRegistro'}, sortDir=${sortDir ?: 'desc'}, busqueda=${busqueda}, estado=${estado})}" 
+                                       th:text="${pageNum + 1}" 
+                                       class="page-link">1</a>
+                                    <span th:if="${pageNum == currentPage}" 
+                                          th:text="${pageNum + 1}" 
+                                          class="page-link">1</span>
                                 </li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#">2</a>
-                                </li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#">3</a>
-                                </li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#">Siguiente</a>
+                                
+                                <!-- Botón Siguiente -->
+                                <li th:class="${currentPage + 1 >= totalPages ? 'page-item disabled' : 'page-item'}">
+                                    <a th:if="${currentPage + 1 < totalPages}" 
+                                       th:href="@{/admin/clientes(page=${currentPage + 1}, size=${size ?: 10}, sortBy=${sortBy ?: 'fechaRegistro'}, sortDir=${sortDir ?: 'desc'}, busqueda=${busqueda}, estado=${estado})}" 
+                                       class="page-link">Siguiente</a>
+                                    <span th:unless="${currentPage + 1 < totalPages}" class="page-link">Siguiente</span>
                                 </li>
                             </ul>
                         </nav>
+                        
+                        <!-- Información de paginación -->
+                        <div th:if="${clientes != null and !clientes.empty}" class="text-center mt-2">
+                            <small class="text-muted">
+                                Mostrando 
+                                <span th:text="${currentPage * (size ?: 10) + 1}">1</span>
+                                a 
+                                <span th:text="${(currentPage + 1) * (size ?: 10) > totalItems ? totalItems : (currentPage + 1) * (size ?: 10)}">10</span>
+                                de 
+                                <span th:text="${totalItems}">0</span>
+                                resultados
+                            </small>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -395,17 +399,6 @@
     </style>
 
     <script>
-        // Search functionality
-        document.getElementById('searchClient').addEventListener('input', function(e) {
-            const searchTerm = e.target.value.toLowerCase();
-            const tableRows = document.querySelectorAll('tbody tr');
-            
-            tableRows.forEach(row => {
-                const text = row.textContent.toLowerCase();
-                row.style.display = text.includes(searchTerm) ? '' : 'none';
-            });
-        });
-
         // Add row hover effects
         document.addEventListener('DOMContentLoaded', function() {
             const rows = document.querySelectorAll('tbody tr');
@@ -415,6 +408,21 @@
                 });
                 row.addEventListener('mouseleave', function() {
                     this.style.backgroundColor = '';
+                });
+            });
+            
+            // Confirmación para acciones de eliminar/activar
+            const forms = document.querySelectorAll('form[action*="/eliminar/"], form[action*="/activar/"]');
+            forms.forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    const isDelete = this.action.includes('/eliminar/');
+                    const message = isDelete ? 
+                        '¿Está seguro de desactivar este cliente?' : 
+                        '¿Está seguro de activar este cliente?';
+                    
+                    if (!confirm(message)) {
+                        e.preventDefault();
+                    }
                 });
             });
         });

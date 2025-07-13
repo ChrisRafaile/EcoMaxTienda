@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head('Detalle Producto | EcoMaxTienda')">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Detalle Producto | EcoMaxTienda</title>
+</head>
+<style>
+    :root {
+        --primary-green: #20c997;
+        --secondary-green: #28a745;
+        --accent-teal: #17a2b8;
+        --warm-orange: #ff6b6b;
+        --eco-gold: #ffd700;
+        --glass-bg: rgba(255, 255, 255, 0.95);
+    }
+
+    body {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #20c997 50%, #28a745 75%, #17a2b8 100%);
+        background-size: 400% 400%;
+        animation: gradientMove 20s ease infinite;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        min-height: 100vh;
+    }
+
+    @keyframes gradientMove {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    .glass-container {
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        border-radius: 30px;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        margin: 2rem auto;
+    }
+
+    .product-hero {
+        background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+        color: white;
+        padding: 2rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .product-hero::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+        transform: rotate(45deg);
+        animation: shimmer 4s infinite;
+    }
+
+    @keyframes shimmer {
+        0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+        100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+    }
+
+    .breadcrumb-eco {
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        padding: 1rem 2rem;
+        border-bottom: 1px solid #dee2e6;
+    }
+
+    .breadcrumb-eco .breadcrumb {
+        margin: 0;
+        background: transparent;
+    }
+
+    .product-image-container {
+        position: relative;
+        height: 500px;
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    }
+
+    .product-image-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+
+    .product-image-container:hover img {
+        transform: scale(1.05);
+    }
+
+    .zoom-overlay {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .zoom-overlay:hover {
+        background: white;
+        transform: scale(1.1);
+    }
+
+    .eco-badge {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        background: linear-gradient(135deg, var(--eco-gold), #ffb347);
+        color: #333;
+        padding: 0.8rem 1.5rem;
+        border-radius: 25px;
+        font-weight: 700;
+        box-shadow: 0 10px 25px rgba(255, 215, 0, 0.4);
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+    }
+
+    .product-info {
+        padding: 2rem;
+    }
+
+    .product-category {
+        background: linear-gradient(135deg, var(--accent-teal), #138496);
+        color: white;
+        padding: 0.5rem 1.5rem;
+        border-radius: 25px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        display: inline-block;
+        margin-bottom: 1rem;
+    }
+
+    .product-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #2c3e50;
+        margin-bottom: 1rem;
+        line-height: 1.2;
+    }
+
+    .product-price {
+        font-size: 3rem;
+        font-weight: 700;
+        color: var(--secondary-green);
+        margin-bottom: 1.5rem;
+    }
+
+    .old-price {
+        font-size: 1.5rem;
+        color: #6c757d;
+        text-decoration: line-through;
+        margin-left: 1rem;
+    }
+
+    .discount-badge {
+        background: var(--warm-orange);
+        color: white;
+        padding: 0.3rem 1rem;
+        border-radius: 15px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        margin-left: 1rem;
+    }
+
+    .product-description {
+        font-size: 1.1rem;
+        line-height: 1.6;
+        color: #5a5a5a;
+        margin-bottom: 2rem;
+    }
+
+    .features-list {
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        padding: 1.5rem;
+        border-radius: 15px;
+        margin-bottom: 2rem;
+    }
+
+    .feature-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0.8rem;
+    }
+
+    .feature-item:last-child {
+        margin-bottom: 0;
+    }
+
+    .feature-icon {
+        color: var(--primary-green);
+        font-size: 1.2rem;
+        margin-right: 1rem;
+        flex-shrink: 0;
+    }
+
+    .quantity-selector {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .quantity-input {
+        width: 80px;
+        text-align: center;
+        border: 2px solid var(--primary-green);
+        border-radius: 10px;
+        padding: 0.5rem;
+        font-weight: 600;
+    }
+
+    .quantity-btn {
+        background: var(--primary-green);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .quantity-btn:hover {
+        background: var(--secondary-green);
+        transform: scale(1.1);
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .btn-eco-large {
+        background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+        border: none;
+        color: white;
+        border-radius: 25px;
+        padding: 1rem 2rem;
+        font-weight: 700;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 10px 25px rgba(32, 201, 151, 0.3);
+        flex: 1;
+    }
+
+    .btn-eco-large:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 35px rgba(32, 201, 151, 0.4);
+        color: white;
+    }
+
+    .btn-outline-eco-large {
+        background: transparent;
+        border: 2px solid var(--primary-green);
+        color: var(--primary-green);
+        border-radius: 25px;
+        padding: 1rem 2rem;
+        font-weight: 700;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex: 1;
+    }
+
+    .btn-outline-eco-large:hover {
+        background: var(--primary-green);
+        color: white;
+        transform: translateY(-3px);
+    }
+
+    .eco-score-card {
+        background: linear-gradient(135deg, #e8f5e8, #d4edda);
+        border: 2px solid var(--primary-green);
+        border-radius: 20px;
+        padding: 1.5rem;
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .eco-score {
+        font-size: 3rem;
+        font-weight: 700;
+        color: var(--secondary-green);
+        margin-bottom: 0.5rem;
+    }
+
+    .related-products {
+        background: #f8f9fa;
+        padding: 2rem;
+        border-top: 1px solid #dee2e6;
+    }
+
+    .related-product-card {
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        height: 100%;
+    }
+
+    .related-product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(32, 201, 151, 0.2);
+    }
+
+    .floating-back-btn {
+        position: fixed;
+        top: 100px;
+        left: 20px;
+        background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 10px 25px rgba(32, 201, 151, 0.3);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        z-index: 1000;
+        text-decoration: none;
+    }
+
+    .floating-back-btn:hover {
+        transform: scale(1.1);
+        color: white;
+        box-shadow: 0 15px 35px rgba(32, 201, 151, 0.4);
+    }
+
+    @media (max-width: 768px) {
+        .product-title {
+            font-size: 2rem;
+        }
+        
+        .product-price {
+            font-size: 2rem;
+        }
+        
+        .action-buttons {
+            flex-direction: column;
+        }
+        
+        .floating-back-btn {
+            left: 15px;
+            width: 50px;
+            height: 50px;
+        }
+    }
+</style>
+<body>
+    <a href="/client/catalogo" class="floating-back-btn" aria-label="Volver al catálogo">
+        <i class="bi bi-arrow-left fs-4"></i>
+    </a>
+
+    <div th:replace="fragments/client-navbar :: client-navbar"></div>
+
+    <div class="container-fluid">
+        <!-- Breadcrumb -->
+        <div class="breadcrumb-eco">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="/client/catalogo" class="text-decoration-none">
+                            <i class="bi bi-house me-1"></i>Catálogo
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a th:href="@{/client/catalogo(categoria=${producto.categoria})}" 
+                           class="text-decoration-none" th:text="${producto.categoria}">Categoría</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page" th:text="${producto.nombre}">Producto</li>
+                </ol>
+            </nav>
+        </div>
+
+        <div class="glass-container">
+            <!-- Hero Section -->
+            <div class="product-hero">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h1 class="display-4 fw-bold mb-3" th:text="${producto.nombre}">Nombre del Producto</h1>
+                        <p class="lead mb-0">Producto eco-amigable de alta calidad para un estilo de vida sostenible</p>
+                    </div>
+                    <div class="col-md-4 text-md-end">
+                        <div th:if="${producto.puntuacionEco != null}" class="eco-score-card bg-light">
+                            <div class="eco-score" th:text="${producto.puntuacionEco}">9.5</div>
+                            <div class="text-success fw-bold">Eco Score</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-4 p-4">
+                <!-- Imagen del producto -->
+                <div class="col-lg-6">
+                    <div class="product-image-container">
+                        <div th:if="${producto.puntuacionEco != null and producto.puntuacionEco >= 8}" 
+                             class="eco-badge">
+                            <i class="bi bi-award-fill me-2"></i>Eco Premium
+                        </div>
+                        
+                        <div class="zoom-overlay" onclick="toggleImageZoom()">
+                            <i class="bi bi-zoom-in"></i>
+                        </div>
+                        
+                        <div th:if="${producto.imagenUrl != null and #strings.length(producto.imagenUrl) > 0}">
+                            <img th:src="${producto.imagenUrl}" 
+                                 th:alt="${'Imagen del producto ' + producto.nombre}" 
+                                 th:title="${'Ver imagen ampliada de ' + producto.nombre}" 
+                                 title="Imagen del producto"
+                                 id="productImage" />
+                        </div>
+                        <div th:unless="${producto.imagenUrl != null and #strings.length(producto.imagenUrl) > 0}"
+                             class="d-flex align-items-center justify-content-center h-100">
+                            <i class="bi bi-image" style="font-size: 5rem; color: #ccc;"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Información del producto -->
+                <div class="col-lg-6">
+                    <div class="product-info">
+                        <div class="product-category" th:text="${producto.categoria}">Categoría</div>
+                        
+                        <h2 class="product-title" th:text="${producto.nombre}">Nombre del Producto</h2>
+                        
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="product-price">
+                                S/ <span th:text="${#numbers.formatDecimal(producto.precio, 1, 2)}">99.99</span>
+                            </div>
+                            <!-- Aquí puedes agregar precio anterior si existe descuento -->
+                        </div>
+
+                        <div class="product-description" th:text="${producto.descripcion}">
+                            Descripción detallada del producto eco-amigable. Materiales sostenibles y procesos responsables con el medio ambiente.
+                        </div>
+
+                        <!-- Características eco-amigables -->
+                        <div class="features-list">
+                            <h5 class="text-success fw-bold mb-3">
+                                <i class="bi bi-leaf-fill me-2"></i>Características Eco-Amigables
+                            </h5>
+                            <div class="feature-item">
+                                <i class="bi bi-check-circle-fill feature-icon"></i>
+                                <span>Materiales 100% reciclables</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="bi bi-check-circle-fill feature-icon"></i>
+                                <span>Producción con energías renovables</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="bi bi-check-circle-fill feature-icon"></i>
+                                <span>Embalaje biodegradable</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="bi bi-check-circle-fill feature-icon"></i>
+                                <span>Comercio justo certificado</span>
+                            </div>
+                        </div>
+
+                        <!-- Selector de cantidad -->
+                        <div class="quantity-selector">
+                            <label class="fw-bold">Cantidad:</label>
+                            <button type="button" class="quantity-btn" onclick="decreaseQuantity()" 
+                                    aria-label="Disminuir cantidad" title="Reducir cantidad">
+                                <i class="bi bi-dash"></i>
+                            </button>
+                            <input type="number" id="quantity" class="quantity-input" value="1" min="1" max="50"
+                                   aria-label="Cantidad de productos" title="Cantidad a agregar al carrito" placeholder="1">
+                            <button type="button" class="quantity-btn" onclick="increaseQuantity()"
+                                    aria-label="Aumentar cantidad" title="Aumentar cantidad">
+                                <i class="bi bi-plus"></i>
+                            </button>
+                        </div>
+
+                        <!-- Botones de acción -->
+                        <div class="action-buttons">
+                            <button class="btn-eco-large" 
+                                    th:onclick="'agregarAlCarrito(' + ${producto.idProducto} + ', \'' + ${producto.nombre} + '\')'">
+                                <i class="bi bi-cart-plus me-2"></i>Agregar al Carrito
+                            </button>
+                            <a href="/client/carrito" class="btn-outline-eco-large">
+                                <i class="bi bi-heart me-2"></i>Lista de Deseos
+                            </a>
+                        </div>
+
+                        <!-- Información adicional -->
+                        <div class="row mt-4">
+                            <div class="col-6">
+                                <div class="text-center p-3 bg-light rounded">
+                                    <i class="bi bi-truck text-success fs-3"></i>
+                                    <div class="mt-2">
+                                        <strong>Envío Gratis</strong>
+                                        <div class="small text-muted">En compras mayores a S/100</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="text-center p-3 bg-light rounded">
+                                    <i class="bi bi-shield-check text-success fs-3"></i>
+                                    <div class="mt-2">
+                                        <strong>Garantía</strong>
+                                        <div class="small text-muted">12 meses de cobertura</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Productos relacionados -->
+        <div th:if="${productosRelacionados != null and #lists.size(productosRelacionados) > 0}" 
+             class="related-products mt-5">
+            <div class="container">
+                <h3 class="text-center mb-4">
+                    <i class="bi bi-stars text-warning me-2"></i>
+                    Productos Relacionados
+                </h3>
+                <div class="row g-4">
+                    <div class="col-md-3" th:each="related : ${productosRelacionados}">
+                        <div class="related-product-card">
+                            <div class="position-relative" style="height: 200px;">
+                                <div th:if="${related.imagenUrl != null and #strings.length(related.imagenUrl) > 0}">
+                                    <img th:src="${related.imagenUrl}" 
+                                         th:alt="|Producto relacionado: ${related.nombre} - ${related.categoria}|" 
+                                         th:title="|Ver ${related.nombre} - S/ ${related.precio}|" 
+                                         class="w-100 h-100 object-fit-cover" />
+                                </div>
+                                <div th:unless="${related.imagenUrl != null and #strings.length(related.imagenUrl) > 0}"
+                                     class="d-flex align-items-center justify-content-center h-100 bg-light">
+                                    <i class="bi bi-image" style="font-size: 3rem; color: #ccc;"></i>
+                                </div>
+                            </div>
+                            <div class="p-3">
+                                <h6 class="fw-bold" th:text="${related.nombre}">Producto Relacionado</h6>
+                                <div class="text-success fw-bold">
+                                    S/ <span th:text="${#numbers.formatDecimal(related.precio, 1, 2)}">49.99</span>
+                                </div>
+                                <a th:href="@{/client/producto-detalle/{id}(id=${related.idProducto})}" 
+                                   class="btn btn-outline-success btn-sm mt-2 w-100">
+                                    Ver Detalles
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="fragments/footer :: footer"></div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Controles de cantidad
+        function increaseQuantity() {
+            const input = document.getElementById('quantity');
+            const currentValue = parseInt(input.value);
+            if (currentValue < 50) {
+                input.value = currentValue + 1;
+            }
+        }
+
+        function decreaseQuantity() {
+            const input = document.getElementById('quantity');
+            const currentValue = parseInt(input.value);
+            if (currentValue > 1) {
+                input.value = currentValue - 1;
+            }
+        }
+
+        // Zoom de imagen
+        let imageZoomed = false;
+        function toggleImageZoom() {
+            const image = document.getElementById('productImage');
+            const overlay = document.querySelector('.zoom-overlay i');
+            
+            if (!imageZoomed) {
+                image.style.transform = 'scale(1.5)';
+                overlay.className = 'bi bi-zoom-out';
+                imageZoomed = true;
+            } else {
+                image.style.transform = 'scale(1)';
+                overlay.className = 'bi bi-zoom-in';
+                imageZoomed = false;
+            }
+        }
+
+        // Función para agregar al carrito
+        function agregarAlCarrito(productoId, nombreProducto) {
+            const cantidad = document.getElementById('quantity').value;
+            
+            fetch('/client/agregar-al-carrito', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `productoId=${productoId}&cantidad=${cantidad}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showNotification(`${nombreProducto} (${cantidad} unidades) agregado al carrito`, 'success');
+                    updateCartCounter(data.totalItems);
+                } else {
+                    showNotification(data.message || 'Error al agregar producto', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showNotification('Error al agregar producto al carrito', 'error');
+            });
+        }
+
+        // Mostrar notificaciones
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `alert alert-${type === 'success' ? 'success' : 'danger'} position-fixed`;
+            notification.style.cssText = `
+                top: 20px;
+                right: 20px;
+                z-index: 10000;
+                min-width: 350px;
+                animation: slideInRight 0.5s ease-out;
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            `;
+            notification.innerHTML = `
+                <div class="d-flex align-items-center">
+                    <i class="bi ${type === 'success' ? 'bi-check-circle-fill' : 'bi-exclamation-triangle-fill'} me-2 fs-5"></i>
+                    ${message}
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOutRight 0.5s ease-out';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 500);
+            }, 4000);
+        }
+
+        // Actualizar contador del carrito
+        function updateCartCounter(totalItems) {
+            const counter = document.querySelector('.cart-counter');
+            if (counter) {
+                counter.textContent = totalItems;
+                counter.style.animation = 'pulse 0.5s ease-out';
+            }
+        }
+
+        // CSS para animaciones
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInRight {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOutRight {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+            .object-fit-cover {
+                object-fit: cover;
+            }
+        `;
+        document.head.appendChild(style);
+
+        console.log('🌱 EcoMaxTienda - Detalle de producto cargado exitosamente');
+    </script>
+</body>
+</html>

@@ -6,7 +6,8 @@
     <title>Inicio | EcoMaxTienda</title>
 </head>
 <body class="eco-bg">
-    <div th:replace="fragments/navbar :: navbar"></div>    <main class="container my-5">
+    <!-- Navbar usando fragment del cliente -->
+    <div th:replace="fragments/client-navbar :: client-navbar"></div>    <main class="container my-5">
         <div class="row justify-content-center">
             <div class="col-md-10">
                 <!-- Alerta de pedido reciente (se muestra dinámicamente con JavaScript) -->

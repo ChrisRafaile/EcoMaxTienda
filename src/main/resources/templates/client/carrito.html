@@ -1,331 +1,546 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/head :: head('Carrito de Compras | EcoMaxTienda')">
-    <!-- Fallback content si Thymeleaf no está disponible -->
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Carrito de Compras | EcoMaxTienda</title>
 </head>
-<body class="eco-bg">
-    <div th:replace="fragments/navbar :: navbar"></div>
-    <main class="container my-5">
-        <div class="row">
-            <div class="col-12">
-                <div class="d-flex align-items-center mb-4">
-                    <i class="bi bi-cart-fill text-success me-3 fs-2"></i>
-                    <h1 class="fw-bold text-success mb-0">Mi Carrito de Compras</h1>
-                </div>
-                <p class="lead mb-5">Revisa tus productos seleccionados antes de proceder al pago.</p>
-            </div>
+<style>
+    :root {
+        --primary-green: #20c997;
+        --secondary-green: #28a745;
+        --accent-teal: #17a2b8;
+        --warm-orange: #ff6b6b;
+        --eco-gold: #ffd700;
+    }
+
+    body {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #20c997 50%, #28a745 75%, #17a2b8 100%);
+        background-size: 400% 400%;
+        animation: gradientMove 20s ease infinite;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        min-height: 100vh;
+    }
+
+    @keyframes gradientMove {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    .cart-container {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        border-radius: 30px;
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+        margin: 2rem auto;
+        max-width: 1200px;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .cart-header {
+        background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+        color: white;
+        padding: 2.5rem;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .cart-header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+        transform: rotate(45deg);
+        animation: shimmer 3s infinite;
+    }
+
+    @keyframes shimmer {
+        0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+        100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+    }
+
+    .cart-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        position: relative;
+        z-index: 1;
+    }
+
+    .cart-subtitle {
+        font-size: 1.1rem;
+        opacity: 0.9;
+        position: relative;
+        z-index: 1;
+    }
+
+    .cart-content {
+        padding: 2rem;
+    }
+
+    .cart-item {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        margin-bottom: 1.5rem;
+        overflow: hidden;
+        border: 1px solid rgba(32, 201, 151, 0.2);
+        transition: all 0.3s ease;
+    }
+
+    .cart-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 40px rgba(32, 201, 151, 0.2);
+        border-color: var(--primary-green);
+    }
+
+    .floating-particles {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    .particle {
+        position: absolute;
+        color: rgba(32, 201, 151, 0.3);
+        animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0) rotate(0deg); }
+        33% { transform: translateY(-20px) rotate(120deg); }
+        66% { transform: translateY(-10px) rotate(240deg); }
+    }
+</style>
+<body>
+    <div class="floating-particles" id="particles"></div>
+
+    <div th:replace="fragments/client-navbar :: client-navbar"></div>
+
+    <div class="cart-container">
+        <!-- Header -->
+        <div class="cart-header">
+            <h1 class="cart-title">
+                <i class="bi bi-cart3 me-3"></i>Carrito Eco-Amigable
+            </h1>
+            <p class="cart-subtitle">Tu selección consciente para un futuro sostenible</p>
         </div>
 
-        <div class="row">
-            <!-- Lista de productos en el carrito -->
-            <div class="col-lg-8">
-                <div class="card client-cart-card">
-                    <div class="card-header client-cart-header">
-                        <h5 class="mb-0"><i class="bi bi-bag-check me-2"></i>Productos en tu Carrito</h5>
-                    </div>
-                    <div class="card-body p-0">
-                        <!-- Producto 1 -->
-                        <div class="client-cart-item border-bottom">
-                            <div class="row align-items-center">
-                                <div class="col-md-2 text-center">
-                                    <div class="client-product-icon mx-auto" style="width: 50px; height: 50px;">
-                                        <i class="bi bi-box-seam text-white fs-4"></i>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <h6 class="fw-bold mb-1 client-text-primary">Eco Kit Hogar</h6>
-                                    <p class="text-muted small mb-0">Kit completo de productos ecológicos para el hogar</p>
-                                    <span class="badge client-product-badge">Eco-Friendly</span>
-                                </div>
-                                <div class="col-md-2">
-                                    <label class="fw-bold small text-muted">Precio</label>
-                                    <div class="fw-bold client-text-primary">S/ 58.50</div>
-                                </div>
-                                <div class="col-md-2">
-                                    <label for="quantity1" class="fw-bold small text-muted">Cantidad</label>
-                                    <div class="input-group input-group-sm">
-                                        <button class="btn client-quantity-btn" type="button" onclick="decreaseQuantity(1)" aria-label="Disminuir cantidad" title="Disminuir cantidad">-</button>
-                                        <input type="number" class="form-control text-center" id="quantity1" value="2" min="1" readonly aria-label="Cantidad del producto">
-                                        <button class="btn client-quantity-btn" type="button" onclick="increaseQuantity(1)" aria-label="Aumentar cantidad" title="Aumentar cantidad">+</button>
-                                    </div>
-                                </div>
-                                <div class="col-md-1">
-                                    <label class="fw-bold small text-muted">Subtotal</label>
-                                    <div class="fw-bold client-text-primary" id="subtotal1">S/ 117.00</div>
-                                </div>
-                                <div class="col-md-1">
-                                    <button class="btn client-btn-remove" onclick="removeItem(1)" aria-label="Eliminar producto del carrito" title="Eliminar producto">
-                                        <i class="bi bi-trash" aria-hidden="true"></i>
-                                    </button>
-                                </div>
+        <div class="cart-content">
+
+            <!-- Carrito con productos -->
+            <div th:if="${carrito != null and #lists.size(carrito) > 0}">
+                <!-- Lista de productos -->
+                <div class="cart-items">
+                    <div class="cart-item d-flex align-items-center p-3" 
+                         th:each="item : ${carrito}">
+                        <!-- Imagen del producto -->
+                        <div class="cart-item-image">
+                            <div th:if="${item.imagenUrl != null and #strings.length(item.imagenUrl) > 0}">
+                                <img th:src="${item.imagenUrl}" th:alt="${item.nombre}" th:title="${item.nombre}" alt="Imagen del producto" />
+                            </div>
+                            <div th:unless="${item.imagenUrl != null and #strings.length(item.imagenUrl) > 0}">
+                                <i class="bi bi-box" style="font-size: 3rem; color: #ccc;"></i>
                             </div>
                         </div>
 
-                        <!-- Producto 2 -->
-                        <div class="client-cart-item border-bottom">
-                            <div class="row align-items-center">
-                                <div class="col-md-2 text-center">
-                                    <div class="client-product-icon mx-auto" style="width: 50px; height: 50px;">
-                                        <i class="bi bi-droplet-half text-white fs-4"></i>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <h6 class="fw-bold mb-1 client-text-primary">Shampoo Natural</h6>
-                                    <p class="text-muted small mb-0">Shampoo orgánico libre de químicos dañinos</p>
-                                    <span class="badge client-product-badge">Orgánico</span>
-                                </div>
-                                <div class="col-md-2">
-                                    <label class="fw-bold small text-muted">Precio</label>
-                                    <div class="fw-bold client-text-primary">S/ 40.00</div>
-                                </div>
-                                <div class="col-md-2">
-                                    <label for="quantity2" class="fw-bold small text-muted">Cantidad</label>
-                                    <div class="input-group input-group-sm">
-                                        <button class="btn client-quantity-btn" type="button" onclick="decreaseQuantity(2)" aria-label="Disminuir cantidad" title="Disminuir cantidad">-</button>
-                                        <input type="number" class="form-control text-center" id="quantity2" value="1" min="1" readonly aria-label="Cantidad del producto">
-                                        <button class="btn client-quantity-btn" type="button" onclick="increaseQuantity(2)" aria-label="Aumentar cantidad" title="Aumentar cantidad">+</button>
-                                    </div>
-                                </div>
-                                <div class="col-md-1">
-                                    <label class="fw-bold small text-muted">Subtotal</label>
-                                    <div class="fw-bold client-text-primary" id="subtotal2">S/ 40.00</div>
-                                </div>
-                                <div class="col-md-1">
-                                    <button class="btn client-btn-remove" onclick="removeItem(2)" aria-label="Eliminar producto del carrito" title="Eliminar producto">
-                                        <i class="bi bi-trash" aria-hidden="true"></i>
-                                    </button>
-                                </div>
+                        <!-- Información del producto -->
+                        <div class="cart-item-info">
+                            <div class="cart-item-category">Producto Eco-Amigable</div>
+                            <h4 class="cart-item-name" th:text="${item.nombre}">Nombre del Producto</h4>
+                            <div class="cart-item-price">
+                                S/ <span th:text="${#numbers.formatDecimal(item.precio, 1, 2)}">0.00</span>
+                            </div>
+                            
+                            <!-- Controles de cantidad -->
+                            <div class="quantity-controls">
+                                <span class="fw-bold">Cantidad:</span>
+                                <button type="button" class="quantity-btn" 
+                                        th:onclick="'updateQuantity(' + ${item.productoId} + ', ' + (${item.cantidad} - 1) + ')'"
+                                        aria-label="Disminuir cantidad" title="Reducir cantidad">
+                                    <i class="bi bi-dash"></i>
+                                </button>
+                                <input type="number" 
+                                       th:value="${item.cantidad}"
+                                       class="quantity-input"
+                                       min="1" max="50"
+                                       th:onchange="'updateQuantity(' + ${item.productoId} + ', this.value)'"
+                                       aria-label="Cantidad del producto" title="Cantidad en el carrito">
+                                <button type="button" class="quantity-btn"
+                                        th:onclick="'updateQuantity(' + ${item.productoId} + ', ' + (${item.cantidad} + 1) + ')'"
+                                        aria-label="Aumentar cantidad" title="Aumentar cantidad">
+                                    <i class="bi bi-plus"></i>
+                                </button>
                             </div>
                         </div>
 
-                        <!-- Producto 3 -->
-                        <div class="client-cart-item">
-                            <div class="row align-items-center">
-                                <div class="col-md-2 text-center">
-                                    <div class="client-product-icon mx-auto" style="width: 50px; height: 50px;">
-                                        <i class="bi bi-cup-straw text-white fs-4"></i>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <h6 class="fw-bold mb-1 client-text-primary">Botella Reutilizable</h6>
-                                    <p class="text-muted small mb-0">Botella de acero inoxidable libre de BPA</p>
-                                    <span class="badge client-product-badge">Reutilizable</span>
-                                </div>
-                                <div class="col-md-2">
-                                    <label class="fw-bold small text-muted">Precio</label>
-                                    <div class="fw-bold client-text-primary">S/ 60.00</div>
-                                </div>
-                                <div class="col-md-2">
-                                    <label for="quantity3" class="fw-bold small text-muted">Cantidad</label>
-                                    <div class="input-group input-group-sm">
-                                        <button class="btn client-quantity-btn" type="button" onclick="decreaseQuantity(3)" aria-label="Disminuir cantidad" title="Disminuir cantidad">-</button>
-                                        <input type="number" class="form-control text-center" id="quantity3" value="1" min="1" readonly aria-label="Cantidad del producto">
-                                        <button class="btn client-quantity-btn" type="button" onclick="increaseQuantity(3)" aria-label="Aumentar cantidad" title="Aumentar cantidad">+</button>
-                                    </div>
-                                </div>
-                                <div class="col-md-1">
-                                    <label class="fw-bold small text-muted">Subtotal</label>
-                                    <div class="fw-bold text-success" id="subtotal3">S/ 60.00</div>
-                                </div>                                <div class="col-md-1">
-                                    <button class="btn btn-outline-danger btn-sm" onclick="removeItem(3)" 
-                                            aria-label="Eliminar producto del carrito" title="Eliminar producto">
-                                        <i class="bi bi-trash" aria-hidden="true"></i>
-                                    </button>
-                                </div>
+                        <!-- Total del item y botón eliminar -->
+                        <div class="d-flex flex-column align-items-end">
+                            <div class="item-total mb-3">
+                                S/ <span th:text="${#numbers.formatDecimal(item.precio * item.cantidad, 1, 2)}">0.00</span>
                             </div>
-                        </div>
-
-                        <!-- Botón para continuar comprando -->
-                        <div class="p-4">
-                            <a href="/client/catalogo" class="btn btn-outline-success">
-                                <i class="bi bi-arrow-left me-2"></i>Continuar Comprando
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Resumen del pedido -->
-            <div class="col-lg-4">
-                <div class="card shadow-sm border-0 sticky-top cart-summary-card">
-                    <div class="card-header bg-light border-0">
-                        <h5 class="mb-0 fw-bold text-dark"><i class="bi bi-receipt me-2"></i>Resumen del Pedido</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between mb-2">
-                            <span class="text-dark">Subtotal (4 productos):</span>
-                            <span id="cartSubtotal" class="text-dark">S/ 217.00</span>
-                        </div>
-                        <div class="d-flex justify-content-between mb-2">
-                            <span class="text-dark">Envío:</span>
-                            <span class="text-success fw-bold">GRATIS</span>
-                        </div>
-                        <div class="d-flex justify-content-between mb-3">
-                            <span class="text-dark">Descuento Eco-Friendly:</span>
-                            <span class="text-success">-S/ 10.85</span>
-                        </div>
-                        <hr>
-                        <div class="d-flex justify-content-between mb-4">
-                            <h5 class="fw-bold text-dark">Total:</h5>
-                            <h5 class="fw-bold text-success" id="cartTotal">S/ 206.15</h5>
-                        </div>
-
-                        <!-- Cupón de descuento -->
-                        <div class="mb-3">
-                            <label class="form-label fw-bold text-dark">Código de Cupón:</label>
-                            <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Ingresa tu cupón" id="couponCode">
-                                <button class="btn btn-outline-success" type="button" onclick="applyCoupon()">Aplicar</button>
-                            </div>
-                            <div class="text-success small mt-1 coupon-message" id="couponMessage">
-                                <i class="bi bi-check-circle me-1"></i>Cupón aplicado correctamente
-                            </div>
-                        </div>
-
-                        <!-- Botón de proceder al pago -->
-                        <div class="d-grid gap-2">
-                            <button class="btn btn-success btn-lg" onclick="proceedToPayment()">
-                                <i class="bi bi-credit-card me-2"></i>Proceder al Pago
-                            </button>
-                            <button class="btn btn-outline-secondary" onclick="clearCart()">
-                                <i class="bi bi-trash me-2"></i>Vaciar Carrito
+                            <button type="button" class="remove-btn"
+                                    th:onclick="'removeFromCart(' + ${item.productoId} + ')'"
+                                    aria-label="Eliminar producto" title="Quitar del carrito">
+                                <i class="bi bi-trash"></i>
                             </button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Información adicional -->
-                <div class="card shadow-sm border-0 mt-4">
-                    <div class="card-body">
-                        <h6 class="fw-bold text-success mb-3">
-                            <i class="bi bi-shield-check me-2"></i>Compra Segura
-                        </h6>
-                        <ul class="list-unstyled small">
-                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Envío gratuito en pedidos superiores a S/ 150</li>
-                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Garantía de devolución de 30 días</li>
-                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Pago 100% seguro</li>
-                            <li class="mb-0"><i class="bi bi-check-circle text-success me-2"></i>Productos eco-amigables certificados</li>
-                        </ul>
+                <!-- Resumen del carrito -->
+                <div class="cart-summary mt-4">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="shipping-info">
+                                <h5><i class="bi bi-truck me-2"></i>Información de Envío</h5>
+                                <p>Envío gratis para compras mayores a S/ 200</p>
+                                <div class="eco-benefits">
+                                    <h6><i class="bi bi-leaf me-2"></i>Beneficios Eco-Amigables</h6>
+                                    <ul>
+                                        <li>5% de descuento por compra sostenible</li>
+                                        <li>Empaque biodegradable incluido</li>
+                                        <li>Contribuyes a la reforestación</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="summary-card">
+                                <h5>Resumen del Pedido</h5>
+                                <div class="summary-line">
+                                    <span>Subtotal:</span>
+                                    <span>S/ <span th:text="${#numbers.formatDecimal(subtotal, 1, 2)}">0.00</span></span>
+                                </div>
+                                <div class="summary-line">
+                                    <span>Descuento Eco (5%):</span>
+                                    <span class="text-success">-S/ <span th:text="${#numbers.formatDecimal(descuento, 1, 2)}">0.00</span></span>
+                                </div>
+                                <div class="summary-line">
+                                    <span>Envío:</span>
+                                    <span th:if="${envio > 0}">S/ <span th:text="${#numbers.formatDecimal(envio, 1, 2)}">0.00</span></span>
+                                    <span th:unless="${envio > 0}" class="text-success">Gratis</span>
+                                </div>
+                                <div class="summary-line">
+                                    <span>IGV (18%):</span>
+                                    <span>S/ <span th:text="${#numbers.formatDecimal(igv, 1, 2)}">0.00</span></span>
+                                </div>
+                                <hr>
+                                <div class="summary-total">
+                                    <span>Total:</span>
+                                    <span>S/ <span th:text="${#numbers.formatDecimal(total, 1, 2)}">0.00</span></span>
+                                </div>
+                                <button class="btn-eco-large mt-3 w-100" onclick="proceedToCheckout()">
+                                    <i class="bi bi-credit-card me-2"></i>Proceder al Pago
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>    </main>
-    
-    <!-- Modal de confirmación del carrito -->
-    <div class="modal fade" id="cartConfirmationModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 bg-success text-white">
-                <div class="modal-body text-center p-5">
-                    <div class="success-animation mb-4">
-                        <i class="bi bi-check-circle-fill success-icon"></i>
-                    </div>
-                    <h4 class="fw-bold mb-3">¡Carrito Registrado Exitosamente!</h4>
-                    <p class="mb-4">Tu carrito ha sido procesado y serás redirigido a la página de pago en unos segundos.</p>                    <div class="progress bg-light mb-3 redirect-progress">
-                        <div class="progress-bar bg-white redirect-progress-bar" role="progressbar" 
-                             id="redirectProgress" aria-label="Progreso de redirección" 
-                             aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                    <p class="small mb-0">Redirigiendo en <span id="countdown">5</span> segundos...</p>
-                </div>
+
+            <!-- Carrito vacío -->
+            <div th:unless="${carrito != null and #lists.size(carrito) > 0}" class="empty-cart">
+                <i class="bi bi-cart-x"></i>
+                <h3>Tu carrito está vacío</h3>
+                <p class="lead">¡Descubre nuestros productos eco-amigables y comienza tu compra consciente!</p>
+                <a href="/client/catalogo" class="btn-eco-large mt-4" style="max-width: 300px; margin: 0 auto;">
+                    <i class="bi bi-leaf-fill me-2"></i>Explorar Productos
+                </a>
             </div>
         </div>
     </div>
 
-    <div th:replace="fragments/footer :: footer"></div>    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <div th:replace="fragments/footer :: footer"></div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Agregar estilos CSS para animaciones
+        // Crear partículas flotantes
+        function createFloatingParticles() {
+            const container = document.getElementById('particles');
+            const icons = ['bi-cart-check', 'bi-leaf', 'bi-heart', 'bi-star'];
+            
+            setInterval(() => {
+                const particle = document.createElement('i');
+                particle.className = `bi ${icons[Math.floor(Math.random() * icons.length)]} particle`;
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.fontSize = (Math.random() * 1 + 0.5) + 'rem';
+                particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                
+                container.appendChild(particle);
+                
+                setTimeout(() => {
+                    if (particle.parentNode) {
+                        particle.parentNode.removeChild(particle);
+                    }
+                }, 6000);
+            }, 4000);
+        }
+
+        // Actualizar cantidad
+        function updateQuantity(productoId, nuevaCantidad) {
+            if (nuevaCantidad < 1) {
+                removeFromCart(productoId);
+                return;
+            }
+            
+            fetch('/client/actualizar-carrito', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `productoId=${productoId}&cantidad=${nuevaCantidad}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    showNotification(data.message || 'Error al actualizar cantidad', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showNotification('Error al actualizar el carrito', 'error');
+            });
+        }
+
+        // Remover del carrito
+        function removeFromCart(productoId) {
+            if (confirm('¿Estás seguro de que deseas eliminar este producto del carrito?')) {
+                fetch('/client/remover-del-carrito', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `productoId=${productoId}`
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showNotification('Producto eliminado del carrito', 'success');
+                        setTimeout(() => location.reload(), 1000);
+                    } else {
+                        showNotification(data.message || 'Error al eliminar producto', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showNotification('Error al eliminar producto del carrito', 'error');
+                });
+            }
+        }
+
+        // Mostrar notificaciones
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `alert alert-${type === 'success' ? 'success' : 'danger'} position-fixed`;
+            notification.style.cssText = `
+                top: 20px;
+                right: 20px;
+                z-index: 10000;
+                min-width: 350px;
+                animation: slideInRight 0.5s ease-out;
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            `;
+            notification.innerHTML = `
+                <div class="d-flex align-items-center">
+                    <i class="bi ${type === 'success' ? 'bi-check-circle-fill' : 'bi-exclamation-triangle-fill'} me-2 fs-5"></i>
+                    ${message}
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOutRight 0.5s ease-out';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 500);
+            }, 3000);
+        }
+
+        // CSS para animaciones
         const style = document.createElement('style');
         style.textContent = `
-            @keyframes bounce {
-                0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-                40% { transform: translateY(-15px); }
-                60% { transform: translateY(-8px); }
+            @keyframes slideInRight {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
             }
-            
-            .success-animation {
-                animation: bounce 0.6s ease-in-out;
+            @keyframes slideOutRight {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
             }
-            
-            .product-card {
+            .cart-item-image {
+                width: 120px;
+                height: 120px;
+                background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+                border-radius: 15px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                overflow: hidden;
+                margin-right: 1.5rem;
+            }
+            .cart-item-image img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                transition: transform 0.3s ease;
+            }
+            .cart-item:hover .cart-item-image img {
+                transform: scale(1.1);
+            }
+            .cart-item-info {
+                flex: 1;
+            }
+            .cart-item-name {
+                font-size: 1.3rem;
+                font-weight: 700;
+                color: #2c3e50;
+                margin-bottom: 0.5rem;
+            }
+            .cart-item-category {
+                background: linear-gradient(135deg, var(--accent-teal), #138496);
+                color: white;
+                padding: 0.2rem 0.8rem;
+                border-radius: 12px;
+                font-size: 0.8rem;
+                font-weight: 600;
+                display: inline-block;
+                margin-bottom: 0.8rem;
+            }
+            .cart-item-price {
+                font-size: 1.5rem;
+                font-weight: 700;
+                color: var(--secondary-green);
+                margin-bottom: 1rem;
+            }
+            .quantity-controls {
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                margin-bottom: 1rem;
+            }
+            .quantity-btn {
+                background: var(--primary-green);
+                color: white;
+                border: none;
+                border-radius: 50%;
+                width: 35px;
+                height: 35px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
                 transition: all 0.3s ease;
             }
-            
-            .product-card:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            .quantity-btn:hover {
+                background: var(--secondary-green);
+                transform: scale(1.1);
+            }
+            .quantity-input {
+                width: 60px;
+                text-align: center;
+                border: 2px solid var(--primary-green);
+                border-radius: 8px;
+                padding: 0.3rem;
+                font-weight: 600;
+            }
+            .item-total {
+                font-size: 1.2rem;
+                font-weight: 700;
+                color: var(--secondary-green);
+                text-align: right;
+            }
+            .remove-btn {
+                background: var(--warm-orange);
+                color: white;
+                border: none;
+                border-radius: 50%;
+                width: 40px;
+                height: 40px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                margin-left: 1rem;
+            }
+            .remove-btn:hover {
+                background: #e55555;
+                transform: scale(1.1);
+            }
+            .empty-cart {
+                text-align: center;
+                padding: 4rem 2rem;
+                color: #6c757d;
+            }
+            .empty-cart i {
+                font-size: 5rem;
+                margin-bottom: 2rem;
+                color: var(--primary-green);
+                opacity: 0.5;
+            }
+            .btn-eco-large {
+                background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+                border: none;
+                color: white;
+                border-radius: 25px;
+                padding: 1rem 2rem;
+                font-weight: 700;
+                font-size: 1.2rem;
+                transition: all 0.3s ease;
+                text-decoration: none;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 10px 25px rgba(32, 201, 151, 0.3);
+                width: 100%;
+            }
+            .btn-eco-large:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 15px 35px rgba(32, 201, 151, 0.4);
+                color: white;
             }
         `;
         document.head.appendChild(style);
 
-        // Precios base de los productos
-        const productPrices = {
-            1: 58.50, // Eco Kit Hogar
-            2: 40.00, // Shampoo Natural
-            3: 60.00  // Botella Reutilizable
-        };
+        // Inicializar partículas
+        createFloatingParticles();
 
-        // Función para aumentar cantidad
-        function increaseQuantity(productId) {
-            const quantityInput = document.getElementById(`quantity${productId}`);
-            let currentQuantity = parseInt(quantityInput.value);
-            currentQuantity++;
-            quantityInput.value = currentQuantity;
-            updateSubtotal(productId, currentQuantity);
-            updateCartTotals();
-        }
-
-        // Función para disminuir cantidad
-        function decreaseQuantity(productId) {
-            const quantityInput = document.getElementById(`quantity${productId}`);
-            let currentQuantity = parseInt(quantityInput.value);
-            if (currentQuantity > 1) {
-                currentQuantity--;
-                quantityInput.value = currentQuantity;
-                updateSubtotal(productId, currentQuantity);
-                updateCartTotals();
+        // Función para proceder al checkout
+        function proceedToCheckout() {
+            // Verificar si hay productos en el carrito
+            const cartItems = document.querySelectorAll('.cart-item');
+            if (cartItems.length === 0) {
+                showNotification('Tu carrito está vacío. Agrega productos antes de proceder al pago.', 'error');
+                return;
             }
-        }
-
-        // Función para actualizar subtotal del producto
-        function updateSubtotal(productId, quantity) {
-            const price = productPrices[productId];
-            const subtotal = price * quantity;
-            document.getElementById(`subtotal${productId}`).textContent = `S/ ${subtotal.toFixed(2)}`;
-        }
-
-        // Función para actualizar totales del carrito
-        function updateCartTotals() {
-            let subtotal = 0;
-            let totalItems = 0;
-
-            for (let productId in productPrices) {
-                const quantity = parseInt(document.getElementById(`quantity${productId}`).value);
-                const price = productPrices[productId];
-                subtotal += price * quantity;
-                totalItems += quantity;
-            }
-
-            const discount = subtotal * 0.05; // 5% de descuento eco-friendly
-            const total = subtotal - discount;
-
-            document.getElementById('cartSubtotal').textContent = `S/ ${subtotal.toFixed(2)}`;
-            document.getElementById('cartTotal').textContent = `S/ ${total.toFixed(2)}`;
             
-            // Actualizar número de productos
-            const summaryText = document.querySelector('.card-body .d-flex span');
-            if (summaryText) {
-                summaryText.textContent = `Subtotal (${totalItems} productos):`;
-            }
+            // Redirigir al checkout
+            window.location.href = '/client/checkout';
         }
 
-        // Función para eliminar producto del carrito
-        function removeItem(productId) {
-            if (confirm('¿Estás seguro de que deseas eliminar este producto del carrito?')) {
-                const productRow = document.getElementById(`quantity${productId}`).closest('.p-4');
-                productRow.remove();
+        console.log('🛒 EcoMaxTienda - Carrito cargado exitosamente');
+    </script>
+</body>
+</html>
                 delete productPrices[productId];
                 updateCartTotals();
                 

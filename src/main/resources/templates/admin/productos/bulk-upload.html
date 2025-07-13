@@ -113,73 +113,10 @@
         }
         
         .step-number {
-            background: var(--primary-green);
-            color: white;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-        }
-    </style>
-</head>
-<body>
-        
-        .upload-zone {
-            border: 3px dashed #28a745;
-            border-radius: 1rem;
-            padding: 3rem 2rem;
-            text-align: center;
-            background: linear-gradient(135deg, #f8f9fa 0%, #fff 100%);
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-        
-        .upload-zone:hover {
-            background: linear-gradient(135deg, #e8f5e8 0%, #f0f9f0 100%);
-            border-color: #20c997;
-        }
-        
-        .upload-zone.dragover {
-            background: linear-gradient(135deg, #e8f5e8 0%, #f0f9f0 100%);
-            border-color: #20c997;
-            transform: scale(1.02);
-        }
-        
-        .upload-icon {
-            font-size: 4rem;
-            color: #28a745;
-            margin-bottom: 1rem;
-        }
-        
-        .info-card {
-            background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
-            border: none;
-            border-radius: 1rem;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-        }
-        
-        .step-card {
-            background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
-            border: none;
-            border-radius: 1rem;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-            transition: all 0.3s ease;
-            height: 100%;
-        }
-        
-        .step-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
-        }
-        
-        .step-number {
             width: 50px;
             height: 50px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            background: linear-gradient(135deg, var(--secondary-green) 0%, var(--primary-green) 100%);
             color: white;
             display: flex;
             align-items: center;
@@ -199,7 +136,7 @@
         }
         
         .upload-btn {
-            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            background: linear-gradient(135deg, var(--secondary-green) 0%, var(--primary-green) 100%);
             border: none;
             color: white;
             border-radius: 0.75rem;
@@ -214,62 +151,11 @@
             padding: 1rem;
             margin-top: 1rem;
         }
-        
-        .result-summary {
-            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
-            border: 1px solid #c3e6cb;
-            border-radius: 0.5rem;
-            padding: 1rem;
-        }
-        
-        .error-list {
-            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
-            border: 1px solid #f5c6cb;
-            border-radius: 0.5rem;
-            padding: 1rem;
-            max-height: 300px;
-            overflow-y: auto;
-        }
-        
-        .warning-list {
-            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
-            border: 1px solid #ffeaa7;
-            border-radius: 0.5rem;
-            padding: 1rem;
-            max-height: 300px;
-            overflow-y: auto;
-        }
-        
-        .progress-bar-custom {
-            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-            height: 8px;
-            border-radius: 4px;
-        }
     </style>
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark shadow-sm" style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%);">
-        <div class="container-fluid">
-            <a class="navbar-brand fw-bold" href="/admin/portal_administrador">
-                <i class="bi bi-leaf-fill text-success"></i> EcoMaxTienda Admin
-            </a>
-            <div class="navbar-nav ms-auto">
-                <div class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                        <i class="bi bi-person-circle"></i> 
-                        <span th:text="${usuario != null ? usuario.nombre : 'Administrador'}">Admin</span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="/admin/perfil"><i class="bi bi-person"></i> Mi Perfil</a></li>
-                        <li><a class="dropdown-item" href="/admin/dashboard"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="/logout"><i class="bi bi-box-arrow-right"></i> Cerrar Sesión</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </nav>
+    <!-- Navbar usando fragment -->
+    <div th:replace="fragments/admin-navbar :: admin-navbar"></div>
 
     <div class="container py-4">
         <!-- Header -->
@@ -405,10 +291,10 @@
                     <div class="card-body">
                         <p class="text-muted">Descarga una plantilla para guiarte en la estructura correcta:</p>
                         <div class="d-grid gap-2">
-                            <a href="/admin/productos/plantilla-csv" class="btn download-btn">
+                            <a th:href="@{/admin/productos/plantilla-csv}" class="btn download-btn">
                                 <i class="bi bi-filetype-csv"></i> Descargar Plantilla CSV
                             </a>
-                            <a href="/admin/productos/plantilla-excel" class="btn download-btn">
+                            <a th:href="@{/admin/productos/plantilla-excel}" class="btn download-btn">
                                 <i class="bi bi-filetype-xlsx"></i> Descargar Plantilla Excel
                             </a>
                         </div>

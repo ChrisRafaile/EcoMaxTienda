@@ -6,70 +6,9 @@
     <title>Productos | EcoMaxTienda</title>
 </head>
 <body class="bg-light">
-    <!-- Admin Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
-        <div class="container-fluid">
-            <a class="navbar-brand fw-bold" href="/admin/portal_administrador">
-                <i class="bi bi-leaf-fill text-success me-2"></i>
-                EcoMaxTienda Admin
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarAdmin" title="Alternar navegación">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarAdmin">                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/admin/portal">
-                            <i class="bi bi-speedometer2 me-1"></i>Panel de Control
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/admin/clientes">
-                            <i class="bi bi-people me-1"></i>Clientes
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="/admin/productos">
-                            <i class="bi bi-box-seam me-1"></i>Productos
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/admin/pedidos">
-                            <i class="bi bi-cart-check me-1"></i>Pedidos
-                        </a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                            <i class="bi bi-gear me-1"></i>Gestión
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="/admin/registro-admin">
-                                <i class="bi bi-person-plus me-2"></i>Nuevo Admin
-                            </a></li>
-                            <li><a class="dropdown-item" href="/admin/reportes">
-                                <i class="bi bi-graph-up me-2"></i>Reportes
-                            </a></li>
-                            <li><a class="dropdown-item" href="/admin/configuracion">
-                                <i class="bi bi-sliders me-2"></i>Configuración
-                            </a></li>
-                        </ul>
-                    </li>
-                </ul>
-                <ul class="navbar-nav">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                            <i class="bi bi-person-circle me-1"></i>Admin
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="/admin/perfil">Mi Perfil</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="/logout">Cerrar Sesión</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
+    <!-- Admin Navbar Fragment -->
+    <div th:replace="fragments/admin-navbar :: admin-navbar"></div>
+    
     <main class="container-fluid py-4">
         <!-- Header -->
         <div class="row mb-4">
@@ -82,10 +21,37 @@
                         </h1>
                         <p class="text-muted mb-0">Administrar catálogo de productos eco-sustentables</p>
                     </div>
-                    <div>
+                    <div class="d-flex gap-2">
+                        <!-- Dropdown para generar reportes -->
+                        <div class="dropdown">
+                            <button class="btn btn-outline-info dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Generar reportes de productos">
+                                <i class="bi bi-file-earmark-bar-graph me-1"></i>
+                                Generar Reporte
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a class="dropdown-item" href="/admin/productos/exportar/pdf" target="_blank">
+                                        <i class="bi bi-file-earmark-pdf text-danger me-2"></i>
+                                        Exportar PDF
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/admin/productos/exportar/excel" target="_blank">
+                                        <i class="bi bi-file-earmark-excel text-success me-2"></i>
+                                        Exportar Excel
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        
                         <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalNuevoProducto" title="Crear nuevo producto">
                             <i class="bi bi-plus-circle me-1"></i>
-                            Nuevo Producto
+                            Agregar Producto
+                        </button>
+                        
+                        <button class="btn btn-secondary" title="Carga masiva de productos" onclick="window.location.href='#cargaMasiva'">
+                            <i class="bi bi-upload me-1"></i>
+                            Carga Masiva
                         </button>
                     </div>
                 </div>
@@ -650,5 +616,8 @@
             padding: 0.25rem 0.5rem;
         }
     </style>
+    
+    <!-- Bootstrap JavaScript -->
+    <script src="/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

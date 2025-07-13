@@ -22,7 +22,6 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ecomaxtienda.dto.ProductoBulkUploadResult;
@@ -33,7 +32,6 @@ import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
 
 @Service
-@Transactional
 public class ProductoBulkService {
     
     private final ProductoService productoService;
@@ -96,12 +94,20 @@ public class ProductoBulkService {
     private void procesarCSV(InputStream inputStream, ProductoBulkUploadResult resultado, 
                            boolean permitirNuevasCategorias) throws IOException, CsvValidationException {
         
-        try (CSVReader reader = new CSVReader(new InputStreamReader(inputStream, "UTF-8"))) {
+        // Leer con BOM handling
+        try (InputStreamReader isr = new InputStreamReader(inputStream, java.nio.charset.StandardCharsets.UTF_8);
+             CSVReader reader = new CSVReader(isr)) {
+            
             String[] headers = reader.readNext();
             
             if (headers == null) {
                 resultado.agregarError("El archivo está vacío");
                 return;
+            }
+            
+            // Limpiar el primer header del posible BOM
+            if (headers.length > 0 && headers[0].startsWith("\uFEFF")) {
+                headers[0] = headers[0].substring(1);
             }
             
             // Validar encabezados
@@ -182,9 +188,20 @@ public class ProductoBulkService {
      */
     private boolean validarEncabezados(String[] headers, ProductoBulkUploadResult resultado) {
         List<String> headersEncontrados = new ArrayList<>();
-        for (String header : headers) {
-            headersEncontrados.add(header.trim().toLowerCase());
+        
+        // Debug: Log headers originales
+        System.out.println("=== DEBUG HEADERS ===");
+        for (int i = 0; i < headers.length; i++) {
+            String header = headers[i];
+            System.out.println("Header[" + i + "]: '" + header + "' (length: " + header.length() + ")");
+            // Limpiar header: trim, lowercase y remover caracteres invisibles
+            String headerLimpio = header.trim().toLowerCase().replaceAll("[\\p{Cntrl}\\p{Space}]", "");
+            headersEncontrados.add(headerLimpio);
+            System.out.println("  -> Limpio: '" + headerLimpio + "'");
         }
+        
+        System.out.println("Headers encontrados: " + headersEncontrados);
+        System.out.println("Headers obligatorios: " + HEADERS_OBLIGATORIOS);
         
         List<String> faltantes = new ArrayList<>();
         for (String obligatorio : HEADERS_OBLIGATORIOS) {
@@ -195,6 +212,7 @@ public class ProductoBulkService {
         
         if (!faltantes.isEmpty()) {
             resultado.agregarError("Faltan encabezados obligatorios: " + String.join(", ", faltantes));
+            resultado.agregarError("Headers encontrados: " + String.join(", ", headersEncontrados));
             return false;
         }
         
@@ -259,6 +277,11 @@ public class ProductoBulkService {
                                 resultado.agregarError(numeroFila, "El precio debe ser mayor a 0");
                                 return;
                             }
+                            // Validar precisión (10,2) y truncar si es necesario
+                            if (!validarPrecisionBigDecimal(precio, 10, 2)) {
+                                precio = truncarBigDecimal(precio, 10, 2);
+                                resultado.agregarAdvertencia(numeroFila, "Precio truncado para cumplir restricciones de BD: " + precio);
+                            }
                             producto.setPrecio(precio);
                         } catch (NumberFormatException e) {
                             resultado.agregarError(numeroFila, "Formato de precio inválido: " + valor);
@@ -300,9 +323,20 @@ public class ProductoBulkService {
                         if (!valor.isEmpty()) {
                             try {
                                 String pesoLimpio = valor.replaceAll("[^\\d.,]", "").replace(",", ".");
-                                producto.setPeso(new BigDecimal(pesoLimpio));
+                                BigDecimal peso = new BigDecimal(pesoLimpio);
+                                if (peso.compareTo(BigDecimal.ZERO) < 0) {
+                                    resultado.agregarError(numeroFila, "El peso no puede ser negativo");
+                                    return;
+                                }
+                                // Validar precisión (8,2) y truncar si es necesario
+                                if (!validarPrecisionBigDecimal(peso, 8, 2)) {
+                                    peso = truncarBigDecimal(peso, 8, 2);
+                                    resultado.agregarAdvertencia(numeroFila, "Peso truncado para cumplir restricciones de BD: " + peso);
+                                }
+                                producto.setPeso(peso);
                             } catch (NumberFormatException e) {
-                                resultado.agregarAdvertencia(numeroFila, "Formato de peso inválido: " + valor);
+                                resultado.agregarError(numeroFila, "Formato de peso inválido: " + valor);
+                                return;
                             }
                         }
                         break;
@@ -332,16 +366,19 @@ public class ProductoBulkService {
                             try {
                                 String puntuacionLimpia = valor.replace(",", ".");
                                 BigDecimal puntuacion = new BigDecimal(puntuacionLimpia);
-                                if (puntuacion.compareTo(BigDecimal.ZERO) >= 0 &&
-                                        puntuacion.compareTo(BigDecimal.TEN) <= 0) {
-                                    producto.setPuntuacionEco(puntuacion);
-                                } else {
-                                    resultado.agregarAdvertencia(numeroFila,
-                                            "Puntuación eco debe estar entre 0 y 10: " + valor);
+                                if (puntuacion.compareTo(BigDecimal.ZERO) < 0) {
+                                    resultado.agregarError(numeroFila, "La puntuación eco no puede ser negativa");
+                                    return;
                                 }
+                                // Validar precisión (3,2) y truncar si es necesario
+                                if (!validarPrecisionBigDecimal(puntuacion, 3, 2)) {
+                                    puntuacion = truncarBigDecimal(puntuacion, 3, 2);
+                                    resultado.agregarAdvertencia(numeroFila, "Puntuación eco truncada para cumplir restricciones de BD: " + puntuacion);
+                                }
+                                producto.setPuntuacionEco(puntuacion);
                             } catch (NumberFormatException e) {
-                                resultado.agregarAdvertencia(numeroFila,
-                                        "Formato de puntuación eco inválido: " + valor);
+                                resultado.agregarError(numeroFila, "Formato de puntuación eco inválido: " + valor);
+                                return;
                             }
                         }
                         break;
@@ -392,22 +429,13 @@ public class ProductoBulkService {
                 }
             }
             
-            // Configurar valores por defecto
-            producto.setEstado(true);
-            producto.setFechaCreacion(LocalDateTime.now());
-            
-            // Validar y guardar producto
-            Producto productoGuardado = productoService.save(producto);
-            
-            // Crear inventario
-            inventario.setProducto(productoGuardado);
-            inventario.setFechaActualizacion(LocalDateTime.now());
-            inventarioService.save(inventario);
-            
-            resultado.incrementarProductosProcesados();
+            // Solo guardar si no hay errores en esta fila
+            if (resultado.getErrores().stream().noneMatch(error -> error.contains("Fila " + numeroFila))) {
+                guardarProductoConInventario(producto, inventario, numeroFila, resultado);
+            }
             
         } catch (Exception e) {
-            resultado.agregarError(numeroFila, "Error al crear producto: " + e.getMessage());
+            resultado.agregarError(numeroFila, "Error al procesar fila: " + e.getMessage());
         }
     }
     
@@ -535,5 +563,108 @@ public class ProductoBulkService {
         
         // Retornar URL relativa
         return "/uploads/" + nombreUnico;
+    }
+    
+    /**
+     * Guarda un producto individual sin transacciones globales
+     */
+    private Producto guardarProductoIndividual(Producto producto) {
+        try {
+            return productoService.save(producto);
+        } catch (Exception e) {
+            throw new RuntimeException("Error al guardar producto: " + e.getMessage(), e);
+        }
+    }
+    
+    /**
+     * Guarda un inventario individual sin transacciones globales
+     */
+    private void guardarInventarioIndividual(Inventario inventario) {
+        try {
+            inventarioService.save(inventario);
+        } catch (Exception e) {
+            throw new RuntimeException("Error al guardar inventario: " + e.getMessage(), e);
+        }
+    }
+    
+    /**
+     * Guarda un producto con su inventario en una sola operación
+     */
+    private void guardarProductoConInventario(Producto producto, Inventario inventario, 
+                                            int numeroFila, ProductoBulkUploadResult resultado) {
+        try {
+            // Configurar valores por defecto
+            producto.setEstado(true);
+            producto.setFechaCreacion(LocalDateTime.now());
+            
+            // Guardar producto
+            Producto productoGuardado = guardarProductoIndividual(producto);
+            
+            // Configurar y guardar inventario
+            inventario.setProducto(productoGuardado);
+            inventario.setFechaActualizacion(LocalDateTime.now());
+            guardarInventarioIndividual(inventario);
+            
+            resultado.incrementarProductosProcesados();
+            
+        } catch (Exception e) {
+            resultado.agregarError(numeroFila, "Error al guardar producto: " + e.getMessage());
+        }
+    }
+    
+    /**
+     * Valida que un BigDecimal respete las restricciones de precisión de la BD
+     */
+    private boolean validarPrecisionBigDecimal(BigDecimal valor, int precision, int scale) {
+        if (valor == null) return true;
+        
+        // Convertir a string para contar dígitos
+        String valorStr = valor.stripTrailingZeros().toPlainString();
+        
+        // Remover signo negativo si existe
+        if (valorStr.startsWith("-")) {
+            valorStr = valorStr.substring(1);
+        }
+        
+        // Dividir en parte entera y decimal
+        String[] partes = valorStr.split("\\.");
+        String parteEntera = partes[0];
+        String parteDecimal = partes.length > 1 ? partes[1] : "";
+        
+        // Validar restricciones
+        int digitosTotales = parteEntera.length() + parteDecimal.length();
+        int digitosDecimales = parteDecimal.length();
+        
+        return digitosTotales <= precision && digitosDecimales <= scale;
+    }
+    
+    /**
+     * Trunca un BigDecimal a la precisión permitida
+     */
+    private BigDecimal truncarBigDecimal(BigDecimal valor, int precision, int scale) {
+        if (valor == null) return null;
+        
+        // Ajustar a la escala permitida
+        valor = valor.setScale(scale, java.math.RoundingMode.HALF_UP);
+        
+        // Calcular el máximo valor permitido
+        StringBuilder maxStr = new StringBuilder();
+        int digitosEnteros = precision - scale;
+        
+        for (int i = 0; i < digitosEnteros; i++) {
+            maxStr.append("9");
+        }
+        
+        if (scale > 0) {
+            maxStr.append(".");
+            for (int i = 0; i < scale; i++) {
+                maxStr.append("9");
+            }
+        }
+        
+        BigDecimal maxValor = new BigDecimal(maxStr.toString());
+        
+        // Retornar el menor entre el valor y el máximo permitido
+        return valor.compareTo(maxValor) > 0 ? maxValor : valor;
     }
 }
