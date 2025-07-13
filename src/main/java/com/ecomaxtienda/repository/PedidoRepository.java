@@ -78,6 +78,10 @@ public interface PedidoRepository extends JpaRepository<Pedido, Integer> {
     @Query("SELECT AVG(p.total) FROM Pedido p WHERE p.estado = 'ENTREGADO'")
     BigDecimal obtenerTicketPromedio();
     
+    // Total de ingresos de todos los pedidos entregados
+    @Query("SELECT SUM(p.total) FROM Pedido p WHERE p.estado = 'ENTREGADO'")
+    BigDecimal calcularIngresosTotales();
+    
     // Estados de pedidos únicos
     @Query("SELECT DISTINCT p.estado FROM Pedido p ORDER BY p.estado")
     List<String> findEstados();
@@ -123,4 +127,17 @@ public interface PedidoRepository extends JpaRepository<Pedido, Integer> {
            "GROUP BY EXTRACT(YEAR FROM p.fechaPedido), EXTRACT(MONTH FROM p.fechaPedido) " +
            "ORDER BY EXTRACT(YEAR FROM p.fechaPedido) DESC, EXTRACT(MONTH FROM p.fechaPedido) DESC")
     List<Object[]> obtenerVentasPorMes();
+    
+    // ===== MÉTODOS PARA ADMINISTRACIÓN =====
+    
+    // Búsqueda paginada de pedidos
+    @Query("SELECT p FROM Pedido p WHERE " +
+           "p.numeroPedido LIKE %:busqueda% OR " +
+           "LOWER(p.usuario.nombre) LIKE LOWER(CONCAT('%', :busqueda, '%')) OR " +
+           "LOWER(p.usuario.apellido) LIKE LOWER(CONCAT('%', :busqueda, '%')) OR " +
+           "p.numeroSeguimiento LIKE %:busqueda%")
+    Page<Pedido> buscarPedidos(@Param("busqueda") String busqueda, Pageable pageable);
+    
+    // Contar pedidos por estado
+    long countByEstado(String estado);
 }

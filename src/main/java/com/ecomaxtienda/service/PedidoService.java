@@ -243,6 +243,10 @@ public class PedidoService {
         return this.pedidoRepository.obtenerTicketPromedio();
     }
     
+    public BigDecimal calcularIngresosTotales() {
+        return this.pedidoRepository.calcularIngresosTotales();
+    }
+    
     public List<String> obtenerEstados() {
         return this.pedidoRepository.findEstados();
     }
@@ -258,6 +262,191 @@ public class PedidoService {
     
     public List<Pedido> obtenerPedidosConRetraso() {
         return this.pedidoRepository.findPedidosConRetraso(LocalDateTime.now());
+    }
+    
+    // ===== MÉTODOS PARA ADMINISTRACIÓN DE PEDIDOS =====
+    
+    /**
+     * Obtener pedidos paginados
+     */
+    public Page<Pedido> obtenerPedidosPaginados(Pageable pageable) {
+        return pedidoRepository.findAll(pageable);
+    }
+    
+    /**
+     * Obtener pedidos por estado paginado
+     */
+    public Page<Pedido> obtenerPedidosPorEstadoPaginado(String estado, Pageable pageable) {
+        return pedidoRepository.findByEstado(estado, pageable);
+    }
+    
+    /**
+     * Buscar pedidos paginado
+     */
+    public Page<Pedido> buscarPedidosPaginado(String busqueda, Pageable pageable) {
+        return pedidoRepository.buscarPedidos(busqueda, pageable);
+    }
+    
+    /**
+     * Contar total de pedidos
+     */
+    public long contarPedidos() {
+        return pedidoRepository.count();
+    }
+    
+    /**
+     * Contar pedidos por estado
+     */
+    public long contarPedidosPorEstado(String estado) {
+        return pedidoRepository.countByEstado(estado);
+    }
+    
+    /**
+     * Obtener pedidos entre fechas
+     */
+    public List<Pedido> obtenerPedidosEntreFechas(LocalDateTime inicio, LocalDateTime fin) {
+        return pedidoRepository.findByFechaPedidoBetween(inicio, fin);
+    }
+    
+    /**
+     * Obtener pedidos por estado
+     */
+    public List<Pedido> obtenerPedidosPorEstado(String estado) {
+        return pedidoRepository.findByEstado(estado);
+    }
+    
+    /**
+     * Eliminar pedido (admin only)
+     */
+    public void eliminarPedido(Integer idPedido) {
+        Optional<Pedido> pedidoOpt = pedidoRepository.findById(idPedido);
+        if (pedidoOpt.isEmpty()) {
+            throw new IllegalArgumentException("Pedido no encontrado con ID: " + idPedido);
+        }
+        
+        Pedido pedido = pedidoOpt.get();
+        
+        // Solo permitir eliminar pedidos cancelados o muy antiguos
+        if (!"CANCELADO".equals(pedido.getEstado())) {
+            throw new IllegalStateException("Solo se pueden eliminar pedidos cancelados");
+        }
+        
+        pedidoRepository.delete(pedido);
+    }
+    
+    /**
+     * Cambiar estado del pedido
+     */
+    public void cambiarEstadoPedido(Integer idPedido, String nuevoEstado) {
+        Optional<Pedido> pedidoOpt = pedidoRepository.findById(idPedido);
+        if (pedidoOpt.isEmpty()) {
+            throw new IllegalArgumentException("Pedido no encontrado con ID: " + idPedido);
+        }
+        
+        Pedido pedido = pedidoOpt.get();
+        String estadoAnterior = pedido.getEstado();
+        pedido.setEstado(nuevoEstado);
+        // pedido.setFechaActualizacion(LocalDateTime.now()); // Comentado hasta que se agregue el campo
+        
+        // Si se cambia a ENTREGADO, actualizar fecha de entrega
+        if ("ENTREGADO".equals(nuevoEstado)) {
+            pedido.setFechaEntrega(LocalDateTime.now());
+        }
+        
+        // Si se cambia a CANCELADO, restaurar inventario
+        if ("CANCELADO".equals(nuevoEstado) && !"CANCELADO".equals(estadoAnterior)) {
+            restaurarInventarioPedido(pedido);
+        }
+        
+        pedidoRepository.save(pedido);
+        
+        // Enviar email de notificación al cliente
+        try {
+            enviarNotificacionCambioEstado(pedido, estadoAnterior, nuevoEstado);
+        } catch (Exception e) {
+            // Log del error pero no detener el proceso
+            System.err.println("Error enviando email de notificación: " + e.getMessage());
+        }
+    }
+    
+    /**
+     * Cancelar pedido con motivo
+     */
+    public void cancelarPedido(Integer idPedido, String motivo) {
+        Optional<Pedido> pedidoOpt = pedidoRepository.findById(idPedido);
+        if (pedidoOpt.isEmpty()) {
+            throw new IllegalArgumentException("Pedido no encontrado con ID: " + idPedido);
+        }
+        
+        Pedido pedido = pedidoOpt.get();
+        
+        if ("CANCELADO".equals(pedido.getEstado())) {
+            throw new IllegalStateException("El pedido ya está cancelado");
+        }
+        
+        if ("ENTREGADO".equals(pedido.getEstado())) {
+            throw new IllegalStateException("No se puede cancelar un pedido ya entregado");
+        }
+        
+        pedido.setEstado("CANCELADO");
+        // pedido.setFechaActualizacion(LocalDateTime.now()); // Comentado hasta que se agregue el campo
+        // Podríamos agregar un campo observaciones/motivo en el futuro
+        
+        // Restaurar inventario
+        restaurarInventarioPedido(pedido);
+        
+        pedidoRepository.save(pedido);
+        
+        // Enviar email de notificación
+        try {
+            enviarNotificacionCancelacion(pedido, motivo);
+        } catch (Exception e) {
+            System.err.println("Error enviando email de cancelación: " + e.getMessage());
+        }
+    }
+    
+    /**
+     * Restaurar inventario cuando se cancela un pedido
+     */
+    private void restaurarInventarioPedido(Pedido pedido) {
+        for (PedidoDetalle detalle : pedido.getDetalles()) {
+            try {
+                // Usar el método correcto de InventarioService
+                inventarioService.aumentarStock(detalle.getProducto().getIdProducto(), detalle.getCantidad(), "Restauración por cancelación de pedido");
+            } catch (Exception e) {
+                System.err.println("Error restaurando stock del producto " + 
+                    detalle.getProducto().getIdProducto() + ": " + e.getMessage());
+            }
+        }
+    }
+    
+    /**
+     * Enviar notificación de cambio de estado
+     */
+    private void enviarNotificacionCambioEstado(Pedido pedido, String estadoAnterior, String nuevoEstado) {
+        try {
+            // Usar uno de los métodos existentes de EmailService
+            // Por ahora vamos a comentar esto hasta crear un método genérico
+            System.out.println("📧 Notificación: Pedido #" + pedido.getIdPedido() + 
+                " cambió de " + estadoAnterior + " a " + nuevoEstado + 
+                " para " + pedido.getUsuario().getEmail());
+        } catch (Exception e) {
+            System.err.println("Error en notificación: " + e.getMessage());
+        }
+    }
+    
+    /**
+     * Enviar notificación de cancelación
+     */
+    private void enviarNotificacionCancelacion(Pedido pedido, String motivo) {
+        try {
+            // Por ahora vamos a comentar esto hasta crear un método genérico
+            System.out.println("📧 Cancelación: Pedido #" + pedido.getIdPedido() + 
+                " cancelado para " + pedido.getUsuario().getEmail() + 
+                (motivo != null ? " - Motivo: " + motivo : ""));
+        } catch (Exception e) {
+            System.err.println("Error en notificación de cancelación: " + e.getMessage());
+        }
     }
     
     // Clase auxiliar para items del pedido

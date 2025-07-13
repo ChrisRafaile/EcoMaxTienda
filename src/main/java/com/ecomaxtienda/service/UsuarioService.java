@@ -92,9 +92,9 @@ public class UsuarioService {
         Usuario usuarioGuardado = this.usuarioRepository.save(usuario);
           // Enviar email de bienvenida
         try {
-            if ("CLIENTE".equals(rolNombre)) {
+            if ("ROLE_CLIENTE".equals(rolNombre)) {
                 this.emailService.enviarCorreoBienvenida(usuarioGuardado.getEmail(), usuarioGuardado.getNombreCompleto());
-            } else if ("ADMIN".equals(rolNombre) || "SUPER_ADMIN".equals(rolNombre)) {
+            } else if ("ROLE_ADMIN".equals(rolNombre) || "ROLE_SUPER_ADMIN".equals(rolNombre)) {
                 // Generar credenciales temporales para admin
                 String credencialesTemp = "Admin" + System.currentTimeMillis() + "!";
                 this.emailService.enviarCorreoBienvenidaAdmin(usuarioGuardado.getEmail(), usuarioGuardado.getNombreCompleto(), rolNombre, credencialesTemp);
@@ -108,11 +108,11 @@ public class UsuarioService {
     }
     
     public Usuario crearCliente(String nombre, String apellido, String email, String password) {
-        return this.crearUsuario(nombre, apellido, email, password, "CLIENTE");
+        return this.crearUsuario(nombre, apellido, email, password, "ROLE_CLIENTE");
     }
     
     public Usuario crearAdmin(String nombre, String apellido, String email, String password, String telefono, String direccion) {
-        Usuario usuario = this.crearUsuario(nombre, apellido, email, password, "ADMIN");
+        Usuario usuario = this.crearUsuario(nombre, apellido, email, password, "ROLE_ADMIN");
         usuario.setTelefono(telefono);
         usuario.setDireccion(direccion);
         return this.usuarioRepository.save(usuario);
@@ -207,11 +207,15 @@ public class UsuarioService {
     }
     
     public Long contarClientes() {
-        return this.usuarioRepository.contarPorRol("CLIENTE");
+        return this.usuarioRepository.contarPorRol("ROLE_CLIENTE");
+    }
+    
+    public Long contarClientesActivos() {
+        return this.usuarioRepository.contarClientesActivos();
     }
     
     public Long contarAdministradores() {
-        return this.usuarioRepository.contarPorRol("ADMIN") + this.usuarioRepository.contarPorRol("SUPER_ADMIN");
+        return this.usuarioRepository.contarPorRol("ROLE_ADMIN") + this.usuarioRepository.contarPorRol("ROLE_SUPER_ADMIN");
     }
     
     public Long contarUsuariosRegistradosHoy() {
@@ -261,5 +265,126 @@ public class UsuarioService {
         
         usuario.setPassword(this.passwordEncoder.encode(passwordNueva));
         this.usuarioRepository.save(usuario);
+    }
+    
+    // ========== MÉTODOS PARA ADMINISTRACIÓN DE CLIENTES ==========
+    
+    /**
+     * Obtener clientes paginados
+     */
+    public Page<Usuario> obtenerClientesPaginados(Pageable pageable) {
+        Rol rolCliente = rolRepository.findByNombre("ROLE_CLIENTE")
+            .orElseThrow(() -> new RuntimeException("Rol ROLE_CLIENTE no encontrado"));
+        return usuarioRepository.findByRol(rolCliente, pageable);
+    }
+    
+    /**
+     * Buscar clientes por texto (incluyendo ID, nombre, email, teléfono, DNI)
+     */
+    public Page<Usuario> buscarClientesPaginado(String busqueda, Pageable pageable) {
+        Rol rolCliente = rolRepository.findByNombre("ROLE_CLIENTE")
+            .orElseThrow(() -> new RuntimeException("Rol ROLE_CLIENTE no encontrado"));
+        return usuarioRepository.buscarClientesCompleto(rolCliente, busqueda, pageable);
+    }
+    
+    /**
+     * Obtener clientes por estado
+     */
+    public Page<Usuario> obtenerClientesPorEstadoPaginado(boolean estado, Pageable pageable) {
+        Rol rolCliente = rolRepository.findByNombre("ROLE_CLIENTE")
+            .orElseThrow(() -> new RuntimeException("Rol ROLE_CLIENTE no encontrado"));
+        return usuarioRepository.findByRolAndEstado(rolCliente, estado, pageable);
+    }
+    
+    /**
+     * Registrar nuevo cliente desde admin
+     */
+    public Usuario registrarCliente(Usuario cliente) {
+        // Validar email único
+        if (usuarioRepository.findByEmail(cliente.getEmail()).isPresent()) {
+            throw new RuntimeException("El email ya está registrado");
+        }
+        
+        // Asignar rol de cliente
+        Rol rolCliente = rolRepository.findByNombre("ROLE_CLIENTE")
+            .orElseThrow(() -> new RuntimeException("Rol ROLE_CLIENTE no encontrado"));
+        
+        cliente.setRol(rolCliente);
+        cliente.setPassword(passwordEncoder.encode(cliente.getPassword()));
+        cliente.setFechaRegistro(LocalDateTime.now());
+        cliente.setEstado(true);
+        
+        return usuarioRepository.save(cliente);
+    }
+    
+    /**
+     * Actualizar cliente existente
+     */
+    public Usuario actualizarCliente(Usuario cliente) {
+        Usuario clienteExistente = usuarioRepository.findById(cliente.getIdUsuario())
+            .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
+        
+        // Validar email único (excluyendo el cliente actual)
+        Optional<Usuario> usuarioConEmail = usuarioRepository.findByEmail(cliente.getEmail());
+        if (usuarioConEmail.isPresent() && !usuarioConEmail.get().getIdUsuario().equals(cliente.getIdUsuario())) {
+            throw new RuntimeException("El email ya está registrado por otro usuario");
+        }
+        
+        // Actualizar campos
+        clienteExistente.setNombre(cliente.getNombre());
+        clienteExistente.setApellido(cliente.getApellido());
+        clienteExistente.setEmail(cliente.getEmail());
+        clienteExistente.setTelefono(cliente.getTelefono());
+        clienteExistente.setDireccion(cliente.getDireccion());
+        clienteExistente.setDni(cliente.getDni());
+        clienteExistente.setFechaNacimiento(cliente.getFechaNacimiento());
+        
+        // Solo cambiar contraseña si se proporciona una nueva
+        if (cliente.getPassword() != null && !cliente.getPassword().isEmpty()) {
+            clienteExistente.setPassword(passwordEncoder.encode(cliente.getPassword()));
+        }
+        
+        return usuarioRepository.save(clienteExistente);
+    }
+    
+    /**
+     * Cambiar estado del cliente (activar/desactivar)
+     */
+    public void cambiarEstadoCliente(Integer id) {
+        Usuario cliente = usuarioRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
+        
+        cliente.setEstado(!cliente.getEstado());
+        usuarioRepository.save(cliente);
+    }
+    
+    /**
+     * Validar email único
+     */
+    public boolean validarEmailUnico(String email, Integer idUsuario) {
+        Optional<Usuario> usuario = usuarioRepository.findByEmail(email);
+        
+        if (usuario.isEmpty()) {
+            return true; // Email disponible
+        }
+        
+        // Si es para edición, verificar que sea el mismo usuario
+        return idUsuario != null && usuario.get().getIdUsuario().equals(idUsuario);
+    }
+    
+    // ===== MÉTODOS PARA REPORTES =====
+    
+    /**
+     * Obtener clientes por rango de fechas
+     */
+    public List<Usuario> obtenerClientesPorFecha(LocalDateTime fechaInicio, LocalDateTime fechaFin) {
+        return usuarioRepository.findClientesPorFecha(fechaInicio, fechaFin);
+    }
+    
+    /**
+     * Obtener todos los clientes (solo con rol CLIENTE)
+     */
+    public List<Usuario> obtenerTodosLosClientes() {
+        return usuarioRepository.findByRolNombre("ROLE_CLIENTE");
     }
 }

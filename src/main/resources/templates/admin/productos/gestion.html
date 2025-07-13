@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head>
+<head th:replace="fragments/head :: head('Gestión de Productos | EcoMaxTienda Admin')">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Productos | EcoMaxTienda Admin</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
-    <style>
+</head>
+<style>
         :root {
             --primary-green: #20c997;
             --secondary-green: #28a745;
@@ -286,66 +287,8 @@
     </style>
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, var(--primary-green) 0%, var(--secondary-green) 100%); box-shadow: var(--card-shadow);">
-        <div class="container-fluid">
-            <a class="navbar-brand fw-bold" href="/admin/portal_administrador">
-                <i class="bi bi-leaf-fill me-2" style="color: #fff;"></i>
-                EcoMaxTienda Admin
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarAdmin" title="Menú">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarAdmin">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/admin/portal_administrador">
-                            <i class="bi bi-speedometer2 me-1"></i>Panel de Control
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="/admin/productos" style="background: rgba(255,255,255,0.2); border-radius: 10px;">
-                            <i class="bi bi-box-seam me-1"></i>Productos
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/admin/clientes">
-                            <i class="bi bi-people me-1"></i>Clientes
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/admin/pedidos">
-                            <i class="bi bi-cart-check me-1"></i>Pedidos
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/admin/gestión">
-                            <i class="bi bi-gear me-1"></i>Gestión
-                        </a>
-                    </li>
-                </ul>
-                <ul class="navbar-nav">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                            <i class="bi bi-person-circle me-1"></i>Admin
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="/admin/perfil">
-                                <i class="bi bi-person"></i> Mi Perfil
-                            </a></li>
-                            <li><a class="dropdown-item" href="/admin/portal_administrador">
-                                <i class="bi bi-speedometer2"></i> Panel Principal
-                            </a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="/logout">
-                                <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
-                            </a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <!-- Navbar usando fragment -->
+    <div th:replace="fragments/admin-navbar :: admin-navbar"></div>
 
     <!-- Header -->
     <div class="admin-header">
@@ -359,6 +302,32 @@
                     <p class="mb-0 opacity-75">Administra el catálogo de productos de EcoMaxTienda</p>
                 </div>
                 <div class="col-md-6 text-end">
+                    <!-- Dropdown para generar reportes -->
+                    <div class="dropdown d-inline-block me-3">
+                        <button class="btn btn-outline-light btn-lg dropdown-toggle" 
+                                type="button" 
+                                data-bs-toggle="dropdown" 
+                                aria-expanded="false" 
+                                style="border-radius: 25px; border-width: 2px;"
+                                title="Generar reportes de productos">
+                            <i class="bi bi-file-earmark-bar-graph me-2"></i>Generar Reporte
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="dropdown-item" href="/admin/productos/exportar/pdf" target="_blank">
+                                    <i class="bi bi-file-earmark-pdf text-danger me-2"></i>
+                                    Exportar PDF
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="/admin/productos/exportar/excel" target="_blank">
+                                    <i class="bi bi-file-earmark-excel text-success me-2"></i>
+                                    Exportar Excel
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    
                     <a th:href="@{/admin/productos/agregar}" 
                        class="btn btn-outline-light btn-lg me-3" 
                        style="border-radius: 25px; border-width: 2px;"
@@ -615,11 +584,11 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" title="Cerrar ventana"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="formCargaMasiva" th:action="@{/admin/productos/cargar-masivo}" method="post" enctype="multipart/form-data">
+                    <form id="formCargaMasiva" th:action="@{/admin/productos/bulk-upload}" method="post" enctype="multipart/form-data">
                         <div class="alert alert-info">
                             <i class="bi bi-info-circle"></i>
                             <strong>Instrucciones:</strong> Sube un archivo CSV con los productos. 
-                            <a href="/admin/productos/template-csv" class="alert-link">Descargar plantilla</a>
+                            <a th:href="@{/admin/productos/plantilla-csv}" class="alert-link">Descargar plantilla</a>
                         </div>
                         
                         <div class="mb-3">
@@ -649,8 +618,15 @@
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Handle delete button clicks
+        // Inicializar dropdowns al cargar la página
         document.addEventListener('DOMContentLoaded', function() {
+            // Inicializar todos los dropdowns
+            var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'));
+            var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
+                return new bootstrap.Dropdown(dropdownToggleEl);
+            });
+            
+            // Handle delete button clicks
             const deleteButtons = document.querySelectorAll('.btn-eliminar');
             deleteButtons.forEach(button => {
                 button.addEventListener('click', function() {
@@ -659,6 +635,8 @@
                     eliminarProducto(id, nombre);
                 });
             });
+            
+            console.log('Bootstrap dropdowns inicializados:', dropdownList.length);
         });
 
         function eliminarProducto(id, nombre) {

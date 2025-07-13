@@ -46,7 +46,7 @@ public class ProductoService {
     
     // Métodos de negocio
     public List<Producto> obtenerProductosActivos() {
-        return this.productoRepository.findByEstadoTrue();
+        return this.productoRepository.findByEstadoTrueWithInventario();
     }
     
     public List<Producto> obtenerPorCategoria(String categoria) {
@@ -254,7 +254,7 @@ public class ProductoService {
     
     // Métodos adicionales para paginación y categorías
     public Page<Producto> obtenerProductosPaginados(Pageable pageable) {
-        return this.productoRepository.findByEstadoTrue(pageable);
+        return this.productoRepository.findByEstadoTrueWithInventario(pageable);
     }
     
     public List<String> obtenerCategoriasDisponibles() {
@@ -288,5 +288,95 @@ public class ProductoService {
             
             this.inventarioRepository.save(inventario);
         }
+    }
+    
+    // ===== MÉTODOS PARA REPORTES Y ESTADÍSTICAS =====
+    
+    /**
+     * Contar total de productos
+     */
+    public long contarProductos() {
+        return productoRepository.count();
+    }
+    
+    /**
+     * Contar productos por categoría
+     */
+    public List<Object[]> contarProductosPorCategoria() {
+        return productoRepository.contarProductosPorCategoria();
+    }
+    
+    // ===== MÉTODOS PARA EL CLIENTE =====
+    
+    /**
+     * Buscar productos con filtros múltiples para el catálogo del cliente
+     */
+    public Page<Producto> buscarProductosConFiltros(String busqueda, String categoria, 
+                                                   String minPrecio, String maxPrecio, 
+                                                   Pageable pageable) {
+        
+        BigDecimal precioMin = null;
+        BigDecimal precioMax = null;
+        
+        try {
+            if (minPrecio != null && !minPrecio.trim().isEmpty()) {
+                precioMin = new BigDecimal(minPrecio);
+            }
+            if (maxPrecio != null && !maxPrecio.trim().isEmpty()) {
+                precioMax = new BigDecimal(maxPrecio);
+            }
+        } catch (NumberFormatException e) {
+            // Ignorar errores de formato y usar valores null
+        }
+        
+        // Si no hay filtros específicos, devolver todos los productos activos CON INVENTARIO OPTIMIZADO
+        if ((busqueda == null || busqueda.trim().isEmpty()) && 
+            (categoria == null || categoria.trim().isEmpty()) &&
+            precioMin == null && precioMax == null) {
+            return productoRepository.findByEstadoTrueWithInventario(pageable);
+        }
+        
+        // Aplicar filtros específicos
+        if (busqueda != null && !busqueda.trim().isEmpty()) {
+            if (categoria != null && !categoria.trim().isEmpty()) {
+                // Busqueda + categoria
+                if (precioMin != null && precioMax != null) {
+                    return productoRepository.findByNombreContainingIgnoreCaseAndCategoriaAndPrecioBetweenAndEstadoTrue(
+                        busqueda, categoria, precioMin, precioMax, pageable);
+                } else {
+                    return productoRepository.findByNombreContainingIgnoreCaseAndCategoriaAndEstadoTrue(
+                        busqueda, categoria, pageable);
+                }
+            } else {
+                // Solo busqueda
+                if (precioMin != null && precioMax != null) {
+                    return productoRepository.findByNombreContainingIgnoreCaseAndPrecioBetweenAndEstadoTrue(
+                        busqueda, precioMin, precioMax, pageable);
+                } else {
+                    return productoRepository.buscarProductosPaginadoWithInventario(busqueda, pageable);
+                }
+            }
+        } else if (categoria != null && !categoria.trim().isEmpty()) {
+            // Solo categoria
+            if (precioMin != null && precioMax != null) {
+                return productoRepository.findByCategoriaAndPrecioBetweenAndEstadoTrue(
+                    categoria, precioMin, precioMax, pageable);
+            } else {
+                return productoRepository.findByCategoriaAndEstadoTrueWithInventario(categoria, pageable);
+            }
+        } else if (precioMin != null && precioMax != null) {
+            // Solo rango de precios - OPTIMIZADO
+            return productoRepository.findByPrecioBetweenAndEstadoTrueWithInventario(precioMin, precioMax, pageable);
+        }
+        
+        // Fallback - OPTIMIZADO
+        return productoRepository.findByEstadoTrueWithInventario(pageable);
+    }
+    
+    /**
+     * Obtener productos por categoría (para productos relacionados)
+     */
+    public List<Producto> findByCategoria(String categoria) {
+        return productoRepository.findByCategoriaAndEstadoTrue(categoria);
     }
 }

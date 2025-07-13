@@ -7,12 +7,11 @@
 </head>
 <body class="bg-light">
     <!-- Admin Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
-        <div class="container-fluid">
-            <a class="navbar-brand fw-bold" href="/admin/portal_administrador">
-                <i class="bi bi-leaf-fill text-success me-2"></i>
-                EcoMaxTienda Admin
-            </a>
+    <div th:replace="fragments/admin-navbar :: admin-navbar"></div>
+    
+    <div style="display: none"><!-- Mantener las clases y estructura para CSS -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+            <div class="container-fluid">
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarAdmin" aria-label="Abrir menú de navegación">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -66,6 +65,7 @@
             </div>
         </div>
     </nav>
+    </div><!-- Fin de estructura oculta para CSS -->
 
     <main class="container-fluid py-4">
         <!-- Header -->
@@ -97,7 +97,7 @@
                             </div>
                             <div class="flex-grow-1 ms-3">
                                 <div class="small fw-bold text-white">Total Pedidos</div>
-                                <div class="h4 mb-0 text-white">2,847</div>
+                                <div class="h4 mb-0 text-white" th:text="${totalPedidos ?: 0}">2,847</div>
                                 <div class="small text-light">Desde el inicio</div>
                             </div>
                         </div>
@@ -113,7 +113,7 @@
                             </div>
                             <div class="flex-grow-1 ms-3">
                                 <div class="small fw-bold text-dark">Pendientes</div>
-                                <div class="h4 mb-0 text-dark">89</div>
+                                <div class="h4 mb-0 text-dark" th:text="${pedidosPendientes ?: 0}">89</div>
                                 <div class="small text-muted">Requieren atención</div>
                             </div>
                         </div>
@@ -129,8 +129,8 @@
                             </div>
                             <div class="flex-grow-1 ms-3">
                                 <div class="small fw-bold text-white">Completados</div>
-                                <div class="h4 mb-0 text-white">2,712</div>
-                                <div class="small text-light">95.2% exitosos</div>
+                                <div class="h4 mb-0 text-white" th:text="${pedidosEntregados ?: 0}">2,712</div>
+                                <div class="small text-light">Entregados</div>
                             </div>
                         </div>
                     </div>
@@ -145,7 +145,7 @@
                             </div>
                             <div class="flex-grow-1 ms-3">
                                 <div class="small fw-bold text-white">Ingresos Total</div>
-                                <div class="h4 mb-0 text-white">S/ 416,530</div>
+                                <div class="h4 mb-0 text-white" th:text="'S/ ' + ${#numbers.formatDecimal(ingresosTotales ?: 0, 1, 2)}">S/ 416,530</div>
                                 <div class="small text-light">Este año</div>
                             </div>
                         </div>
@@ -159,36 +159,37 @@
             <div class="col-12">
                 <div class="card border-0 shadow-sm">
                     <div class="card-body">
-                        <div class="row g-3 align-items-end">
-                            <div class="col-md-3">
-                                <label class="form-label fw-bold">Estado del Pedido</label>
-                                <select class="form-select" id="statusFilter" title="Estado del Pedido">
-                                    <option value="">Todos los estados</option>
-                                    <option value="pendiente">Pendiente</option>
-                                    <option value="procesando">Procesando</option>
-                                    <option value="enviado">Enviado</option>
-                                    <option value="entregado">Entregado</option>
-                                    <option value="cancelado">Cancelado</option>
-                                </select>
-                            </div>
-                            <div class="col-md-3">
-                                <label class="form-label fw-bold">Fecha Desde</label>
-                                <input type="date" class="form-control" id="dateFrom" title="Fecha Desde" placeholder="Selecciona la fecha de inicio">
-                            </div>
-                            <div class="col-md-3">
-                                <label class="form-label fw-bold">Fecha Hasta</label>
-                                <input type="date" class="form-control" id="dateTo" title="Fecha Hasta" placeholder="Selecciona la fecha de fin">
-                            </div>
-                            <div class="col-md-3">
-                                <label class="form-label fw-bold">Buscar</label>
-                                <div class="input-group">
-                                    <input type="text" class="form-control" placeholder="ID, cliente, email..." id="searchOrders">
-                                    <button class="btn btn-outline-secondary" type="button" title="Buscar">
-                                        <i class="bi bi-search"></i>
-                                    </button>
+                        <form method="get" action="/admin/pedidos" id="filtrosForm">
+                            <div class="row g-3 align-items-end">
+                                <div class="col-md-3">
+                                    <label class="form-label fw-bold">Estado del Pedido</label>
+                                    <select class="form-select" name="estado" id="statusFilter" title="Estado del Pedido" th:value="${estado}">
+                                        <option value="">Todos los estados</option>
+                                        <option th:each="est : ${estados}" 
+                                                th:value="${est}" 
+                                                th:text="${est}" 
+                                                th:selected="${est == estado}">Estado</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label fw-bold">Fecha Desde</label>
+                                    <input type="date" class="form-control" name="fechaDesde" id="dateFrom" title="Fecha Desde" th:value="${fechaDesde}">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label fw-bold">Fecha Hasta</label>
+                                    <input type="date" class="form-control" name="fechaHasta" id="dateTo" title="Fecha Hasta" th:value="${fechaHasta}">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label fw-bold">Buscar</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="busqueda" placeholder="ID, cliente, email..." id="searchOrders" th:value="${busqueda}">
+                                        <button class="btn btn-outline-secondary" type="submit" title="Buscar">
+                                            <i class="bi bi-search"></i>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -232,51 +233,68 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
+                                    <tr th:each="pedido : ${pedidos.content}" th:if="${pedidos.hasContent()}">
                                         <td>
-                                            <span class="fw-bold text-primary">#ECO-2024-1025</span>
+                                            <span class="fw-bold text-primary" th:text="'#' + ${pedido.numeroPedido}">#ECO-2024-1025</span>
                                         </td>
                                         <td>
                                             <div class="d-flex align-items-center">
-                                                <img src="/img/avatar-placeholder.png" alt="Avatar" class="rounded-circle me-2" width="32" height="32">
+                                                <img th:src="${pedido.usuario.fotoPerfil != null ? pedido.usuario.fotoPerfil : '/img/default-profile.svg'}" 
+                                                     alt="Avatar" class="rounded-circle me-2" width="32" height="32">
                                                 <div>
-                                                    <div class="fw-bold">María González</div>
-                                                    <small class="text-muted">maria.gonzalez@email.com</small>
+                                                    <div class="fw-bold" th:text="${pedido.usuario.nombre + ' ' + pedido.usuario.apellido}">Cliente</div>
+                                                    <small class="text-muted" th:text="${pedido.usuario.email}">email@ejemplo.com</small>
                                                 </div>
                                             </div>
                                         </td>
                                         <td>
-                                            <div>15/05/2024</div>
-                                            <small class="text-muted">14:30</small>
+                                            <div th:text="${#temporals.format(pedido.fechaPedido, 'dd/MM/yyyy')}">15/05/2024</div>
+                                            <small class="text-muted" th:text="${#temporals.format(pedido.fechaPedido, 'HH:mm')}">14:30</small>
                                         </td>
                                         <td>
                                             <div class="d-flex align-items-center">
-                                                <span class="badge bg-info me-2">3 items</span>
-                                                <small>Eco Kit Hogar, Shampoo...</small>
+                                                <span class="badge bg-info me-2" th:text="${#lists.size(pedido.detalles)} + ' items'">3 items</span>
+                                                <small th:text="${#strings.abbreviate(#strings.listJoin(pedido.detalles.![producto.nombre], ', '), 20)}">Productos...</small>
                                             </div>
                                         </td>
                                         <td>
-                                            <span class="fw-bold text-success">S/ 300.50</span>
+                                            <span class="fw-bold text-success" th:text="'S/ ' + ${#numbers.formatDecimal(pedido.total, 1, 2)}">S/ 300.50</span>
                                         </td>
                                         <td>
-                                            <span class="badge bg-warning">Procesando</span>
+                                            <span th:class="${pedido.estado == 'PENDIENTE' ? 'badge bg-warning' : 
+                                                           (pedido.estado == 'CONFIRMADO' ? 'badge bg-info' :
+                                                           (pedido.estado == 'PREPARANDO' ? 'badge bg-primary' :
+                                                           (pedido.estado == 'ENVIADO' ? 'badge bg-secondary' :
+                                                           (pedido.estado == 'ENTREGADO' ? 'badge bg-success' : 'badge bg-danger')))}"
+                                                  th:text="${pedido.estado}">Estado</span>
                                         </td>
                                         <td>
-                                            <i class="bi bi-credit-card text-primary me-1"></i>
-                                            Tarjeta
+                                            <i th:class="${pedido.metodoPago == 'TARJETA' ? 'bi bi-credit-card text-primary me-1' : 
+                                                          (pedido.metodoPago == 'PAYPAL' ? 'bi bi-paypal text-info me-1' : 
+                                                          'bi bi-cash text-success me-1')}"></i>
+                                            <span th:text="${pedido.metodoPago}">Método</span>
                                         </td>
                                         <td>
                                             <div class="btn-group btn-group-sm">
-                                                <button class="btn btn-outline-primary" title="Ver detalles" onclick="viewOrder('ECO-2024-1025')">
+                                                <a th:href="@{/admin/pedidos/detalle/{id}(id=${pedido.idPedido})}" 
+                                                   class="btn btn-outline-primary" title="Ver detalles">
                                                     <i class="bi bi-eye"></i>
-                                                </button>
-                                                <button class="btn btn-outline-warning" title="Editar estado" onclick="editOrderStatus('ECO-2024-1025')">
+                                                </a>
+                                                <button class="btn btn-outline-warning" title="Editar estado" 
+                                                        th:onclick="'editOrderStatus(' + ${pedido.idPedido} + ')'">
                                                     <i class="bi bi-pencil"></i>
                                                 </button>
-                                                <button class="btn btn-outline-info" title="Imprimir" onclick="printOrder('ECO-2024-1025')">
+                                                <button class="btn btn-outline-info" title="Imprimir" 
+                                                        th:onclick="'printOrder(' + ${pedido.idPedido} + ')'">
                                                     <i class="bi bi-printer"></i>
                                                 </button>
                                             </div>
+                                        </td>
+                                    </tr>
+                                    <tr th:unless="${pedidos.hasContent()}">
+                                        <td colspan="8" class="text-center py-4">
+                                            <i class="bi bi-inbox text-muted" style="font-size: 3rem;"></i>
+                                            <p class="text-muted mt-2">No se encontraron pedidos</p>
                                         </td>
                                     </tr>
                                     <tr>
@@ -377,23 +395,32 @@
                             </table>
                         </div>
                     </div>
-                    <div class="card-footer bg-white">
+                    <div class="card-footer bg-white" th:if="${pedidos.totalPages > 1}">
                         <nav>
                             <ul class="pagination justify-content-center mb-0">
-                                <li class="page-item disabled">
-                                    <span class="page-link">Anterior</span>
+                                <!-- Botón Anterior -->
+                                <li th:class="${pedidos.first ? 'page-item disabled' : 'page-item'}">
+                                    <a th:if="${!pedidos.first}" 
+                                       th:href="@{/admin/pedidos(page=${currentPage - 1}, size=${pedidos.size}, estado=${estado}, busqueda=${busqueda})}" 
+                                       class="page-link">Anterior</a>
+                                    <span th:if="${pedidos.first}" class="page-link">Anterior</span>
                                 </li>
-                                <li class="page-item active">
-                                    <span class="page-link">1</span>
+                                
+                                <!-- Números de página -->
+                                <li th:each="i : ${#numbers.sequence(0, pedidos.totalPages - 1)}" 
+                                    th:class="${i == currentPage ? 'page-item active' : 'page-item'}">
+                                    <a th:if="${i != currentPage}" 
+                                       th:href="@{/admin/pedidos(page=${i}, size=${pedidos.size}, estado=${estado}, busqueda=${busqueda})}" 
+                                       th:text="${i + 1}" class="page-link">1</a>
+                                    <span th:if="${i == currentPage}" th:text="${i + 1}" class="page-link">1</span>
                                 </li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#">2</a>
-                                </li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#">3</a>
-                                </li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#">Siguiente</a>
+                                
+                                <!-- Botón Siguiente -->
+                                <li th:class="${pedidos.last ? 'page-item disabled' : 'page-item'}">
+                                    <a th:if="${!pedidos.last}" 
+                                       th:href="@{/admin/pedidos(page=${currentPage + 1}, size=${pedidos.size}, estado=${estado}, busqueda=${busqueda})}" 
+                                       class="page-link">Siguiente</a>
+                                    <span th:if="${pedidos.last}" class="page-link">Siguiente</span>
                                 </li>
                             </ul>
                         </nav>
@@ -481,38 +508,56 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
                 <div class="modal-body">
-                    <form>
+                    <form id="exportForm">
                         <div class="mb-3">
                             <label class="form-label" for="exportFormatSelect">Formato de Exportación</label>
                             <select class="form-select" id="exportFormatSelect" title="Formato de Exportación">
+                                <option value="pdf">PDF (.pdf)</option>
                                 <option value="excel">Excel (.xlsx)</option>
                                 <option value="csv">CSV (.csv)</option>
-                                <option value="pdf">PDF (.pdf)</option>
                             </select>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Rango de Fechas</label>
                             <div class="row g-2">
                                 <div class="col">
-                                    <input type="date" class="form-control" placeholder="Desde">
+                                    <input type="text" class="form-control" id="fechaInicio" placeholder="dd/mm/aaaa" title="Fecha de inicio">
                                 </div>
                                 <div class="col">
-                                    <input type="date" class="form-control" placeholder="Hasta">
+                                    <input type="text" class="form-control" id="fechaFin" placeholder="dd/mm/aaaa" title="Fecha de fin">
                                 </div>
                             </div>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Estados a Incluir</label>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" checked title="Seleccionar todos los estados">
-                                <label class="form-check-label">Todos los estados</label>
+                                <input class="form-check-input" type="checkbox" id="todosEstados" checked title="Seleccionar todos los estados">
+                                <label class="form-check-label" for="todosEstados">Todos los estados</label>
+                            </div>
+                            <div id="estadosIndividuales" style="display: none;">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="PENDIENTE" id="estadoPendiente">
+                                    <label class="form-check-label" for="estadoPendiente">Pendiente</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="CONFIRMADO" id="estadoConfirmado">
+                                    <label class="form-check-label" for="estadoConfirmado">Confirmado</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="ENTREGADO" id="estadoEntregado">
+                                    <label class="form-check-label" for="estadoEntregado">Entregado</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="CANCELADO" id="estadoCancelado">
+                                    <label class="form-check-label" for="estadoCancelado">Cancelado</label>
+                                </div>
                             </div>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-success">
+                    <button type="button" class="btn btn-success" onclick="exportarPedidos()">
                         <i class="bi bi-download me-2"></i>Exportar
                     </button>
                 </div>
@@ -601,62 +646,64 @@
 
         // Order action functions
         function viewOrder(orderId) {
-            // Simulate loading order details
-            document.getElementById('orderIdModal').textContent = orderId;
-            document.getElementById('customerName').textContent = 'María González';
-            document.getElementById('customerEmail').textContent = 'maria.gonzalez@email.com';
-            document.getElementById('customerPhone').textContent = '+1 234 567 8900';
-            document.getElementById('customerAddress').textContent = 'Calle 123, Ciudad Eco, País Verde';
-            document.getElementById('orderDate').textContent = '15/05/2024 14:30';
-            document.getElementById('orderStatus').innerHTML = '<span class="badge bg-warning">Procesando</span>';
-            document.getElementById('paymentMethod').textContent = 'Tarjeta de Crédito';
-            document.getElementById('orderTotal').textContent = 'S/ 300.50';
-            
-            // Load products
-            const productsList = document.getElementById('orderProductsList');
-            productsList.innerHTML = `
-                <tr>
-                    <td>Eco Kit Hogar</td>
-                    <td>1</td>
-                    <td>S/ 153.50</td>
-                    <td>S/ 153.50</td>
-                </tr>
-                <tr>
-                    <td>Shampoo Natural</td>
-                    <td>2</td>
-                    <td>S/ 40.00</td>
-                    <td>S/ 80.00</td>
-                </tr>
-                <tr>
-                    <td>Detergente Orgánico</td>
-                    <td>1</td>
-                    <td>S/ 67.00</td>
-                    <td>S/ 67.00</td>
-                </tr>
-            `;
-            
-            new bootstrap.Modal(document.getElementById('orderDetailsModal')).show();
+            window.location.href = '/admin/pedidos/detalle/' + orderId;
         }
 
         function editOrderStatus(orderId) {
-            // Implement edit status functionality
-            console.log('Editing status for order:', orderId);
+            window.location.href = '/admin/pedidos/detalle/' + orderId;
         }
 
         function printOrder(orderId) {
-            // Implement print functionality
-            console.log('Printing order:', orderId);
+            window.open('/admin/pedidos/detalle/' + orderId, '_blank');
+            setTimeout(() => {
+                window.print();
+            }, 1000);
         }
-
-        function trackOrder(orderId) {
-            // Implement tracking functionality
-            console.log('Tracking order:', orderId);
+        
+        // Función para exportar pedidos
+        function exportarPedidos() {
+            const formato = document.getElementById('exportFormatSelect').value;
+            const fechaInicio = document.getElementById('fechaInicio').value;
+            const fechaFin = document.getElementById('fechaFin').value;
+            const todosEstados = document.getElementById('todosEstados').checked;
+            
+            let estados = 'todos';
+            if (!todosEstados) {
+                const estadosSeleccionados = [];
+                document.querySelectorAll('#estadosIndividuales input[type="checkbox"]:checked').forEach(cb => {
+                    estadosSeleccionados.push(cb.value);
+                });
+                estados = estadosSeleccionados.join(',');
+            }
+            
+            // Construir URL de exportación
+            let url = `/admin/pedidos/exportar/${formato}?`;
+            const params = new URLSearchParams();
+            
+            if (fechaInicio) params.append('fechaInicio', fechaInicio);
+            if (fechaFin) params.append('fechaFin', fechaFin);
+            if (estados !== 'todos') params.append('estados', estados);
+            
+            url += params.toString();
+            
+            // Crear enlace temporal para descarga
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = true;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            // Cerrar modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('exportModal'));
+            modal.hide();
         }
-
-        function reorderItems(orderId) {
-            // Implement reorder functionality
-            console.log('Reordering items from:', orderId);
-        }
+        
+        // Controlar visibilidad de estados individuales
+        document.getElementById('todosEstados').addEventListener('change', function() {
+            const estadosDiv = document.getElementById('estadosIndividuales');
+            estadosDiv.style.display = this.checked ? 'none' : 'block';
+        });
 
         // Set current date as default for date filters
         document.addEventListener('DOMContentLoaded', function() {
@@ -665,8 +712,12 @@
             lastMonth.setMonth(lastMonth.getMonth() - 1);
             const lastMonthStr = lastMonth.toISOString().split('T')[0];
             
-            document.getElementById('dateFrom').value = lastMonthStr;
-            document.getElementById('dateTo').value = today;
+            if (document.getElementById('dateFrom')) {
+                document.getElementById('dateFrom').value = lastMonthStr;
+            }
+            if (document.getElementById('dateTo')) {
+                document.getElementById('dateTo').value = today;
+            }
         });
     </script>
 </body>

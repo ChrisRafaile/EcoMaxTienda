@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mi Perfil | EcoMaxTienda</title>
 </head>
-<body class="eco-bg">    <div th:replace="fragments/navbar :: navbar"></div>
+<body class="eco-bg">    <div th:replace="fragments/client-navbar :: client-navbar"></div>
     
     <main class="container my-5">
         <div class="row">            <!-- Sidebar de navegación -->
@@ -42,8 +42,13 @@
                         <div class="row mb-4">
                             <div class="col-md-4 text-center">
                                 <div class="profile-photo-container mb-3">
-                                    <img th:if="${usuario != null && usuario.fotoPerfil != null && !usuario.fotoPerfil.isEmpty()}" th:src="@{'/uploads/' + ${usuario.fotoPerfil}}" class="rounded-circle border border-success border-3 profile-image shadow-lg" alt="Foto de perfil" onclick="window.location.href='/client/configuracion'" title="Haz clic para editar tu foto de perfil" style="width: 150px; height: 150px; object-fit: cover; cursor: pointer;">
-                                    <img th:if="${usuario == null || usuario.fotoPerfil == null || usuario.fotoPerfil.isEmpty()}" src="https://via.placeholder.com/150x150/28a745/ffffff?text=JD" class="rounded-circle border border-success border-3 profile-image shadow-lg" alt="Foto de perfil" onclick="window.location.href='/client/configuracion'" title="Haz clic para editar tu foto de perfil" style="width: 150px; height: 150px; object-fit: cover; cursor: pointer;">
+                                    <img th:src="@{/api/imagenes/perfil/{id}(id=${usuario != null ? usuario.idUsuario : 0})}" 
+                                         class="rounded-circle border border-success border-3 profile-image shadow-lg" 
+                                         alt="Foto de perfil" 
+                                         onclick="window.location.href='/client/configuracion'" 
+                                         title="Haz clic para editar tu foto de perfil" 
+                                         style="width: 150px; height: 150px; object-fit: cover; cursor: pointer;"
+                                         onerror="this.src='/img/default-profile.svg'">
                                     <div class="profile-overlay rounded-circle d-flex align-items-center justify-content-center" style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 150px; height: 150px; background: rgba(40, 167, 69, 0.7); opacity: 0; transition: opacity 0.3s;">
                                         <i class="bi bi-camera text-white fs-3"></i>
                                     </div>
@@ -175,11 +180,14 @@
                     <div class="card-body">
                         <div class="row g-3">
                             <div class="col-md-6">
-                                <div class="d-flex align-items-center p-3 border rounded">                                    <img src="https://via.placeholder.com/60x60/28a745/ffffff?text=Kit"
-                                         class="rounded me-3 small-product-image" alt="Eco Kit">
+                                <div class="d-flex align-items-center p-3 border rounded">
+                                    <img src="https://via.placeholder.com/60x60/28a745/ffffff?text=Kit"
+                                         class="rounded me-3 small-product-image" 
+                                         alt="Imagen del producto Eco Kit Hogar">
                                     <div class="flex-grow-1">
                                         <h6 class="fw-bold mb-1">Eco Kit Hogar</h6>
-                                        <p class="text-muted small mb-1">Kit completo para el hogar</p>                                        <span class="text-success fw-bold">S/ 117.00</span>
+                                        <p class="text-muted small mb-1">Kit completo para el hogar</p>
+                                        <span class="text-success fw-bold">S/ 117.00</span>
                                     </div>
                                     <a href="/client/catalogo" class="btn btn-outline-success btn-sm" 
                                        title="Agregar Eco Kit al carrito" aria-label="Agregar Eco Kit al carrito">
@@ -188,8 +196,10 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="d-flex align-items-center p-3 border rounded">                                    <img src="https://via.placeholder.com/60x60/28a745/ffffff?text=Shampoo"
-                                         class="rounded me-3 small-product-image" alt="Shampoo">
+                                <div class="d-flex align-items-center p-3 border rounded">
+                                    <img src="https://via.placeholder.com/60x60/28a745/ffffff?text=Shampoo"
+                                         class="rounded me-3 small-product-image" 
+                                         alt="Imagen del producto Shampoo Natural orgánico">
                                     <div class="flex-grow-1">
                                         <h6 class="fw-bold mb-1">Shampoo Natural</h6>
                                         <p class="text-muted small mb-1">Orgánico sin químicos</p>

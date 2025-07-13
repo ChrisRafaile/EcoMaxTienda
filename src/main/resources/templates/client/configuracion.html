@@ -6,7 +6,7 @@
     <title>Configuración | EcoMaxTienda</title>
 </head>
 <body class="eco-bg">
-    <div th:replace="fragments/navbar :: navbar"></div>
+    <div th:replace="fragments/client-navbar :: client-navbar"></div>
     
     <main class="container my-5">
         <div class="row">
@@ -47,20 +47,26 @@
                             <div class="row mb-4">
                                 <div class="col-md-4 text-center">
                                     <div class="position-relative d-inline-block">
-                                        <img id="profileImage" th:src="${usuario.fotoPerfil != null && !usuario.fotoPerfil.isEmpty() ? '/uploads/' + usuario.fotoPerfil : 'https://via.placeholder.com/150x150/28a745/ffffff?text=JD'}" 
+                                        <img id="profileImage" th:src="@{/api/imagenes/perfil/{id}(id=${usuario != null ? usuario.idUsuario : 0})}" 
                                              class="rounded-circle border border-success border-3 profile-image shadow-sm"
                                              alt="Foto de perfil"
                                              onclick="document.getElementById('photoUpload').click();"
-                                             style="width: 150px; height: 150px; object-fit: cover; cursor: pointer;">
+                                             style="width: 150px; height: 150px; object-fit: cover; cursor: pointer;"
+                                             onerror="this.src='/img/default-profile.svg'">
                                         <label for="photoUpload" class="position-absolute bottom-0 end-0 btn btn-success btn-sm rounded-circle photo-upload-btn shadow"
                                                title="Cambiar foto de perfil"
                                                style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
                                             <i class="bi bi-camera"></i>
                                         </label>
-                                        <input type="file" id="photoUpload" name="fotoPerfilFile" class="d-none" accept="image/*"
-                                               title="Seleccionar nueva foto de perfil" aria-label="Seleccionar archivo de imagen para foto de perfil">
+                                        <input type="file" id="photoUpload" name="fotoPerfilFile" class="d-none" accept="*/*"
+                                               title="Seleccionar archivo para foto de perfil (cualquier formato)" aria-label="Seleccionar archivo para foto de perfil (cualquier formato)">
                                     </div>
-                                    <p class="text-muted small mt-2">Click para cambiar foto</p>
+                                    <p class="text-muted small mt-2">Click para cambiar foto (cualquier formato)</p>
+                                    <div id="upload-status" class="mt-2" style="display: none;">
+                                        <div class="alert alert-info" role="alert">
+                                            <i class="bi bi-upload"></i> Subiendo imagen...
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="col-md-8">
                                     <div class="row g-3">
@@ -355,28 +361,53 @@
         function previewImage(event) {
             const file = event.target.files[0];
             if (file) {
-                // Validar tipo de archivo
-                if (!file.type.startsWith('image/')) {
-                    alert('Por favor selecciona un archivo de imagen válido');
-                    return;
-                }
+                // Mostrar estado de carga (sin validaciones restrictivas)
+                const statusDiv = document.getElementById('upload-status');
+                statusDiv.style.display = 'block';
                 
-                // Validar tamaño de archivo (máximo 5MB)
-                if (file.size > 5 * 1024 * 1024) {
-                    alert('El archivo es demasiado grande. Máximo 5MB');
-                    return;
-                }
+                // Crear FormData para enviar el archivo
+                const formData = new FormData();
+                formData.append('image', file);
                 
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('profileImage').src = e.target.result;
-                    showSuccessToast('Imagen de perfil actualizada. Guarda los cambios para conservarla.');
-                };
-                reader.readAsDataURL(file);
+                // Enviar imagen al servidor
+                fetch('/client/upload-profile-image', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    console.log('Respuesta del servidor:', data);
+                    
+                    // Actualizar imagen en la página
+                    const timestamp = new Date().getTime();
+                    const profileImage = document.getElementById('profileImage');
+                    const userId = /*[[${usuario != null ? usuario.idUsuario : 0}]]*/ 0;
+                    profileImage.src = `/api/imagenes/perfil/${userId}?t=${timestamp}`;
+                    
+                    // Actualizar imagen en el navbar también
+                    const navbarImage = document.querySelector('img[src*="/api/imagenes/perfil/"]');
+                    if (navbarImage) {
+                        navbarImage.src = `/api/imagenes/perfil/${userId}?t=${timestamp}`;
+                    }
+                    
+                    // Ocultar estado de carga
+                    statusDiv.style.display = 'none';
+                    showSuccessToast('Imagen de perfil actualizada exitosamente');
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    statusDiv.style.display = 'none';
+                    alert('Error al subir la imagen: ' + error.message);
+                });
             }
         }
 
-        // Previsualizar imagen de perfil (fallback)
+        // Previsualizar imagen de perfil
         document.getElementById('photoUpload').addEventListener('change', function(e) {
             previewImage(e);
         });

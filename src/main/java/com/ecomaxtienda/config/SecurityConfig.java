@@ -28,7 +28,9 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }    @Bean
+    }
+    
+    @Bean
     @SuppressWarnings("deprecation")
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
@@ -40,13 +42,33 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
-    }@Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {        http
-            .authenticationProvider(this.authenticationProvider())            .authorizeHttpRequests(auth -> auth
+    }
+    
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+            .csrf(csrf -> csrf
+                .ignoringRequestMatchers("/api/imagenes/**")
+                .ignoringRequestMatchers("/api/data/**")
+                .ignoringRequestMatchers("/admin/upload-profile-image")
+                .ignoringRequestMatchers("/client/upload-profile-image")
+                .ignoringRequestMatchers("/admin/productos/bulk-upload")
+                .ignoringRequestMatchers("/admin/productos/cargar-masivo")
+            )
+            .authenticationProvider(this.authenticationProvider())
+            .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/auth/**", "/css/**", "/js/**", "/img/**", "/fonts/**", "/").permitAll()
+                .requestMatchers("/uploads/**").permitAll()
+                // Catálogo público - TODOS LOS ENDPOINTS DE CATÁLOGO
+                .requestMatchers("/client/catalogo/**", "/client/catalogo", "/client/catalogo-*", "/client/catalogo-final", "/client/catalogo-integrado", "/client/catalogo-simple-test", "/client/producto-detalle/**", "/client/test-catalogo").permitAll()
+                .requestMatchers("/client/home").permitAll() // Home público
+                .requestMatchers("/client/agregar-al-carrito", "/client/carrito/**").permitAll() // Carrito público
+                .requestMatchers("/api/imagenes/**").permitAll() // Imágenes públicas
+                .requestMatchers("/images/**").permitAll() // Imágenes de productos públicas
+                .requestMatchers("/api/data/**").hasRole("ADMIN")
                 .requestMatchers("/admin/**").hasRole("ADMIN")
-                .requestMatchers("/client/**").hasRole("CLIENTE")
                 .anyRequest().authenticated()
+                // Nota: removimos .requestMatchers("/client/**").hasRole("CLIENTE") para evitar conflictos
             )
             .formLogin(form -> form
                 .loginPage("/auth/login")
@@ -59,7 +81,10 @@ public class SecurityConfig {
             )
             .logout(logout -> logout
                 .logoutUrl("/logout")
-                .logoutSuccessUrl("/auth/login?logout")
+                .logoutSuccessUrl("/auth/logout")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
+                .clearAuthentication(true)
                 .permitAll()
             );
         return http.build();
