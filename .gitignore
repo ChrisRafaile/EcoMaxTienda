@@ -37,3 +37,7 @@ application-local.properties
 application-prod.properties
 *.env
 .env.local
+
+# Archivos de configuración local (NO subir)
+src/main/resources/application-local.properties
+src/main/resources/application.properties.local
